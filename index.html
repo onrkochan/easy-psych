@@ -335,7 +335,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
       <strong>Olası kontrendikasyonlar:</strong> ağır KOAH / CO₂ retansiyonu, ağır KC yetmezliği, miyastenia gravis, tedavi edilmemiş uyku apnesi, dar açılı glokom, akut alkol intoksikasyonu, BZD aşırı duyarlılığı, ağır hipotansiyon
     </div>
     <div id="bzd-ybu-warn" class="feedback-box fb-danger" style="display:none;margin-top:10px">
-      <strong>⚠ Deliryum tremens riski + BZD kontrendikasyon.</strong><br>YBÜ yatışı gerekir.
+      <strong>⚠ Kapalı serviste tedavisi uygun değil.</strong><br>BZD kontrendikasyonu — YBÜ yatışı gerekebilir.
     </div>
   </div>
 
@@ -352,6 +352,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
       <strong>⚠ Benzodiazepin endikasyonu yok?</strong><br>Psikiyatrik yatış endikasyonuna emin misiniz?
     </div>
     <button id="ciwa-calc" class="btn-primary" onclick="calcCiwa()">Skoru hesapla →</button>
+    <div id="bzd-ybu-warn-2" class="feedback-box fb-danger" style="display:none;margin-top:10px">
+      <strong>⚠ Kapalı serviste tedavisi uygun değil.</strong><br>BZD kontrendikasyonu — YBÜ yatışı gerekebilir.
+    </div>
   </div>
 
   <button class="btn-secondary" onclick="go('home')" style="margin-top:8px">Ana ekrana dön</button>
@@ -1016,16 +1019,16 @@ function refreshBzdContraUI(){
   var yesBtn=document.getElementById('bzd-yes-btn');
   var tick=document.getElementById('bzd-no-tick');
   var ybu=document.getElementById('bzd-ybu-warn');
+  var ybu2=document.getElementById('bzd-ybu-warn-2');
   if(noBtn){
     var isNo=(bzdContra===false);
     noBtn.classList.toggle('selected-no',isNo);
     if(tick) tick.style.display=isNo?'inline':'none';
   }
   if(yesBtn) yesBtn.classList.toggle('selected-yes',bzdContra===true);
-  if(ybu){
-    var dtRisk=ciwaComplete() && ciwaTotal()>=20;
-    ybu.style.display=(bzdContra===true && dtRisk)?'block':'none';
-  }
+  var showWarn=(bzdContra===true);
+  if(ybu) ybu.style.display=showWarn?'block':'none';
+  if(ybu2) ybu2.style.display=showWarn?'block':'none';
 }
 
 var drsItems=[
