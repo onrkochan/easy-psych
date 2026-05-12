@@ -132,6 +132,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .alkol-toggle.selected-yes{border:2px solid #A32D2D;background:#FCEBEB;color:#A32D2D;font-weight:500}
 .alkol-toggle.missing{border-color:#A32D2D;color:#A32D2D;background:#FEF8F8}
 .alkol-toggle.missing:hover{background:#FCEBEB}
+.check-box.req-missing{border-color:#A32D2D !important;background:#FEF8F8}
+.check-text.req-missing{color:#A32D2D}
 </style>
 </head>
 <body>
@@ -324,6 +326,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
   <button class="btn-back" onclick="go('home')"><i class="ti ti-arrow-left"></i> Geri</button>
   <p class="page-title">Alkol hastası yatırma checklisti</p>
   <p class="page-sub">BZD kontrendikasyon kontrolü → CIWA-Ar</p>
+
+  <div class="card">
+    <p class="section-label">Ön değerlendirme</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Aşağıdaki üç maddenin tamamı onaylanmadan yatış kararı verilemez.</p>
+
+    <div class="checklist-item" id="prereq-fall-row">
+      <div class="check-box" id="prereq-fall-box" onclick="togglePrereq('fall')"></div>
+      <div class="check-text" id="prereq-fall-text">Düşmeye bağlı patolojiler <span style="color:#888;font-weight:400">(kafa travması, intrakraniyal kanama, ekstremite kırıkları)</span> ekarte edildi</div>
+    </div>
+    <div class="checklist-item" id="prereq-elec-row">
+      <div class="check-box" id="prereq-elec-box" onclick="togglePrereq('elec')"></div>
+      <div class="check-text" id="prereq-elec-text">Elektrolit bozukluğu ve hızlı müdahale edilmezse hayati tehlike oluşturacak durumlar ekarte edildi</div>
+    </div>
+    <div class="checklist-item" id="prereq-del-row">
+      <div class="check-box" id="prereq-del-box" onclick="togglePrereq('del')"></div>
+      <div class="check-text" id="prereq-del-text">Genel tıbbi duruma bağlı deliryum <span style="color:#888;font-weight:400">(alkol dışı sebepli)</span> düşünülmedi</div>
+    </div>
+  </div>
 
   <div class="card">
     <p class="section-label">1. Benzodiazepin kontrendikasyonu</p>
@@ -878,11 +898,19 @@ var CIWA_ITEMS=[
 ];
 var ciwaVals={};
 var bzdContra=null;
+var prereqChecks={fall:false,elec:false,del:false};
 
 function openAlkol(){
   ciwaVals={};
   bzdContra=null;
+  prereqChecks={fall:false,elec:false,del:false};
   buildCiwa();
+  ['fall','elec','del'].forEach(function(k){
+    var box=document.getElementById('prereq-'+k+'-box');
+    var txt=document.getElementById('prereq-'+k+'-text');
+    if(box){box.classList.remove('checked','req-missing');box.innerHTML='';}
+    if(txt) txt.classList.remove('req-missing');
+  });
   var disp=document.getElementById('ciwa-score-display');
   if(disp) disp.style.display='none';
   var low=document.getElementById('ciwa-low-warn');
@@ -891,6 +919,32 @@ function openAlkol(){
   if(miss) miss.style.display='none';
   refreshBzdContraUI();
   go('alkol');
+}
+
+function togglePrereq(key){
+  prereqChecks[key]=!prereqChecks[key];
+  var box=document.getElementById('prereq-'+key+'-box');
+  var txt=document.getElementById('prereq-'+key+'-text');
+  if(box){
+    box.classList.toggle('checked',prereqChecks[key]);
+    box.innerHTML=prereqChecks[key]?'<i class="ti ti-check"></i>':'';
+    box.classList.remove('req-missing');
+  }
+  if(txt) txt.classList.remove('req-missing');
+}
+
+function markMissingPrereqs(){
+  var allOk=true;
+  ['fall','elec','del'].forEach(function(k){
+    if(!prereqChecks[k]){
+      allOk=false;
+      var box=document.getElementById('prereq-'+k+'-box');
+      var txt=document.getElementById('prereq-'+k+'-text');
+      if(box) box.classList.add('req-missing');
+      if(txt) txt.classList.add('req-missing');
+    }
+  });
+  return allOk;
 }
 
 function buildCiwa(){
@@ -956,6 +1010,18 @@ function ciwaComplete(){
 }
 
 function calcCiwa(){
+  // Ön değerlendirme zorunlu
+  var prereqOk=markMissingPrereqs();
+  if(!prereqOk){
+    var fb=document.getElementById('ciwa-missing-msg');
+    if(fb){
+      fb.innerHTML='<strong>⚠ Ön değerlendirme eksik.</strong><br>Kırmızı işaretli kutucukları onaylayın.';
+      fb.style.display='block';
+    }
+    var firstMiss=document.querySelector('.check-box.req-missing');
+    if(firstMiss) firstMiss.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
   // BZD kontrendikasyon seçimi zorunlu
   if(bzdContra===null){
     markMissingBzd();
