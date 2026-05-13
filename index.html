@@ -132,8 +132,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .alkol-toggle.selected-yes{border:2px solid #A32D2D;background:#FCEBEB;color:#A32D2D;font-weight:500}
 .alkol-toggle.missing{border-color:#A32D2D;color:#A32D2D;background:#FEF8F8}
 .alkol-toggle.missing:hover{background:#FCEBEB}
-.check-box.req-missing{border-color:#A32D2D !important;background:#FEF8F8}
-.check-text.req-missing{color:#A32D2D}
+
+/* DSM-5 kriter, ölçek ve hezeyan stilleri */
+.dsm-warning{background:#FAEEDA;color:#854F0B;border:0.5px solid #EF9F27;padding:10px 12px;border-radius:8px;font-size:13px;line-height:1.5;margin-bottom:14px}
+.dsm-warning strong{display:block;margin-bottom:3px}
+.dsm-section-title{font-size:13px;font-weight:600;color:#1a1a1a;margin:14px 0 8px;text-transform:none}
+.crit-item{border:0.5px solid rgba(0,0,0,0.12);border-radius:8px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:#fff;transition:all 0.15s}
+.crit-item:hover{background:#fafaf8}
+.crit-item.open{border-color:#185FA5;background:#F5F9FE}
+.crit-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.crit-label{font-size:13px;line-height:1.5;flex:1}
+.crit-toggle{font-size:18px;color:#888;line-height:1;margin-top:-2px}
+.crit-item.open .crit-toggle{color:#185FA5}
+.crit-item .crit-toggle::before{content:'+'}
+.crit-item.open .crit-toggle::before{content:'−'}
+.crit-desc{display:none;margin-top:8px;padding-top:8px;border-top:0.5px solid rgba(0,0,0,0.08);font-size:12px;color:#555;line-height:1.6}
+.crit-item.open .crit-desc{display:block}
+.crit-letter{font-weight:600;color:#185FA5;margin-right:6px}
+.organic-list{background:#FCEBEB;border:0.5px solid #F09595;border-radius:8px;padding:10px 12px;margin:10px 0;font-size:12px;line-height:1.7;color:#7A2222}
+.organic-list strong{display:block;margin-bottom:4px;color:#A32D2D}
+.scale-item{border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:10px 12px;margin-bottom:6px}
+.scale-q{font-size:13px;font-weight:500;margin-bottom:6px;line-height:1.4}
+.scale-opts{display:flex;flex-direction:column;gap:4px}
+.scale-opt{padding:7px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;font-size:12px;color:#1a1a1a;text-align:left}
+.scale-opt:hover{background:#f0f0ee}
+.scale-opt.selected{border:2px solid #185FA5;background:#E6F1FB;color:#0C447C}
+.hez-item{padding:10px 12px;border-left:3px solid #6B47C9;background:#FAF8FF;border-radius:0 8px 8px 0;margin-bottom:8px}
+.hez-name{font-size:13px;font-weight:600;color:#3C3489;margin-bottom:3px}
+.hez-desc{font-size:12px;color:#444;line-height:1.55}
 </style>
 </head>
 <body>
@@ -158,6 +184,78 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
       <div>
         <p style="font-weight:500;font-size:15px">Alkol hastası yatırma checklisti</p>
         <p style="font-size:12px;color:#888;margin-top:3px">BZD kontrendikasyon → CIWA-Ar</p>
+      </div>
+      <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+    </div>
+  </div>
+
+  <p class="section-label" style="margin-top:20px;margin-bottom:10px">DSM-5 tanı ve ölçekler</p>
+
+  <div class="card" style="cursor:pointer;border-left:3px solid #3B6D11;border-radius:0 12px 12px 0" onclick="openDsmDep()">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <p style="font-weight:500;font-size:15px">DSM-5 Major Depresyon</p>
+        <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Hamilton (HAM-D) ölçeği</p>
+      </div>
+      <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+    </div>
+  </div>
+
+  <div class="card" style="cursor:pointer;border-left:3px solid #6B47C9;border-radius:0 12px 12px 0" onclick="openDsmYab()">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <p style="font-weight:500;font-size:15px">DSM-5 Yaygın Anksiyete Bozukluğu</p>
+        <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon + HAM-A</p>
+      </div>
+      <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+    </div>
+  </div>
+
+  <div class="card" style="cursor:pointer;border-left:3px solid #A32D2D;border-radius:0 12px 12px 0" onclick="openDsmPanik()">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <p style="font-weight:500;font-size:15px">DSM-5 Panik Bozukluk</p>
+        <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon</p>
+      </div>
+      <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+    </div>
+  </div>
+
+  <div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0" onclick="openDsmUyum()">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <p style="font-weight:500;font-size:15px">DSM-5 Uyum Bozukluğu</p>
+        <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + askeri yönetmelik uyarısı</p>
+      </div>
+      <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+    </div>
+  </div>
+
+  <div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0" onclick="openDsmOkb()">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <p style="font-weight:500;font-size:15px">DSM-5 Obsesif-Kompulsif Bozukluk</p>
+        <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Y-BOCS ölçeği</p>
+      </div>
+      <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+    </div>
+  </div>
+
+  <div class="card" style="cursor:pointer;border-left:3px solid #B89400;border-radius:0 12px 12px 0" onclick="openMani()">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <p style="font-weight:500;font-size:15px">Mani değerlendirmesi</p>
+        <p style="font-size:12px;color:#888;margin-top:3px">YMRS — Young Mania Rating Scale</p>
+      </div>
+      <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+    </div>
+  </div>
+
+  <div class="card" style="cursor:pointer;border-left:3px solid #3C3489;border-radius:0 12px 12px 0" onclick="openHezeyan()">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <p style="font-weight:500;font-size:15px">Hezeyan türleri (DSM-5 glossary)</p>
+        <p style="font-size:12px;color:#888;margin-top:3px">11 psikotik sanrı tipi + tanım</p>
       </div>
       <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
     </div>
@@ -328,24 +426,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
   <p class="page-sub">BZD kontrendikasyon kontrolü → CIWA-Ar</p>
 
   <div class="card">
-    <p class="section-label">Ön değerlendirme</p>
-    <p style="font-size:12px;color:#666;margin-bottom:10px">Aşağıdaki üç maddenin tamamı onaylanmadan yatış kararı verilemez.</p>
-
-    <div class="checklist-item" id="prereq-fall-row">
-      <div class="check-box" id="prereq-fall-box" onclick="togglePrereq('fall')"></div>
-      <div class="check-text" id="prereq-fall-text">Düşmeye bağlı patolojiler <span style="color:#888;font-weight:400">(kafa travması, intrakraniyal kanama, ekstremite kırıkları)</span> ekarte edildi</div>
-    </div>
-    <div class="checklist-item" id="prereq-elec-row">
-      <div class="check-box" id="prereq-elec-box" onclick="togglePrereq('elec')"></div>
-      <div class="check-text" id="prereq-elec-text">Elektrolit bozukluğu ve hızlı müdahale edilmezse hayati tehlike oluşturacak durumlar ekarte edildi</div>
-    </div>
-    <div class="checklist-item" id="prereq-del-row">
-      <div class="check-box" id="prereq-del-box" onclick="togglePrereq('del')"></div>
-      <div class="check-text" id="prereq-del-text">Genel tıbbi duruma bağlı deliryum <span style="color:#888;font-weight:400">(alkol dışı sebepli)</span> düşünülmedi</div>
-    </div>
-  </div>
-
-  <div class="card">
     <p class="section-label">1. Benzodiazepin kontrendikasyonu</p>
     <div class="alkol-toggle-row">
       <button class="alkol-toggle" id="bzd-no-btn" onclick="setBzdContra(false)"><span id="bzd-no-tick" style="display:none">✅</span><span>Benzodiazepin kontrendikasyonu yok</span></button>
@@ -355,7 +435,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
       <strong>Olası kontrendikasyonlar:</strong> ağır KOAH / CO₂ retansiyonu, ağır KC yetmezliği, miyastenia gravis, tedavi edilmemiş uyku apnesi, dar açılı glokom, akut alkol intoksikasyonu, BZD aşırı duyarlılığı, ağır hipotansiyon
     </div>
     <div id="bzd-ybu-warn" class="feedback-box fb-danger" style="display:none;margin-top:10px">
-      <strong>⚠ Kapalı serviste tedavisi uygun değil.</strong><br>BZD kontrendikasyonu — YBÜ yatışı gerekebilir.
+      <strong>⚠ Deliryum tremens riski + BZD kontrendikasyon.</strong><br>YBÜ yatışı gerekir.
     </div>
   </div>
 
@@ -372,15 +452,219 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
       <strong>⚠ Benzodiazepin endikasyonu yok?</strong><br>Psikiyatrik yatış endikasyonuna emin misiniz?
     </div>
     <button id="ciwa-calc" class="btn-primary" onclick="calcCiwa()">Skoru hesapla →</button>
-    <div id="bzd-ybu-warn-2" class="feedback-box fb-danger" style="display:none;margin-top:10px">
-      <strong>⚠ Kapalı serviste tedavisi uygun değil.</strong><br>BZD kontrendikasyonu — YBÜ yatışı gerekebilir.
-    </div>
   </div>
 
   <button class="btn-secondary" onclick="go('home')" style="margin-top:8px">Ana ekrana dön</button>
 </div>
 
-<!-- DELIRYUM NEGATİF — ORGANİK PATOLOJİ TARAMASI -->
+<!-- DSM-5 MAJOR DEPRESYON -->
+<div id="dsm-dep" class="screen">
+  <button class="btn-back" onclick="go('home')"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">DSM-5 Major Depresif Bozukluk</p>
+  <p class="page-sub">Kriterler + Hamilton Depresyon Ölçeği (HAM-D 17)</p>
+
+  <div class="card">
+    <p class="section-label">A. Tanı kriterleri</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Aşağıdaki belirtilerden ≥ 5'i aynı 2 haftalık süre içinde bulunmalı; <strong>en az biri</strong> (1) <em>çökkün duygudurum</em> veya (2) <em>ilgi/zevk kaybı</em> olmalıdır. Detay için kriterlere tıklayın.</p>
+    <div id="dsm-dep-criteria"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">B–E. Diğer kriterler</p>
+    <div id="dsm-dep-other"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Hamilton Depresyon Ölçeği (HAM-D 17)</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Klinisyenin değerlendirdiği 17 maddelik ölçek. Maddelerin bir kısmı 0–4, bir kısmı 0–2 puanlanır. Toplam aralık: 0–52.</p>
+    <div id="hamd-items"></div>
+    <div id="hamd-missing-msg" class="feedback-box fb-warning" style="display:none;font-size:13px;margin-top:4px"></div>
+    <div id="hamd-score-display" class="score-display" style="display:none;margin-top:10px">
+      <div><p style="font-size:12px;color:#888;margin-bottom:2px">HAM-D toplam</p><span class="score-num" id="hamd-total">0</span></div>
+      <p class="score-interp" id="hamd-interp"></p>
+    </div>
+    <button id="hamd-calc" class="btn-primary" onclick="calcHamD()">Skoru hesapla →</button>
+  </div>
+
+  <button class="btn-secondary" onclick="go('home')" style="margin-top:8px">Ana ekrana dön</button>
+</div>
+
+<!-- DSM-5 YAYGIN ANKSİYETE BOZUKLUĞU -->
+<div id="dsm-yab" class="screen">
+  <button class="btn-back" onclick="go('home')"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">DSM-5 Yaygın Anksiyete Bozukluğu (YAB)</p>
+  <p class="page-sub">Kriterler + organik ekartasyon + HAM-A</p>
+
+  <div class="card">
+    <p class="section-label">A–F. Tanı kriterleri</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Detay için her kritere tıklayın.</p>
+    <div id="dsm-yab-criteria"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Ekarte edilmesi gereken organik patolojiler</p>
+    <div class="organic-list">
+      <strong>Endokrin:</strong> Hipertiroidi/tirotoksikoz, feokromositoma, hipoglisemi, Cushing, hiperparatiroidi, karsinoid sendrom.<br>
+      <strong>Kardiyovasküler:</strong> Aritmi (özellikle SVT, AF), mitral kapak prolapsusu, kalp yetmezliği, KAH.<br>
+      <strong>Pulmoner:</strong> Astım, KOAH, pulmoner emboli, hipoksi.<br>
+      <strong>Nörolojik:</strong> Temporal lob epilepsisi, MS, vestibüler bozukluklar, BPPV.<br>
+      <strong>Madde / ilaç:</strong> Kafein, kokain, amfetamin, kannabis intoksikasyonu; alkol/BZD/opioid yoksunluğu; kortikosteroid, β-agonist, levotiroksin, dekonjestan, SSRİ aktivasyon.<br>
+      <strong>Hematolojik / metabolik:</strong> Anemi, elektrolit bozukluğu (özellikle hipokalsemi), vitamin B12 eksikliği.
+    </div>
+    <p style="font-size:12px;color:#555;margin-top:10px">
+      <strong>Önerilen ilk basamak tarama:</strong> TSH, sT4, tam kan sayımı, glukoz, elektrolitler, EKG. Klinik şüpheye göre 24 saatlik idrar metanefrin, idrar toksikolojisi, EKO, akciğer grafisi.
+    </p>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Hamilton Anksiyete Ölçeği (HAM-A)</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">14 maddelik klinisyen değerlendirme ölçeği. Her madde 0–4 arası puanlanır. Toplam aralık: 0–56.</p>
+    <div id="hama-items"></div>
+    <div id="hama-missing-msg" class="feedback-box fb-warning" style="display:none;font-size:13px;margin-top:4px"></div>
+    <div id="hama-score-display" class="score-display" style="display:none;margin-top:10px">
+      <div><p style="font-size:12px;color:#888;margin-bottom:2px">HAM-A toplam</p><span class="score-num" id="hama-total">0</span></div>
+      <p class="score-interp" id="hama-interp"></p>
+    </div>
+    <button id="hama-calc" class="btn-primary" onclick="calcHamA()">Skoru hesapla →</button>
+  </div>
+
+  <button class="btn-secondary" onclick="go('home')" style="margin-top:8px">Ana ekrana dön</button>
+</div>
+
+<!-- DSM-5 PANİK BOZUKLUK -->
+<div id="dsm-panik" class="screen">
+  <button class="btn-back" onclick="go('home')"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">DSM-5 Panik Bozukluk</p>
+  <p class="page-sub">Kriterler + organik ekartasyon</p>
+
+  <div class="card">
+    <p class="section-label">A. Panik atak — 4 belirti gereklidir</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Yineleyici, beklenmedik panik ataklar. Panik atak, dakikalar içinde zirveye ulaşan yoğun korku/rahatsızlık dönemidir; aşağıdaki 13 belirtiden ≥ 4'ünün varlığı şarttır.</p>
+    <div id="dsm-panik-a"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">B–E. Diğer kriterler</p>
+    <div id="dsm-panik-other"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Ekarte edilmesi gereken organik patolojiler</p>
+    <div class="organic-list">
+      <strong>Kardiyovasküler (acil ekartasyon):</strong> Akut koroner sendrom, aritmi (SVT, paroksismal AF), mitral kapak prolapsusu, pulmoner emboli, perikardit.<br>
+      <strong>Endokrin:</strong> Hipertiroidi, feokromositoma, hipoglisemi, karsinoid sendrom, insülinoma.<br>
+      <strong>Pulmoner:</strong> Astım atağı, KOAH alevlenme, hiperventilasyon, hipoksi.<br>
+      <strong>Nörolojik:</strong> Temporal lob (parsiyel kompleks) epilepsisi, vestibüler bozukluklar, migren ekivalanı, TIA.<br>
+      <strong>Madde / ilaç:</strong> Kafein, nikotin, kokain, amfetamin, MDMA, kannabis; alkol/BZD/opioid yoksunluğu; β-agonist, kortikosteroid, levotiroksin, dekonjestan.<br>
+      <strong>Diğer:</strong> Anemi, hipokalsemi, hipomagnezemi, anaflaksi (erken).
+    </div>
+    <p style="font-size:12px;color:#555;margin-top:10px">
+      <strong>İlk başvuruda zorunlu:</strong> EKG (özellikle ilk atakta), tam kan sayımı, TSH, glukoz, elektrolitler. Şüpheye göre troponin, D-dimer, akciğer grafisi, idrar toksikolojisi, 24 saatlik idrar metanefrin.
+    </p>
+  </div>
+
+  <button class="btn-secondary" onclick="go('home')" style="margin-top:8px">Ana ekrana dön</button>
+</div>
+
+<!-- DSM-5 UYUM BOZUKLUĞU -->
+<div id="dsm-uyum" class="screen">
+  <button class="btn-back" onclick="go('home')"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">DSM-5 Uyum Bozuklukları</p>
+  <p class="page-sub">Kriterler + askeri yönetmelik uyarısı</p>
+
+  <div class="dsm-warning">
+    <strong>⚠ Önemli ayrım — Askeri yönetmelik</strong>
+    TSK Sağlık Yeteneği Yönetmeliği'ndeki "uyum bozukluğu" (örn. <em>"askerliğe uyum güçlüğü"</em> veya bazı hastalık kategorilerinin altındaki "uyum güçlüğü" maddeleri) DSM-5'teki <em>Uyum Bozuklukları (Adjustment Disorders)</em> tanısı ile aynı şey <strong>değildir</strong>. Yönetmelikteki tanımlar idari-hukuki nitelikte olup; askerlik ortamına uyumsuzluk, davranışsal sorunlar, dürtü kontrol sorunları gibi durumları içerebilir. Rapor düzenlerken DSM-5 kriterlerinin karşılanıp karşılanmadığı ayrı; yönetmeliğin ilgili madde tanımına uyup uymadığı ayrı değerlendirilmelidir.
+  </div>
+
+  <div class="card">
+    <p class="section-label">A–F. Tanı kriterleri</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Detay için her kritere tıklayın.</p>
+    <div id="dsm-uyum-criteria"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Belirleyiciler (alt tipler)</p>
+    <div id="dsm-uyum-spec"></div>
+  </div>
+
+  <button class="btn-secondary" onclick="go('home')" style="margin-top:8px">Ana ekrana dön</button>
+</div>
+
+<!-- DSM-5 OKB -->
+<div id="dsm-okb" class="screen">
+  <button class="btn-back" onclick="go('home')"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">DSM-5 Obsesif-Kompulsif Bozukluk</p>
+  <p class="page-sub">Kriterler + Y-BOCS ölçeği</p>
+
+  <div class="card">
+    <p class="section-label">A–D. Tanı kriterleri</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Detay için her kritere tıklayın.</p>
+    <div id="dsm-okb-criteria"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">İçgörü belirleyicileri</p>
+    <div id="dsm-okb-spec"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Y-BOCS — Yale-Brown Obsessive Compulsive Scale</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">10 maddelik klinisyen değerlendirme ölçeği. İlk 5 madde obsesyon, son 5 madde kompulsiyon için. Her madde 0–4. Toplam aralık: 0–40.</p>
+    <div id="ybocs-items"></div>
+    <div id="ybocs-missing-msg" class="feedback-box fb-warning" style="display:none;font-size:13px;margin-top:4px"></div>
+    <div id="ybocs-score-display" class="score-display" style="display:none;margin-top:10px">
+      <div><p style="font-size:12px;color:#888;margin-bottom:2px">Y-BOCS toplam</p><span class="score-num" id="ybocs-total">0</span></div>
+      <p class="score-interp" id="ybocs-interp"></p>
+    </div>
+    <button id="ybocs-calc" class="btn-primary" onclick="calcYbocs()">Skoru hesapla →</button>
+  </div>
+
+  <button class="btn-secondary" onclick="go('home')" style="margin-top:8px">Ana ekrana dön</button>
+</div>
+
+<!-- MANİ DEĞERLENDİRMESİ — YMRS -->
+<div id="mani" class="screen">
+  <button class="btn-back" onclick="go('home')"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">Mani Değerlendirmesi</p>
+  <p class="page-sub">YMRS — Young Mania Rating Scale</p>
+
+  <div class="card">
+    <p class="section-label">Ölçek hakkında</p>
+    <p style="font-size:13px;color:#444;line-height:1.55">
+      YMRS, manik epizodun şiddetini ölçen 11 maddelik klinisyen değerlendirme ölçeğidir. 7 madde 0–4, 4 madde (irritabilite, konuşma, düşünce içeriği, yıkıcı/saldırgan davranış) 0–8 puanlanır. Son 48 saatlik bilgi ve görüşme gözlemine dayanır. Toplam aralık: 0–60.
+    </p>
+  </div>
+
+  <div class="card">
+    <p class="section-label">YMRS maddeleri</p>
+    <div id="ymrs-items"></div>
+    <div id="ymrs-missing-msg" class="feedback-box fb-warning" style="display:none;font-size:13px;margin-top:4px"></div>
+    <div id="ymrs-score-display" class="score-display" style="display:none;margin-top:10px">
+      <div><p style="font-size:12px;color:#888;margin-bottom:2px">YMRS toplam</p><span class="score-num" id="ymrs-total">0</span></div>
+      <p class="score-interp" id="ymrs-interp"></p>
+    </div>
+    <button id="ymrs-calc" class="btn-primary" onclick="calcYmrs()">Skoru hesapla →</button>
+  </div>
+
+  <button class="btn-secondary" onclick="go('home')" style="margin-top:8px">Ana ekrana dön</button>
+</div>
+
+<!-- HEZEYAN TÜRLERİ -->
+<div id="hezeyan" class="screen">
+  <button class="btn-back" onclick="go('home')"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">Hezeyan (Sanrı) Türleri</p>
+  <p class="page-sub">DSM-5 glossary — Psikotik sanrı tipleri ve örnekleri</p>
+
+  <div class="card">
+    <p style="font-size:12px;color:#666;margin-bottom:12px;line-height:1.55">
+      Hezeyan; kanıt karşısında değişmeyen, kişinin kültürüyle uyumsuz, sarsılmaz yanlış inanıştır. Aşağıda en sık görülen 11 tip listelenmiştir.
+    </p>
+    <div id="hezeyan-list"></div>
+  </div>
+
+  <button class="btn-secondary" onclick="go('home')" style="margin-top:8px">Ana ekrana dön</button>
+</div>
 <div id="organik" class="screen">
   <button class="btn-back" onclick="go('cam')"><i class="ti ti-arrow-left"></i> Geri</button>
   <p class="page-title">Deliryum düşünülmedi</p>
@@ -898,19 +1182,11 @@ var CIWA_ITEMS=[
 ];
 var ciwaVals={};
 var bzdContra=null;
-var prereqChecks={fall:false,elec:false,del:false};
 
 function openAlkol(){
   ciwaVals={};
   bzdContra=null;
-  prereqChecks={fall:false,elec:false,del:false};
   buildCiwa();
-  ['fall','elec','del'].forEach(function(k){
-    var box=document.getElementById('prereq-'+k+'-box');
-    var txt=document.getElementById('prereq-'+k+'-text');
-    if(box){box.classList.remove('checked','req-missing');box.innerHTML='';}
-    if(txt) txt.classList.remove('req-missing');
-  });
   var disp=document.getElementById('ciwa-score-display');
   if(disp) disp.style.display='none';
   var low=document.getElementById('ciwa-low-warn');
@@ -919,32 +1195,6 @@ function openAlkol(){
   if(miss) miss.style.display='none';
   refreshBzdContraUI();
   go('alkol');
-}
-
-function togglePrereq(key){
-  prereqChecks[key]=!prereqChecks[key];
-  var box=document.getElementById('prereq-'+key+'-box');
-  var txt=document.getElementById('prereq-'+key+'-text');
-  if(box){
-    box.classList.toggle('checked',prereqChecks[key]);
-    box.innerHTML=prereqChecks[key]?'<i class="ti ti-check"></i>':'';
-    box.classList.remove('req-missing');
-  }
-  if(txt) txt.classList.remove('req-missing');
-}
-
-function markMissingPrereqs(){
-  var allOk=true;
-  ['fall','elec','del'].forEach(function(k){
-    if(!prereqChecks[k]){
-      allOk=false;
-      var box=document.getElementById('prereq-'+k+'-box');
-      var txt=document.getElementById('prereq-'+k+'-text');
-      if(box) box.classList.add('req-missing');
-      if(txt) txt.classList.add('req-missing');
-    }
-  });
-  return allOk;
 }
 
 function buildCiwa(){
@@ -1010,18 +1260,6 @@ function ciwaComplete(){
 }
 
 function calcCiwa(){
-  // Ön değerlendirme zorunlu
-  var prereqOk=markMissingPrereqs();
-  if(!prereqOk){
-    var fb=document.getElementById('ciwa-missing-msg');
-    if(fb){
-      fb.innerHTML='<strong>⚠ Ön değerlendirme eksik.</strong><br>Kırmızı işaretli kutucukları onaylayın.';
-      fb.style.display='block';
-    }
-    var firstMiss=document.querySelector('.check-box.req-missing');
-    if(firstMiss) firstMiss.scrollIntoView({behavior:'smooth',block:'center'});
-    return;
-  }
   // BZD kontrendikasyon seçimi zorunlu
   if(bzdContra===null){
     markMissingBzd();
@@ -1085,16 +1323,16 @@ function refreshBzdContraUI(){
   var yesBtn=document.getElementById('bzd-yes-btn');
   var tick=document.getElementById('bzd-no-tick');
   var ybu=document.getElementById('bzd-ybu-warn');
-  var ybu2=document.getElementById('bzd-ybu-warn-2');
   if(noBtn){
     var isNo=(bzdContra===false);
     noBtn.classList.toggle('selected-no',isNo);
     if(tick) tick.style.display=isNo?'inline':'none';
   }
   if(yesBtn) yesBtn.classList.toggle('selected-yes',bzdContra===true);
-  var showWarn=(bzdContra===true);
-  if(ybu) ybu.style.display=showWarn?'block':'none';
-  if(ybu2) ybu2.style.display=showWarn?'block':'none';
+  if(ybu){
+    var dtRisk=ciwaComplete() && ciwaTotal()>=20;
+    ybu.style.display=(bzdContra===true && dtRisk)?'block':'none';
+  }
 }
 
 var drsItems=[
@@ -1578,6 +1816,611 @@ function buildChecklist(containerId,items){
     div.appendChild(txt);
     c.appendChild(div);
   });
+}
+
+/* ========================================================== */
+/* ============= DSM-5 KRİTERLER + ÖLÇEKLER ================= */
+/* ========================================================== */
+
+// Genel: kliklenebilir kriter inşa eden yardımcı
+function buildCriteria(containerId, items){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(it,i){
+    var d=document.createElement('div');
+    d.className='crit-item';
+    d.onclick=(function(el){return function(){el.classList.toggle('open')}})(d);
+    var letter=it.l?'<span class="crit-letter">'+it.l+'.</span>':'';
+    d.innerHTML='<div class="crit-head">'+
+        '<p class="crit-label">'+letter+it.t+'</p>'+
+        '<span class="crit-toggle"></span>'+
+      '</div>'+
+      '<div class="crit-desc">'+it.d+'</div>';
+    c.appendChild(d);
+  });
+}
+
+// Genel: ölçek inşa eden yardımcı
+function buildScale(containerId, items, valsObj){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(item){
+    var d=document.createElement('div');
+    d.className='scale-item';
+    d.setAttribute('data-scale-id',item.id);
+    var q=document.createElement('p');
+    q.className='scale-q';
+    q.textContent=item.label;
+    d.appendChild(q);
+    if(item.hint){
+      var h=document.createElement('p');
+      h.className='cam-note';
+      h.style.marginBottom='6px';
+      h.textContent=item.hint;
+      d.appendChild(h);
+    }
+    var opts=document.createElement('div');
+    opts.className='scale-opts';
+    item.opts.forEach(function(opt){
+      var b=document.createElement('button');
+      b.className='scale-opt';
+      b.textContent=opt.t;
+      b.onclick=(function(id,score,btn,wrap){
+        return function(){
+          wrap.querySelectorAll('.scale-opt').forEach(function(x){x.classList.remove('selected')});
+          btn.classList.add('selected');
+          valsObj[id]=score;
+        };
+      })(item.id,opt.s,b,opts);
+      opts.appendChild(b);
+    });
+    d.appendChild(opts);
+    c.appendChild(d);
+  });
+}
+
+function scaleAllFilled(items, valsObj){
+  return items.every(function(it){return it.id in valsObj});
+}
+
+function scaleSum(valsObj){
+  var t=0;for(var k in valsObj) t+=valsObj[k];return t;
+}
+
+/* =============== DSM-5 MAJOR DEPRESYON =============== */
+var DSM_DEP_A=[
+  {l:'A1',t:'Çökkün duygudurum (depresif mood)',
+   d:'Günün büyük bölümünde, neredeyse her gün hissedilen üzüntü, boşluk veya umutsuzluk; öznel bildirim ya da gözlem ile (çocuk-ergende irritabilite olabilir).'},
+  {l:'A2',t:'İlgi/zevk kaybı (anhedoni)',
+   d:'Hemen tüm etkinliklere karşı ilgi veya zevk almada belirgin azalma. Hobiler, sosyal aktiviteler ve cinsel ilgi geri çekilir.'},
+  {l:'A3',t:'Belirgin kilo değişikliği veya iştah değişikliği',
+   d:'Diyet yapmadan ayda > %5 kilo kaybı/alımı veya neredeyse her gün iştah artışı/azalması (çocukta beklenen kilo artışını yapamama).'},
+  {l:'A4',t:'Uykusuzluk veya aşırı uyuma',
+   d:'Neredeyse her gün insomni (sıklıkla erken uyanma) veya hipersomni. Atipik depresyonda hipersomni baskındır.'},
+  {l:'A5',t:'Psikomotor ajitasyon veya retardasyon',
+   d:'Başkalarınca gözlenebilen — yalnızca öznel huzursuzluk veya yavaşlama hissi değil. Konuşma, düşünce ve hareket yavaşlığı (retardasyon) ya da kıpır kıpır huzursuzluk (ajitasyon).'},
+  {l:'A6',t:'Yorgunluk veya enerji kaybı',
+   d:'Neredeyse her gün. Küçük işler bile büyük çaba gerektiriyormuş gibi hissedilir.'},
+  {l:'A7',t:'Değersizlik veya aşırı/uygunsuz suçluluk',
+   d:'Sanrısal düzeyde olabilir. Sadece hasta olmaktan kaynaklanan suçluluk veya kendini sitemden farklıdır; "kötü insanım, hak etmiyorum" gibi temalar.'},
+  {l:'A8',t:'Düşünme/konsantrasyon güçlüğü veya kararsızlık',
+   d:'Öznel bildirim veya gözlem ile. Yaşlılarda demansla karışabilir (psödo-demans).'},
+  {l:'A9',t:'Yineleyen ölüm düşünceleri / intihar düşüncesi veya girişimi',
+   d:'Sadece ölüm korkusu değil, ölmeyi düşünme; özgül planı olmayan yineleyici intihar düşüncesi, intihar girişimi veya özgül bir intihar planı.'}
+];
+
+var DSM_DEP_OTHER=[
+  {l:'B',t:'Klinik anlamlı sıkıntı / işlevsellikte bozulma',
+   d:'Belirtiler sosyal, mesleki veya diğer önemli alanlarda belirgin sıkıntıya ya da işlevsellik bozulmasına neden olur.'},
+  {l:'C',t:'Madde veya başka tıbbi duruma bağlanamaz',
+   d:'Belirtiler bir maddenin fizyolojik etkilerine veya başka bir tıbbi duruma (örn. hipotiroidi) bağlanamaz.'},
+  {l:'D',t:'Şizofreni spektrumu / diğer psikotik bozukluklarla daha iyi açıklanamaz',
+   d:'Şizoaffektif bozukluk, şizofreni, şizofreniform, sanrılı veya diğer tanımlanmış/tanımlanmamış psikotik bozuklukla daha iyi açıklanamaz.'},
+  {l:'E',t:'Hiçbir zaman manik veya hipomanik epizod görülmemiş',
+   d:'Manik veya hipomanik epizod öyküsü bipolar bozukluk tanısı düşündürür. Madde/tıbbi duruma bağlı manik benzeri epizodlar bu kriteri ihlal etmez.'}
+];
+
+/* =============== HAMILTON DEPRESYON ÖLÇEĞİ (HAM-D 17) =============== */
+var HAMD_ITEMS=[
+  {id:'mood',label:'1. Çökkün duygudurum',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Sadece sorulunca belirtir',s:1},{t:'2 — Kendiliğinden sözel olarak belirtir',s:2},
+    {t:'3 — Yüz ifadesi, ses tonu, ağlama eğilimi ile sözel olmayan biçimde de iletir',s:3},
+    {t:'4 — Hemen tamamen bu duyguları yansıtır (sözel + sözel olmayan)',s:4}
+  ]},
+  {id:'guilt',label:'2. Suçluluk duyguları',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Kendini kötüleme, başkalarını hayal kırıklığına uğrattığını hisseder',s:1},
+    {t:'2 — Suçluluk fikri, geçmiş hatalar üzerinde durma',s:2},
+    {t:'3 — Şimdiki hastalığı ceza olarak görme; suçluluk sanrıları',s:3},
+    {t:'4 — Suçlayıcı veya itham edici sesler işitir; tehdit edici görsel halüsinasyonlar',s:4}
+  ]},
+  {id:'suicide',label:'3. İntihar',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Yaşamın değersizliği hissi',s:1},
+    {t:'2 — Ölme isteği veya kendi ölümüyle ilgili düşünceler',s:2},
+    {t:'3 — İntihar düşünceleri veya hareketleri',s:3},
+    {t:'4 — İntihar girişimi (her ciddi girişim 4 puan)',s:4}
+  ]},
+  {id:'ins_early',label:'4. Uykuya dalmada güçlük (erken insomni)',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Ara sıra (yarım saatten fazla uykuya dalamama)',s:1},{t:'2 — Her gece',s:2}
+  ]},
+  {id:'ins_mid',label:'5. Gece ortasında uyanma (orta insomni)',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Huzursuz, dağınık uyku, gece boyu uyanma',s:1},{t:'2 — Tuvalete gitme dışındaki tüm uyanmalar',s:2}
+  ]},
+  {id:'ins_late',label:'6. Erken uyanma (geç insomni)',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Erken uyanır ama tekrar uyur',s:1},{t:'2 — Bir kez uyandıktan sonra tekrar uyuyamama',s:2}
+  ]},
+  {id:'work',label:'7. İş ve aktiviteler',opts:[
+    {t:'0 — Güçlük yok',s:0},{t:'1 — Aktivitelere yetersizlik, yorgunluk düşünceleri',s:1},
+    {t:'2 — Hobilerine, işine ilgi kaybı (doğrudan belirti veya kayıtsızlık)',s:2},
+    {t:'3 — Etkinlik için harcanan zamanda azalma veya verimde düşme',s:3},
+    {t:'4 — Hastalık nedeniyle çalışamama (hastane içinde günlük rutin işleri yapamama da 4)',s:4}
+  ]},
+  {id:'retard',label:'8. Retardasyon (yavaşlama)',opts:[
+    {t:'0 — Normal konuşma ve düşünme',s:0},{t:'1 — Görüşmede hafif yavaşlama',s:1},
+    {t:'2 — Görüşmede belirgin yavaşlama',s:2},{t:'3 — Görüşme güçleşmiştir',s:3},
+    {t:'4 — Tam stupor',s:4}
+  ]},
+  {id:'agit',label:'9. Ajitasyon',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Kıpır kıpır',s:1},{t:'2 — Ellerle, saçla oynama',s:2},
+    {t:'3 — Yerinde duramama, sürekli hareket etme',s:3},
+    {t:'4 — Ellerini ovuşturma, tırnak yeme, saç çekme, dudak ısırma',s:4}
+  ]},
+  {id:'anx_psy',label:'10. Psişik anksiyete',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Öznel gerginlik ve irritabilite',s:1},
+    {t:'2 — Önemsiz şeyler için endişelenme',s:2},{t:'3 — Yüz ifadesi veya konuşmada kaygılı tutum',s:3},
+    {t:'4 — Sorulmadan ifade edilen korkular',s:4}
+  ]},
+  {id:'anx_som',label:'11. Somatik anksiyete',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif',s:1},{t:'2 — Orta',s:2},{t:'3 — Şiddetli',s:3},
+    {t:'4 — Yeti yitimine yol açan (GIS, KVS, solunum, ürogenital, otonom semptomlar)',s:4}
+  ]},
+  {id:'gi',label:'12. Gastrointestinal somatik belirtiler',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — İştah kaybı, ama personel olmadan yer; epigastrik ağırlık',s:1},
+    {t:'2 — Yemek yemekte güçlük, laksatif/GIS ilaç ihtiyacı',s:2}
+  ]},
+  {id:'genel_som',label:'13. Genel somatik belirtiler',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Sırt-baş ağrısı, sırt kaslarında ağrılar; halsizlik, enerji kaybı, yorgunluk',s:1},
+    {t:'2 — Belirgin somatik belirtiler',s:2}
+  ]},
+  {id:'sexual',label:'14. Genital belirtiler',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif (libido kaybı, menstrüel düzensizlik)',s:1},{t:'2 — Belirgin',s:2}
+  ]},
+  {id:'hypochon',label:'15. Hipokondriyazis',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Vücut işlevlerine yönelik aşırı uğraşı',s:1},
+    {t:'2 — Sağlık konusunda aşırı uğraşı',s:2},
+    {t:'3 — Sık şikayetler, yardım çağrıları',s:3},
+    {t:'4 — Hipokondriyazis sanrıları',s:4}
+  ]},
+  {id:'insight',label:'16. İçgörü',opts:[
+    {t:'0 — Hasta olduğunu kabul eder',s:0},
+    {t:'1 — Hasta olduğunu kabul eder ama hastalığı kötü beslenme, iklim, aşırı çalışma, virüse bağlar',s:1},
+    {t:'2 — Hasta olduğunu tamamen reddeder',s:2}
+  ]},
+  {id:'weight',label:'17. Kilo kaybı',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafta başına 0.5 kg\'dan az',s:1},{t:'2 — Hafta başına 0.5 kg\'dan fazla',s:2}
+  ]}
+];
+var hamdVals={};
+function calcHamD(){
+  if(!scaleAllFilled(HAMD_ITEMS,hamdVals)){
+    var miss=HAMD_ITEMS.length-Object.keys(hamdVals).length;
+    var fb=document.getElementById('hamd-missing-msg');
+    fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Tüm maddeleri doldurun.';
+    fb.style.display='block';
+    return;
+  }
+  document.getElementById('hamd-missing-msg').style.display='none';
+  var total=scaleSum(hamdVals);
+  var interp='';
+  if(total<=7) interp='Normal / remisyon (0–7)';
+  else if(total<=13) interp='Hafif depresyon (8–13)';
+  else if(total<=18) interp='Orta depresyon (14–18)';
+  else if(total<=22) interp='Şiddetli depresyon (19–22)';
+  else interp='Çok şiddetli depresyon (≥ 23)';
+  document.getElementById('hamd-total').textContent=total;
+  document.getElementById('hamd-interp').textContent=interp;
+  document.getElementById('hamd-score-display').style.display='flex';
+}
+function openDsmDep(){
+  hamdVals={};
+  document.getElementById('hamd-score-display').style.display='none';
+  document.getElementById('hamd-missing-msg').style.display='none';
+  buildCriteria('dsm-dep-criteria',DSM_DEP_A);
+  buildCriteria('dsm-dep-other',DSM_DEP_OTHER);
+  buildScale('hamd-items',HAMD_ITEMS,hamdVals);
+  go('dsm-dep');
+}
+
+/* =============== DSM-5 YAB =============== */
+var DSM_YAB=[
+  {l:'A',t:'En az 6 ay süre ile günlerin çoğunda aşırı kaygı / endişe',
+   d:'Birden çok olay veya etkinliği (örn. iş, okul performansı) içeren kaygı ve aşırı endişe. Süre kriteri YAB için kritiktir; daha kısa süreler "tanımlanmış başka bir anksiyete bozukluğu" olarak kodlanır.'},
+  {l:'B',t:'Endişeyi kontrol etmekte güçlük',
+   d:'Kişi endişesinin orantısız ve kontrolsüz olduğunu farkındadır ama durduramaz. "Endişelenmeyi bırakamıyorum" tipik bir ifadedir.'},
+  {l:'C',t:'≥ 3 fiziksel/bilişsel semptom (çocukta yalnızca 1 yeterli)',
+   d:'Aşağıdaki 6 belirtiden en az 3 (son 6 ay içinde günlerin çoğu): (1) huzursuzluk/sinirlilik, (2) kolay yorulma, (3) konsantrasyon güçlüğü/zihin boşalması, (4) irritabilite, (5) kas gerginliği, (6) uyku bozukluğu. Çocuklarda 1 belirti yeterlidir.'},
+  {l:'D',t:'Klinik anlamlı sıkıntı / işlevsellikte bozulma',
+   d:'Belirtiler sosyal, mesleki veya diğer önemli alanlarda belirgin sıkıntıya ya da işlevsellik bozulmasına neden olur.'},
+  {l:'E',t:'Madde / tıbbi duruma bağlanamaz',
+   d:'Belirtiler bir maddenin (örn. kafein, kokain) veya başka bir tıbbi durumun (örn. hipertiroidi) fizyolojik etkilerine bağlanamaz. Bu yüzden organik ekartasyon zorunludur.'},
+  {l:'F',t:'Başka bir mental bozuklukla daha iyi açıklanamaz',
+   d:'Örn. panik bozukluğunda panik atak öncesi anksiyete, sosyal anksiyetede sosyal değerlendirme korkusu, OKB\'de kontaminasyon obsesyonu, ayrılma anksiyetesinde bağlanma figürlerinden ayrılık, PTSD\'de travma hatırlatıcıları, somatik belirti bozukluğunda hastalığa odaklı kaygı ile daha iyi açıklanmamalıdır.'}
+];
+
+/* =============== HAMILTON ANKSİYETE ÖLÇEĞİ (HAM-A) =============== */
+function hamaOpts(){
+  return [
+    {t:'0 — Yok',s:0},{t:'1 — Hafif',s:1},{t:'2 — Orta',s:2},{t:'3 — Şiddetli',s:3},{t:'4 — Çok şiddetli / yeti yitimine yol açan',s:4}
+  ];
+}
+var HAMA_ITEMS=[
+  {id:'anx_mood',label:'1. Anksiyöz duygudurum',opts:hamaOpts(),hint:'Endişeler, kötü şeyler olacak beklentisi, kaygılı bekleyiş, irritabilite'},
+  {id:'tension',label:'2. Gerginlik',opts:hamaOpts(),hint:'Gerginlik hissi, kolay yorulma, irkilme, ağlama eğilimi, titreme, gevşeyememe'},
+  {id:'fears',label:'3. Korkular',opts:hamaOpts(),hint:'Karanlık, yabancı, yalnız kalma, trafik, kalabalık, hayvan korkusu vb.'},
+  {id:'insomnia',label:'4. İnsomni',opts:hamaOpts(),hint:'Uykuya dalmada güçlük, parçalı uyku, yetersiz uyku, kabuslar, gece terlemesi'},
+  {id:'intellect',label:'5. Entelektüel (bilişsel)',opts:hamaOpts(),hint:'Konsantrasyon güçlüğü, bellek zayıflığı'},
+  {id:'depressed',label:'6. Depresif duygudurum',opts:hamaOpts(),hint:'İlgi kaybı, hobilerden zevk alamama, üzüntü, erken uyanma, diurnal değişim'},
+  {id:'somatic_m',label:'7. Somatik — kas',opts:hamaOpts(),hint:'Ağrılar, sızılar, kasılma, miyoklonik seğirme, diş gıcırdatma, ses titremesi, kas tonusunda artış'},
+  {id:'somatic_s',label:'8. Somatik — duyusal',opts:hamaOpts(),hint:'Kulak çınlaması, görmede bulanıklık, sıcak-soğuk basması, halsizlik hissi, karıncalanma'},
+  {id:'cardio',label:'9. Kardiyovasküler',opts:hamaOpts(),hint:'Çarpıntı, taşikardi, göğüste ağrı/atışlar, damarlarda zonklama, baygınlık hissi, ekstrasistoller'},
+  {id:'respir',label:'10. Solunum',opts:hamaOpts(),hint:'Göğüste sıkışma, boğulma hissi, iç çekme, dispne'},
+  {id:'gi',label:'11. Gastrointestinal',opts:hamaOpts(),hint:'Yutma güçlüğü, mide bulantısı, kusma, abdominal ağrı, gürültü, ishal, kilo kaybı, kabızlık'},
+  {id:'urog',label:'12. Genitoüriner',opts:hamaOpts(),hint:'Sık idrara çıkma, aciliyet, amenore, menoraji, frijidite, erken boşalma, libido kaybı, empotans'},
+  {id:'auton',label:'13. Otonom',opts:hamaOpts(),hint:'Ağız kuruluğu, kızarma, solgunluk, terleme, baş dönmesi, gerilim tipi başağrısı, tüylerin diken diken olması'},
+  {id:'behav',label:'14. Görüşmedeki davranış',opts:hamaOpts(),hint:'Huzursuzluk, kıpırdanma, tremor, kaşları çatma, gergin yüz, iç çekme, hızlı solunum, terleme, göz kapağı seğirmesi'}
+];
+var hamaVals={};
+function calcHamA(){
+  if(!scaleAllFilled(HAMA_ITEMS,hamaVals)){
+    var miss=HAMA_ITEMS.length-Object.keys(hamaVals).length;
+    var fb=document.getElementById('hama-missing-msg');
+    fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Tüm maddeleri doldurun.';
+    fb.style.display='block';
+    return;
+  }
+  document.getElementById('hama-missing-msg').style.display='none';
+  var total=scaleSum(hamaVals);
+  var interp='';
+  if(total<=17) interp='Hafif anksiyete (≤ 17)';
+  else if(total<=24) interp='Hafif-orta anksiyete (18–24)';
+  else if(total<=30) interp='Orta-şiddetli anksiyete (25–30)';
+  else interp='Şiddetli anksiyete (> 30)';
+  document.getElementById('hama-total').textContent=total;
+  document.getElementById('hama-interp').textContent=interp;
+  document.getElementById('hama-score-display').style.display='flex';
+}
+function openDsmYab(){
+  hamaVals={};
+  document.getElementById('hama-score-display').style.display='none';
+  document.getElementById('hama-missing-msg').style.display='none';
+  buildCriteria('dsm-yab-criteria',DSM_YAB);
+  buildScale('hama-items',HAMA_ITEMS,hamaVals);
+  go('dsm-yab');
+}
+
+/* =============== DSM-5 PANİK BOZUKLUK =============== */
+var DSM_PANIK_A=[
+  {l:'1',t:'Çarpıntı, kalp atımlarının duyumsanması veya hızlanma',
+   d:'Tipik olarak ataktan önce sessizdir, atak sırasında belirginleşir. Hasta sıklıkla acil servise başvurur; ilk atakta kardiyak değerlendirme zorunludur.'},
+  {l:'2',t:'Terleme',
+   d:'Soğuk veya sıcak terleme; özellikle alın, avuçlar, koltuk altı.'},
+  {l:'3',t:'Titreme veya sarsılma',
+   d:'İnce tremor; tüm vücut sarsıntısı şeklinde olabilir.'},
+  {l:'4',t:'Nefes darlığı veya boğulma hissi',
+   d:'"Nefes alamıyorum" hissi; hiperventilasyon sıklıkla eşlik eder ve parestezi yaratır.'},
+  {l:'5',t:'Soluğun kesilmesi hissi (choking)',
+   d:'Boğazda yumru, tıkanma hissi. Globus hystericus ile karışabilir.'},
+  {l:'6',t:'Göğüste ağrı veya rahatsızlık',
+   d:'Sıklıkla atipik, batıcı, kısa süreli. Yine de akut koroner sendrom ekartasyonu zorunludur (özellikle ilk atak, kardiyak risk faktörleri).'},
+  {l:'7',t:'Bulantı veya karın ağrısı',
+   d:'Mide kasılması, ishal, kusma olabilir.'},
+  {l:'8',t:'Baş dönmesi, sersemlik, dengesizlik veya bayılacakmış gibi olma',
+   d:'Vertigo ile karıştırılmamalıdır (rotatuar değildir). Vestibüler hastalıkların ekartasyonu gerekir.'},
+  {l:'9',t:'Üşüme veya ateş basması',
+   d:'Hem sıcak basması hem üşüme aynı atakta yer alabilir.'},
+  {l:'10',t:'Uyuşma veya karıncalanma (parestezi)',
+   d:'Hiperventilasyon kaynaklı respiratuar alkaloza bağlı; tipik olarak periferal (parmak uçları, ağız çevresi).'},
+  {l:'11',t:'Derealizasyon veya depersonalizasyon',
+   d:'"Sanki rüyada gibi" / "kendime dışarıdan bakıyormuş gibi" hissi.'},
+  {l:'12',t:'Kontrolünü kaybetme veya çıldırma korkusu',
+   d:'"Bir delilik yapacağım" düşüncesi tipiktir; psikoz ile karıştırılmamalıdır — içgörü korunmuştur.'},
+  {l:'13',t:'Ölüm korkusu',
+   d:'"Öleceğim" hissi ataktaki en sık ve en ağır deneyimlerden biridir; ACS şüphesini canlı tutar.'}
+];
+var DSM_PANIK_OTHER=[
+  {l:'B',t:'En az 1 atak sonrası ≥ 1 ay süren endişe veya davranış değişikliği',
+   d:'Aşağıdakilerden biri: (1) atak veya sonuçları (kontrolü kaybetme, kalp krizi, çıldırma) hakkında sürekli endişe, (2) ataklarla ilişkili belirgin uyumsuz davranış değişikliği (örn. egzersizden kaçınma, yalnız kalmaktan kaçınma).'},
+  {l:'C',t:'Madde / tıbbi duruma bağlanamaz',
+   d:'Maddenin (örn. kokain, kafein, amfetamin) veya başka bir tıbbi durumun (örn. hipertiroidi, feokromositoma, kardiyopulmoner hastalıklar) fizyolojik etkilerine bağlanamaz. Bu nedenle organik dışlama zorunludur.'},
+  {l:'D',t:'Başka bir mental bozuklukla daha iyi açıklanamaz',
+   d:'Örn. sosyal anksiyete (sosyal durumlara yanıt olarak), özgül fobi (fobik objeye yanıt), OKB (obsesyona yanıt), PTSD (travma hatırlatıcısına yanıt), ayrılma anksiyetesinde (bağlanma figürlerinden ayrılığa yanıt) görülen panik atakları daha iyi açıklayabilir.'}
+];
+function openDsmPanik(){
+  buildCriteria('dsm-panik-a',DSM_PANIK_A);
+  buildCriteria('dsm-panik-other',DSM_PANIK_OTHER);
+  go('dsm-panik');
+}
+
+/* =============== DSM-5 UYUM BOZUKLUĞU =============== */
+var DSM_UYUM=[
+  {l:'A',t:'Tanımlanabilir bir stresöre yanıt olarak 3 ay içinde belirti gelişmesi',
+   d:'Stresör belirgin (yaşam olayı: işten çıkarma, ayrılık, taşınma, hastalık tanısı) veya birden çok olabilir. Stresörden sonraki 3 ay içinde duygusal/davranışsal belirtiler ortaya çıkmalıdır.'},
+  {l:'B',t:'Belirtiler / davranışlar klinik anlamlı düzeydedir',
+   d:'Aşağıdakilerden biri olmalı: (1) stresörle orantısız sıkıntı (kültürel ve bağlamsal değerlendirme dahil), (2) sosyal, mesleki veya diğer önemli alanlarda anlamlı bozulma. Sadece normal yas dahil değildir.'},
+  {l:'C',t:'Başka bir mental bozukluk veya önceki bir bozukluğun alevlenmesi değildir',
+   d:'Stres ilişkili belirti başka bir mental bozukluğun kriterlerini karşılıyorsa o tanı konur. Önceki bir mental bozukluğun stresörle alevlenmesi uyum bozukluğu olarak kodlanmaz.'},
+  {l:'D',t:'Normal yas tepkisi değildir',
+   d:'Yakın kayıp sonrası gelişen normal kültürel yas tepkileri uyum bozukluğu sayılmaz. Ancak yas süreci komplike olur ve orantısız işlevsellik bozulması yaratırsa "uzamış yas bozukluğu" düşünülmelidir.'},
+  {l:'E',t:'Stresör veya sonuçları sona erdikten sonra ≤ 6 ay içinde belirtiler kaybolur',
+   d:'Akut form ≤ 6 ay sürer. Stresör veya sonuçları devam ediyorsa (örn. kronik tıbbi hastalık, sürmekte olan eşle problem) kronik form gelişebilir ve belirtiler 6 aydan uzun sürebilir.'}
+];
+var DSM_UYUM_SPEC=[
+  {l:'',t:'Depresif duygudurum ile',
+   d:'Çökkün duygudurum, ağlama, umutsuzluk hakim klinik tablodur.'},
+  {l:'',t:'Anksiyete ile',
+   d:'Sinirlilik, endişe, gerginlik veya çocukta bağlanma figürlerinden ayrılma korkusu hakimdir.'},
+  {l:'',t:'Karma anksiyete ve depresif duygudurum ile',
+   d:'Hem depresyon hem anksiyete birlikte görülür.'},
+  {l:'',t:'Davranım bozukluğu ile',
+   d:'Başkalarının haklarını ihlal eden veya yaşa uygun toplumsal normları/kuralları ihlal eden davranışlar hakimdir.'},
+  {l:'',t:'Karma duygu ve davranım bozukluğu ile',
+   d:'Hem duygusal belirtiler (depresyon/anksiyete) hem davranışsal belirtiler birlikte hakimdir.'},
+  {l:'',t:'Tanımlanmamış',
+   d:'Uyum bozukluğunun spesifik alt tiplerinden hiçbirine uymayan uyumsuz reaksiyonlar (örn. fiziksel yakınmalar, sosyal geri çekilme, iş/akademik engellenme).'}
+];
+function openDsmUyum(){
+  buildCriteria('dsm-uyum-criteria',DSM_UYUM);
+  buildCriteria('dsm-uyum-spec',DSM_UYUM_SPEC);
+  go('dsm-uyum');
+}
+
+/* =============== DSM-5 OKB =============== */
+var DSM_OKB=[
+  {l:'A',t:'Obsesyonların, kompulsiyonların veya her ikisinin varlığı',
+   d:'<strong>Obsesyonlar:</strong> Yineleyici, ısrarlı, istem dışı yaşanan ve müdahaleci/istenmeyen bulunan düşünce, dürtü veya görüntülerdir. Belirgin anksiyete veya sıkıntıya yol açarlar. Kişi bunları başka bir düşünce/eylemle bastırmaya, görmezden gelmeye ya da nötralize etmeye çalışır. <br><br><strong>Kompulsiyonlar:</strong> Obsesyona yanıt olarak veya katı kurallara göre yapılmak zorunda hissedilen yineleyici davranışlar (el yıkama, kontrol etme, düzenleme) veya zihinsel eylemlerdir (dua, sayı sayma, sessizce kelimeleri tekrarlama). Sıkıntıyı önlemeye yöneliktir ama gerçekçi değildir veya açıkça aşırıdır.'},
+  {l:'B',t:'Obsesyon/kompulsiyonlar zaman alıcıdır ve klinik anlamlı sıkıntı/işlevsellikte bozulma yapar',
+   d:'Günde > 1 saat veya sosyal, mesleki ya da diğer önemli alanlarda belirgin bozulma. Bu süre eşiği özellikle hafif OKB\'yi obsesif-kompulsif kişilik özelliklerinden ayırmada önemlidir.'},
+  {l:'C',t:'Madde / tıbbi duruma bağlanamaz',
+   d:'Belirtiler bir maddenin (örn. kokain, amfetamin) veya başka bir tıbbi durumun fizyolojik etkilerine bağlanamaz. PANDAS/PANS gibi enfeksiyon sonrası tablolar ayrıdır.'},
+  {l:'D',t:'Başka bir mental bozuklukla daha iyi açıklanamaz',
+   d:'Örn. YAB\'da aşırı endişe, vücut dismorfik bozukluğunda görünüme odaklı uğraşı, biriktirme bozukluğunda eşya biriktirme, trikotillomanide saç koparma, deri yolma bozukluğunda deri yolma, tik bozukluklarında stereotipik hareketler, yeme bozukluklarında ritualistik beslenme, hastalık anksiyetesi bozukluğunda hastalıkla uğraşı, paraflik bozukluklarda cinsel dürtüler, davranım bozukluğu/diğer dürtü kontrol bozukluklarında saldırgan dürtüler, MDB\'de suçluluk geviş getirmeleri, otizm spektrum bozukluğunda yineleyici davranış kalıpları.'}
+];
+var DSM_OKB_SPEC=[
+  {l:'',t:'İçgörüsü iyi veya orta — inançlarının kesinlikle/muhtemelen doğru olmadığını ya da doğru olabileceğini veya olmayabileceğini kabul eder',
+   d:'Hastaların büyük çoğunluğu bu kategoridedir. Tedavi yanıtı tipik olarak iyidir.'},
+  {l:'',t:'İçgörüsü kötü — inançlarının muhtemelen doğru olduğunu düşünür',
+   d:'Tedavi yanıtı daha sınırlıdır; bilişsel müdahale ve antipsikotik artırma stratejisi gerekebilir.'},
+  {l:'',t:'İçgörü yok / sanrısal inançlar — inançlarının doğru olduğuna kesinlikle inanır',
+   d:'Sanrı düzeyine ulaşan OKB ile psikotik bozukluk ayrımı önemlidir. Yapı obsesif-kompulsif kalır; bu durumda da OKB tanısı verilir, "şizofreni veya başka psikotik bozukluk" eklenmez (yalnızca OKB belirtilerinin sanrılı düzeyde olduğu belirtilir).'},
+  {l:'',t:'Tik ilişkili — şu anda veya geçmişte tik bozukluğu öyküsü vardır',
+   d:'Erken başlangıçlı, daha sık erkek, daha simetri/düzen odaklı obsesyonlar, "tam doğru" hissi peşinde olma; SSRI yanıtı daha sınırlıdır, antipsikotik artırma daha sık gerekir.'}
+];
+
+/* =============== Y-BOCS =============== */
+var YBOCS_ITEMS=[
+  {id:'time_obs',label:'1. Obsesyonlarla geçen zaman',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif (günde < 1 saat veya seyrek girişim)',s:1},
+    {t:'2 — Orta (1–3 saat veya sık girişim)',s:2},
+    {t:'3 — Şiddetli (> 3–8 saat veya çok sık girişim)',s:3},
+    {t:'4 — Çok şiddetli (> 8 saat veya neredeyse sürekli)',s:4}
+  ]},
+  {id:'interfere_obs',label:'2. Obsesyonların yarattığı engellenme',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif (sosyal/mesleki işlevde hafif girişim, performans bozulmaz)',s:1},
+    {t:'2 — Orta (belirgin girişim ama hâlâ idare edebilir)',s:2},
+    {t:'3 — Şiddetli (önemli işlev kaybı)',s:3},{t:'4 — Çok şiddetli (yeti yitimi)',s:4}
+  ]},
+  {id:'distress_obs',label:'3. Obsesyonların yarattığı sıkıntı',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif, çok az rahatsız edici',s:1},
+    {t:'2 — Orta, rahatsız edici ama idare edilebilir',s:2},
+    {t:'3 — Şiddetli, çok rahatsız edici',s:3},{t:'4 — Çok şiddetli, neredeyse sürekli yeti yitimi',s:4}
+  ]},
+  {id:'resist_obs',label:'4. Obsesyonlara karşı direnç',opts:[
+    {t:'0 — Her zaman direnir',s:0},{t:'1 — Çoğu zaman direnir',s:1},
+    {t:'2 — Bir miktar çaba ile direnir',s:2},{t:'3 — Tüm obsesyonlara teslim olur ama gönülsüz',s:3},
+    {t:'4 — Tüm obsesyonlara tamamen ve isteyerek teslim olur',s:4}
+  ]},
+  {id:'control_obs',label:'5. Obsesyonlar üzerinde kontrol derecesi',opts:[
+    {t:'0 — Tam kontrol',s:0},{t:'1 — Çoğu zaman kontrol edebilir',s:1},
+    {t:'2 — Bazen kontrol edebilir',s:2},{t:'3 — Nadiren başarılı, güçlükle bölebilir',s:3},
+    {t:'4 — Kontrol edemez, obsesyonu yalnızca dikkatini kısa süre dağıtarak erteleyebilir',s:4}
+  ]},
+  {id:'time_comp',label:'6. Kompulsiyonlarla geçen zaman',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif (günde < 1 saat veya seyrek)',s:1},
+    {t:'2 — Orta (1–3 saat veya sık)',s:2},{t:'3 — Şiddetli (> 3–8 saat veya çok sık)',s:3},
+    {t:'4 — Çok şiddetli (> 8 saat veya neredeyse sürekli)',s:4}
+  ]},
+  {id:'interfere_comp',label:'7. Kompulsiyonların yarattığı engellenme',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif',s:1},{t:'2 — Orta',s:2},
+    {t:'3 — Şiddetli',s:3},{t:'4 — Çok şiddetli (yeti yitimi)',s:4}
+  ]},
+  {id:'distress_comp',label:'8. Kompulsiyonlardan engellenirse sıkıntı düzeyi',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif anksiyete',s:1},
+    {t:'2 — Orta, idare edilebilir anksiyete',s:2},
+    {t:'3 — Belirgin ve çok rahatsız edici anksiyete',s:3},
+    {t:'4 — Yeti yitimine yol açan anksiyete',s:4}
+  ]},
+  {id:'resist_comp',label:'9. Kompulsiyonlara karşı direnç',opts:[
+    {t:'0 — Her zaman direnir',s:0},{t:'1 — Çoğu zaman direnir',s:1},
+    {t:'2 — Bir miktar çaba ile direnir',s:2},{t:'3 — Tüm kompulsiyonlara teslim olur ama gönülsüz',s:3},
+    {t:'4 — Tüm kompulsiyonlara tamamen ve isteyerek teslim olur',s:4}
+  ]},
+  {id:'control_comp',label:'10. Kompulsiyonlar üzerinde kontrol derecesi',opts:[
+    {t:'0 — Tam kontrol',s:0},{t:'1 — Çoğu zaman geciktirme baskısı altında ama tamamlar',s:1},
+    {t:'2 — Bir miktar gecikme veya kısaltma yapabilir',s:2},
+    {t:'3 — Sadece güçlükle tamamlanmadan bırakabilir',s:3},
+    {t:'4 — Kompulsiyonu istemeden de tamamlamak zorunda kalır',s:4}
+  ]}
+];
+var ybocsVals={};
+function calcYbocs(){
+  if(!scaleAllFilled(YBOCS_ITEMS,ybocsVals)){
+    var miss=YBOCS_ITEMS.length-Object.keys(ybocsVals).length;
+    var fb=document.getElementById('ybocs-missing-msg');
+    fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Tüm maddeleri doldurun.';
+    fb.style.display='block';
+    return;
+  }
+  document.getElementById('ybocs-missing-msg').style.display='none';
+  var total=scaleSum(ybocsVals);
+  var interp='';
+  if(total<=7) interp='Subklinik (0–7)';
+  else if(total<=15) interp='Hafif OKB (8–15)';
+  else if(total<=23) interp='Orta OKB (16–23)';
+  else if(total<=31) interp='Şiddetli OKB (24–31)';
+  else interp='Aşırı şiddetli OKB (32–40)';
+  document.getElementById('ybocs-total').textContent=total;
+  document.getElementById('ybocs-interp').textContent=interp;
+  document.getElementById('ybocs-score-display').style.display='flex';
+}
+function openDsmOkb(){
+  ybocsVals={};
+  document.getElementById('ybocs-score-display').style.display='none';
+  document.getElementById('ybocs-missing-msg').style.display='none';
+  buildCriteria('dsm-okb-criteria',DSM_OKB);
+  buildCriteria('dsm-okb-spec',DSM_OKB_SPEC);
+  buildScale('ybocs-items',YBOCS_ITEMS,ybocsVals);
+  go('dsm-okb');
+}
+
+/* =============== YMRS =============== */
+var YMRS_ITEMS=[
+  {id:'mood',label:'1. Yükselmiş duygudurum',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Sorgulamada hafif veya olası artış',s:1},
+    {t:'2 — Öznel hafif yükseliş, neşeli, uygun ortama göre iyimser, kendine güvenli',s:2},
+    {t:'3 — Belirgin yükselme, espri, gülme, aşırı neşe',s:3},
+    {t:'4 — Öforik, uygunsuz gülme, şarkı söyleme',s:4}
+  ]},
+  {id:'activity',label:'2. Artmış motor enerji-aktivite',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Öznel olarak artmış',s:1},
+    {t:'2 — Canlı jestler, artmış enerji',s:2},
+    {t:'3 — Aşırı enerji, dönem dönem hiperaktivite, huzursuzluk (sakinleştirilebilir)',s:3},
+    {t:'4 — Motor eksitasyon, sürekli hiperaktivite (sakinleştirilemez)',s:4}
+  ]},
+  {id:'sexual',label:'3. Cinsel ilgi',opts:[
+    {t:'0 — Normal, artmamış',s:0},{t:'1 — Hafif artmış',s:1},
+    {t:'2 — Sorulduğunda belirgin artış',s:2},
+    {t:'3 — Spontan cinsel içerikli konuşma, konuyu cinselleştirme',s:3},
+    {t:'4 — Açık cinsel davranışlar (hasta, personel, görüşmeciye karşı)',s:4}
+  ]},
+  {id:'sleep',label:'4. Uyku',opts:[
+    {t:'0 — Azalma yok',s:0},{t:'1 — < 1 saat azalma',s:1},
+    {t:'2 — > 1 saat azalma',s:2},
+    {t:'3 — Uyku ihtiyacında azalma bildirir',s:3},
+    {t:'4 — Uyku ihtiyacını inkâr eder',s:4}
+  ]},
+  {id:'irrit',label:'5. İrritabilite (×2 katsayı; 0–8)',opts:[
+    {t:'0 — Yok',s:0},{t:'2 — Öznel olarak artmış',s:2},
+    {t:'4 — Görüşmede dönem dönem belirgin irritabilite; konuşma sırasında ses tonu yükselir',s:4},
+    {t:'6 — Görüşme boyunca sıklıkla irritabl; kısa, ters cevaplar',s:6},
+    {t:'8 — Düşmanca, işbirliği yapmıyor; görüşme imkânsız',s:8}
+  ]},
+  {id:'speech',label:'6. Konuşma — hız ve miktar (×2 katsayı; 0–8)',opts:[
+    {t:'0 — Artış yok',s:0},
+    {t:'2 — Konuşmacı olduğu izlenimi',s:2},
+    {t:'4 — Aralıklı hızlanma veya artmış miktar; ayrıntılı (verbose)',s:4},
+    {t:'6 — Sürekli baskıyla konuşma; bölmek zor',s:6},
+    {t:'8 — Bölünmesi mümkün olmayan, hızlı, kesintisiz konuşma',s:8}
+  ]},
+  {id:'thought_disorder',label:'7. Dil-düşünce bozukluğu',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Çevresel; hafif dağınık',s:1},
+    {t:'2 — Çabuk dikkat dağılması, hedeften kaybetme; tema değişikliklerini sık görme',s:2},
+    {t:'3 — Fikir uçuşması, teğet düşünce; takip etmek zor; klang çağrışım',s:3},
+    {t:'4 — Tutarsız, iletişim imkânsız',s:4}
+  ]},
+  {id:'thought_content',label:'8. Düşünce içeriği (×2 katsayı; 0–8)',opts:[
+    {t:'0 — Normal',s:0},
+    {t:'2 — Şüpheli planlar, yeni ilgiler',s:2},
+    {t:'4 — Özel proje(ler); aşırı dindarlık',s:4},
+    {t:'6 — Grandiyöz veya paranoid fikirler, "referans" fikirleri',s:6},
+    {t:'8 — Hezeyanlar; halüsinasyonlar',s:8}
+  ]},
+  {id:'aggressive',label:'9. Yıkıcı / saldırgan davranış (×2 katsayı; 0–8)',opts:[
+    {t:'0 — Yok',s:0},{t:'2 — Alaycı, gürültülü, ihtiyatlı',s:2},
+    {t:'4 — Tehditkâr, hakaret eder; ses yükseltir',s:4},
+    {t:'6 — Personele saldırı tehdidi, eşyaları kırma',s:6},
+    {t:'8 — Saldırgan davranış, fiziksel atak; tehlikeli',s:8}
+  ]},
+  {id:'appearance',label:'10. Görünüm',opts:[
+    {t:'0 — Düzenli, uygun giyim',s:0},{t:'1 — Hafif dağınık',s:1},
+    {t:'2 — Dağınık; abartılı giyim',s:2},
+    {t:'3 — Kıyafetlerin önemli bir kısmı eksik / acayip',s:3},
+    {t:'4 — Tam dağınık; süslemeli, garip kıyafet',s:4}
+  ]},
+  {id:'insight',label:'11. İçgörü',opts:[
+    {t:'0 — Mevcut; hasta olduğunu kabul eder, tedavi ihtiyacını kabul eder',s:0},
+    {t:'1 — Hasta olabileceğini kabul eder',s:1},
+    {t:'2 — Davranış değişikliğini kabul eder ama hasta olmayı reddeder',s:2},
+    {t:'3 — Olası davranış değişikliğini kabul eder ama hasta olmayı reddeder',s:3},
+    {t:'4 — Hasta olduğunu tamamen reddeder',s:4}
+  ]}
+];
+var ymrsVals={};
+function calcYmrs(){
+  if(!scaleAllFilled(YMRS_ITEMS,ymrsVals)){
+    var miss=YMRS_ITEMS.length-Object.keys(ymrsVals).length;
+    var fb=document.getElementById('ymrs-missing-msg');
+    fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Tüm maddeleri doldurun.';
+    fb.style.display='block';
+    return;
+  }
+  document.getElementById('ymrs-missing-msg').style.display='none';
+  var total=scaleSum(ymrsVals);
+  var interp='';
+  if(total<=12) interp='Remisyon / minimal belirti (≤ 12)';
+  else if(total<=19) interp='Hafif mani (13–19)';
+  else if(total<=25) interp='Orta mani (20–25)';
+  else if(total<=37) interp='Şiddetli mani (26–37)';
+  else interp='Çok şiddetli mani (≥ 38)';
+  document.getElementById('ymrs-total').textContent=total;
+  document.getElementById('ymrs-interp').textContent=interp;
+  document.getElementById('ymrs-score-display').style.display='flex';
+}
+function openMani(){
+  ymrsVals={};
+  document.getElementById('ymrs-score-display').style.display='none';
+  document.getElementById('ymrs-missing-msg').style.display='none';
+  buildScale('ymrs-items',YMRS_ITEMS,ymrsVals);
+  go('mani');
+}
+
+/* =============== HEZEYAN TÜRLERİ =============== */
+var HEZEYAN_LIST=[
+  {n:'Zarar Görme (Persekütör / Komplo) Hezeyanları',
+   d:'Kişinin izlendiğine, kendisine komplo kurulduğuna veya zarar verileceğine inanması. <em>Örn: "MİT beni dinliyor, evime kameralar yerleştirdiler, beni öldürmek için zehir karıştırıyorlar."</em>'},
+  {n:'Alınma (Referans) Hezeyanları',
+   d:'Çevredeki nötr olayların (televizyon haberi, yoldan geçen iki kişinin konuşması, gazete yazısı vb.) doğrudan kendisiyle ilgili olduğuna inanması. <em>Örn: "TV spikeri benim hakkımda konuşuyor, yoldan geçenler bana mesaj veriyor."</em>'},
+  {n:'Kıskançlık (Othello) Hezeyanları',
+   d:'Eşinin veya partnerinin kendisini aldattığına dair somut kanıt olmaksızın duyulan sarsılmaz inanç. <em>Sıklıkla alkol kullanım bozukluğu, vasküler patoloji veya geç başlangıçlı psikoz zemininde görülür.</em>'},
+  {n:'Suçluluk ve Günahkârlık Hezeyanları',
+   d:'İşlemediği bir suçtan dolayı kendini aşırı suçlama veya affedilemez günahlar işlediğini düşünme. <em>Genellikle psikotik özellikli ağır depresyonda görülür; intihar riski yüksektir.</em>'},
+  {n:'Büyüklük (Grandiyöz) Hezeyanları',
+   d:'Kişinin çok ünlü, zengin, özel güçleri olan veya önemli bir tarihi/dini kişilik olduğuna inanması. <em>Manik epizod, şizofreni veya genel parezi (nörosifiliz) ayırıcı tanılarında düşünülür.</em>'},
+  {n:'Dinsel (Mistik) Hezeyanlar',
+   d:'Dini içerikli, sıra dışı ve kişinin gerçekliğiyle bağdaşmayan aşırı inançlar. <em>Kültürel bağlama göre değerlendirilmelidir; din ile uyumlu inançlar hezeyan sayılmaz.</em>'},
+  {n:'Somatik Hezeyanlar',
+   d:'Vücudunda ağır bir hastalık, organlarında çürüme veya fiziksel bir deformasyon olduğuna dair inanç. <em>Cotard sendromunda "öldüğüne / organlarının olmadığına" inanma; psikotik depresyon ve nörolojik hastalıklarda görülebilir.</em>'},
+  {n:'Kontrol Edilme (Etkilenme) Hezeyanları',
+   d:'Düşüncelerinin, duygularının veya hareketlerinin dış bir güç (cihazlar, ışınlar, insanlar) tarafından yönetildiğini hissetme. <em>Şizofreni için Schneider birinci sıra belirtileri arasındadır.</em>'},
+  {n:'Düşünce Okunması',
+   d:'Başkalarının kendi aklından geçenleri bildiğine dair inanç. <em>Schneider birinci sıra belirtisi.</em>'},
+  {n:'Düşünce Yayınlanması (Yayılması)',
+   d:'Kendi düşüncelerinin sesli bir şekilde dışarıya yayıldığı ve başkaları tarafından duyulduğu hissi. <em>Schneider birinci sıra belirtisi; şizofreni için karakteristiktir.</em>'},
+  {n:'Düşünce Çekilmesi (Sokulması)',
+   d:'Düşüncelerinin zihninden zorla alındığı (çekilme) veya yerine başkalarının düşüncelerinin konulduğuna (sokulma) inanma. <em>Schneider birinci sıra belirtisi.</em>'}
+];
+function openHezeyan(){
+  var c=document.getElementById('hezeyan-list');
+  if(c){
+    c.innerHTML='';
+    HEZEYAN_LIST.forEach(function(h){
+      var d=document.createElement('div');
+      d.className='hez-item';
+      d.innerHTML='<p class="hez-name">'+h.n+'</p><p class="hez-desc">'+h.d+'</p>';
+      c.appendChild(d);
+    });
+  }
+  go('hezeyan');
 }
 </script>
 </body>
