@@ -148,6 +148,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .crit-item.open .crit-toggle::before{content:'−'}
 .crit-desc{display:none;margin-top:8px;padding-top:8px;border-top:0.5px solid rgba(0,0,0,0.08);font-size:12px;color:#555;line-height:1.6}
 .crit-item.open .crit-desc{display:block}
+.crit-item.selected{border-color:#185FA5;background:#E6F1FB}
+.crit-item.selected .crit-label{color:#0C447C;font-weight:500}
+.crit-select{width:20px;height:20px;min-width:20px;border:0.5px solid rgba(0,0,0,0.25);border-radius:4px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;margin-top:1px}
+.crit-item.selected .crit-select{background:#185FA5;border-color:#185FA5}
+.crit-item.selected .crit-select::before{content:'✓'}
+.crit-status{margin-top:10px;padding:10px 12px;border-radius:8px;font-size:13px;line-height:1.45;display:none}
+.crit-status.show{display:block}
+.crit-status.warning{background:#FAEEDA;color:#854F0B;border:0.5px solid #EF9F27}
+.crit-status.success{background:#EAF3DE;color:#3B6D11;border:0.5px solid #97C459}
+.crit-missing{border-color:#EF9F27}
 .crit-letter{font-weight:600;color:#185FA5;margin-right:6px}
 .organic-list{background:#FCEBEB;border:0.5px solid #F09595;border-radius:8px;padding:10px 12px;margin:10px 0;font-size:12px;line-height:1.7;color:#7A2222}
 .organic-list strong{display:block;margin-bottom:4px;color:#A32D2D}
@@ -174,11 +184,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
     <p class="section-label">A. Panik atak — 4 belirti gereklidir</p>
     <p style="font-size:12px;color:#666;margin-bottom:10px">Yineleyici, beklenmedik panik ataklar. Panik atak, dakikalar içinde zirveye ulaşan yoğun korku/rahatsızlık dönemidir; aşağıdaki 13 belirtiden ≥ 4'ünün varlığı şarttır.</p>
     <div id="dsm-panik-a"></div>
+    <div id="dsm-panik-a-status" class="crit-status warning"></div>
   </div>
 
   <div class="card">
-    <p class="section-label">B–E. Diğer kriterler</p>
+    <p class="section-label">B–D. Diğer kriterler</p>
     <div id="dsm-panik-other"></div>
+    <div id="dsm-panik-other-status" class="crit-status warning"></div>
   </div>
 
   <div class="card">
@@ -192,7 +204,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
       <strong>Diğer:</strong> Anemi, hipokalsemi, hipomagnezemi, anaflaksi (erken).
     </div>
     <p style="font-size:12px;color:#555;margin-top:10px">
-      <strong>İlk başvuruda zorunlu:</strong> EKG (özellikle ilk atakta), tam kan sayımı, TSH, glukoz, elektrolitler. Şüpheye göre troponin, D-dimer, akciğer grafisi, idrar toksikolojisi, 24 saatlik idrar metanefrin.
+      <strong>İlk başvuruda zorunlu:</strong> EKG (özellikle ilk atakta), tam kan sayımı, TSH, glukoz, elektrolitler. Şüpheye göre troponin, D-dimer, akciğer grafisi.
     </p>
   </div>
 
@@ -211,15 +223,79 @@ function buildCriteria(containerId, items){
   items.forEach(function(it,i){
     var d=document.createElement('div');
     d.className='crit-item';
-    d.onclick=(function(el){return function(){el.classList.toggle('open')}})(d);
+    d.setAttribute('data-crit-letter', it.l || '');
+    d.setAttribute('data-container-id', containerId);
+
     var letter=it.l?'<span class="crit-letter">'+it.l+'.</span>':'';
     d.innerHTML='<div class="crit-head">'+
+        '<span class="crit-select" title="Kriteri seç"></span>'+
         '<p class="crit-label">'+letter+it.t+'</p>'+
-        '<span class="crit-toggle"></span>'+
+        '<span class="crit-toggle" title="Açıklamayı göster"></span>'+
       '</div>'+
       '<div class="crit-desc">'+it.d+'</div>';
+
+    var selectBox=d.querySelector('.crit-select');
+    var toggleBox=d.querySelector('.crit-toggle');
+
+    selectBox.onclick=function(ev){
+      ev.stopPropagation();
+      d.classList.toggle('selected');
+      updatePanikCriteriaWarnings();
+    };
+
+    toggleBox.onclick=function(ev){
+      ev.stopPropagation();
+      d.classList.toggle('open');
+    };
+
+    d.onclick=function(){
+      d.classList.toggle('selected');
+      updatePanikCriteriaWarnings();
+    };
+
     c.appendChild(d);
   });
+  updatePanikCriteriaWarnings();
+}
+
+
+function updatePanikCriteriaWarnings(){
+  var aWrap=document.getElementById('dsm-panik-a');
+  var aStatus=document.getElementById('dsm-panik-a-status');
+  var otherWrap=document.getElementById('dsm-panik-other');
+  var otherStatus=document.getElementById('dsm-panik-other-status');
+
+  if(aWrap && aStatus){
+    var aItems=aWrap.querySelectorAll('.crit-item');
+    var aSelected=aWrap.querySelectorAll('.crit-item.selected').length;
+    aItems.forEach(function(x){x.classList.remove('crit-missing')});
+
+    if(aSelected < 4){
+      var eksik=4-aSelected;
+      aStatus.className='crit-status warning show';
+      aStatus.innerHTML='<strong>A kriteri sağlanmadı.</strong> Panik atak için en az 4 belirti seçilmelidir. Şu an '+aSelected+' belirti seçildi; '+eksik+' madde daha gerekli.';
+      aItems.forEach(function(x){ if(!x.classList.contains('selected')) x.classList.add('crit-missing'); });
+    }else{
+      aStatus.className='crit-status success show';
+      aStatus.innerHTML='<strong>A kriteri biçimsel olarak karşılandı.</strong> En az 4 panik atak belirtisi seçildi.';
+    }
+  }
+
+  if(otherWrap && otherStatus){
+    var otherItems=Array.from(otherWrap.querySelectorAll('.crit-item'));
+    var missing=otherItems.filter(function(x){return !x.classList.contains('selected')});
+    otherItems.forEach(function(x){x.classList.remove('crit-missing')});
+
+    if(missing.length>0){
+      var harfler=missing.map(function(x){return x.getAttribute('data-crit-letter')}).filter(Boolean).join(', ');
+      otherStatus.className='crit-status warning show';
+      otherStatus.innerHTML='<strong>B–D kriterleri tamamlanmadı.</strong> Seçilmemiş kriter: '+harfler+'. Panik bozukluk tanı ölçütleri için B, C ve D kriterlerinin tamamı değerlendirilmelidir.';
+      missing.forEach(function(x){x.classList.add('crit-missing')});
+    }else{
+      otherStatus.className='crit-status success show';
+      otherStatus.innerHTML='<strong>B–D kriterleri tamamlandı.</strong> Diğer tanı ölçütlerinin tamamı seçildi.';
+    }
+  }
 }
 
 function buildScale(containerId, items, valsObj){
