@@ -1,38 +1,603 @@
-from pathlib import Path
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deliryum Değerlendirmesi</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;color:#1a1a1a;background:#f5f5f3}
+.app{max-width:460px;margin:0 auto;padding:12px}
+@media (min-width:768px){
+  .app{max-width:720px;padding:20px}
+  body{font-size:15px}
+}
+@media (min-width:1100px){
+  .app{max-width:1080px;padding:28px}
+  .screen.active#organik,
+  .screen.active#psikiyatrik{max-width:820px;margin:0 auto}
+}
+.screen{display:none}
+.screen.active{display:block}
+.card{background:#fff;border:0.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:1rem 1.25rem;margin-bottom:12px}
+.page-title{font-size:18px;font-weight:500;margin-bottom:4px}
+.page-sub{font-size:13px;color:#666;margin-bottom:16px}
+.section-label{font-size:12px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.flow-arrow{text-align:center;font-size:22px;color:#888;margin:8px 0}
+.rass-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rass-btn{padding:10px 8px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;text-align:left;font-size:13px;color:#1a1a1a}
+.rass-btn:hover{background:#f0f0ee}
+.rass-btn.selected{border:2px solid #185FA5;background:#E6F1FB;color:#0C447C}
+.rass-score{font-size:18px;font-weight:500;display:block;margin-bottom:2px}
+.rass-label{font-size:11px;color:inherit;opacity:.8}
+.feedback-box{padding:12px;border-radius:8px;margin:12px 0;font-size:14px;line-height:1.5}
+.fb-danger{background:#FCEBEB;color:#A32D2D;border:0.5px solid #F09595}
+.fb-warning{background:#FAEEDA;color:#854F0B;border:0.5px solid #EF9F27}
+.fb-success{background:#EAF3DE;color:#3B6D11;border:0.5px solid #97C459}
+.fb-info{background:#E6F1FB;color:#0C447C;border:0.5px solid #85B7EB}
+.btn-primary{display:block;width:100%;padding:12px;background:#185FA5;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;margin-top:12px;text-align:center}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-secondary{display:block;width:100%;padding:10px;background:#fff;color:#1a1a1a;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;font-size:14px;cursor:pointer;margin-top:8px;text-align:center}
+.btn-back{background:none;border:none;cursor:pointer;font-size:13px;color:#888;padding:0;margin-bottom:14px;display:flex;align-items:center;gap:4px}
+.cam-item{border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:12px;margin-bottom:8px}
+.cam-q{font-size:14px;font-weight:500;margin-bottom:8px}
+.cam-note{font-size:12px;color:#666;margin-top:4px}
+.radio-row{display:flex;gap:8px;margin-top:6px}
+.radio-btn{flex:1;padding:8px 4px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;font-size:13px;text-align:center;color:#1a1a1a}
+.radio-btn.selected-evet{border:2px solid #3B6D11;background:#EAF3DE;color:#3B6D11;font-weight:500}
+.radio-btn.selected-hayir{border:2px solid #A32D2D;background:#FCEBEB;color:#A32D2D;font-weight:500}
+.score-display{background:#f5f5f3;border-radius:8px;padding:12px;margin:12px 0;display:flex;justify-content:space-between;align-items:center}
+.score-num{font-size:28px;font-weight:500}
+.score-interp{font-size:13px;color:#666;text-align:right;max-width:60%}
+.drs-item{border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.drs-q{font-size:13px;font-weight:500;margin-bottom:6px}
+.drs-options{display:flex;flex-direction:column;gap:4px}
+.drs-opt{padding:7px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;font-size:12px;color:#1a1a1a;text-align:left}
+.drs-opt.selected{border:2px solid #185FA5;background:#E6F1FB;color:#0C447C}
+.checklist-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:0.5px solid rgba(0,0,0,0.08)}
+.checklist-item:last-child{border-bottom:none}
+.check-box{width:22px;height:22px;min-width:22px;border:0.5px solid rgba(0,0,0,0.2);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#fff;font-size:14px;color:#185FA5}
+.check-box.checked{background:#185FA5;border-color:#185FA5;color:#fff}
+.check-text{font-size:13px;line-height:1.5;flex:1}
+.check-sub{font-size:11px;color:#888;margin-top:2px}
+.dd-section{margin-bottom:14px;padding-bottom:14px;border-bottom:0.5px solid rgba(0,0,0,0.08)}
+.dd-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.dd-title{font-size:14px;font-weight:500;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.dd-criteria{font-size:12px;color:#555;line-height:1.6}
+.dd-action{font-size:12px;color:#0C447C;background:#E6F1FB;padding:6px 8px;border-radius:6px;margin-top:6px;line-height:1.4}
+.badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:500}
+.badge-blue{background:#E6F1FB;color:#185FA5}
+.badge-amber{background:#FAEEDA;color:#854F0B}
+.badge-red{background:#FCEBEB;color:#A32D2D}
+.badge-green{background:#EAF3DE;color:#3B6D11}
+.badge-purple{background:#EEEDFE;color:#3C3489}
+.progress{display:flex;gap:4px;margin-bottom:16px}
+.progress-dot{height:4px;flex:1;border-radius:2px;background:rgba(0,0,0,0.1)}
+.progress-dot.done{background:#185FA5}
+.progress-dot.active{background:#B5D4F4}
+.lab-row{display:grid;grid-template-columns:120px 1fr 70px;gap:8px;align-items:center;padding:8px 0;border-bottom:0.5px solid rgba(0,0,0,0.06)}
+.lab-row:last-child{border-bottom:none}
+.lab-name{font-size:13px;font-weight:500}
+.lab-input{padding:6px 8px;border:0.5px solid rgba(0,0,0,0.2);border-radius:6px;font-size:13px;width:100%}
+.lab-unit{font-size:11px;color:#888}
+.lab-result{margin-top:4px;font-size:11px;padding:4px 8px;border-radius:4px;display:none}
+.lab-result.shown{display:block}
+.lab-normal{background:#EAF3DE;color:#3B6D11}
+.lab-mild{background:#FAEEDA;color:#854F0B}
+.lab-severe{background:#FCEBEB;color:#A32D2D}
+.red-flag{border:0.5px solid #F09595;border-radius:8px;padding:10px 12px;margin-bottom:8px;background:#FEF8F8}
+.rf-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.rf-title{font-size:13px;font-weight:500;color:#A32D2D}
+.rf-toggle{font-size:18px;color:#A32D2D}
+.rf-body{display:none;margin-top:8px;padding-top:8px;border-top:0.5px solid rgba(163,45,45,0.2)}
+.rf-body.open{display:block}
+.rf-clues{font-size:12px;color:#555;line-height:1.6;margin-bottom:6px}
+.rf-action{font-size:12px;color:#A32D2D;font-weight:500;background:#FCEBEB;padding:6px 8px;border-radius:6px}
+.konsult-item{padding:10px 12px;border-left:3px solid #185FA5;background:#F5F9FE;border-radius:0 8px 8px 0;margin-bottom:8px}
+.konsult-name{font-size:13px;font-weight:500;color:#0C447C;margin-bottom:2px}
+.konsult-when{font-size:12px;color:#555;line-height:1.5}
+.summary-box{background:#fff;border:0.5px solid rgba(0,0,0,0.12);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;line-height:1.5}
+.rdm-group{margin-bottom:14px}
+.rdm-title{font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:6px;text-transform:none}
+.rdm-opts{display:flex;flex-wrap:wrap;gap:6px}
+.rdm-opt{padding:6px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:14px;background:#fff;font-size:12px;color:#1a1a1a;cursor:pointer;transition:all 0.15s;position:relative;font-family:inherit}
+.rdm-opt:hover{background:#f0f0ee}
+.rdm-opt.selected{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.rdm-opt[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:6px 10px;border-radius:6px;font-size:11px;white-space:normal;width:max-content;max-width:240px;z-index:10;line-height:1.4;pointer-events:none;text-align:left}
+.rdm-other-input{padding:6px 10px;border:0.5px dashed rgba(0,0,0,0.3);border-radius:14px;background:#fafaf8;font-size:12px;font-family:inherit;width:140px;outline:none}
+.rdm-other-input:focus{border-color:#1a1a1a;border-style:solid;background:#fff}
 
-src = Path("/mnt/data/deliryum.html")
-html = src.read_text(encoding="utf-8")
-
-# 1) Add CSS for locked consultation note selection
-css_anchor = """.btn-secondary.blocked{opacity:.55}"""
-css_insert = """.btn-secondary.blocked{opacity:.55}
+.rdm-section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:0}
+.rdm-skip-btn{padding:5px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:14px;background:#fff;font-size:12px;color:#1a1a1a;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.15s}
+.rdm-skip-btn:hover{background:#f0f0ee}
+.rdm-skip-btn.selected-red{background:#A32D2D;color:#fff;border-color:#A32D2D;font-weight:500}
+.rdm-followup{display:none;margin-top:8px;padding:10px;border:0.5px solid rgba(0,0,0,0.12);border-radius:8px;background:#fafaf8}
+.rdm-followup.open{display:block}
+.rdm-followup-label{font-size:12px;font-weight:500;color:#1a1a1a;margin-bottom:6px}
+.rdm-followup-input{width:100%;padding:8px 10px;border:0.5px solid rgba(0,0,0,0.22);border-radius:8px;background:#fff;font-size:12px;font-family:inherit;outline:none}
+.rdm-followup-input:focus{border-color:#1a1a1a}
+.rdm-title.rdm-missing{color:#A32D2D}
+.rdm-opt.missing-opt{border-color:#A32D2D;color:#A32D2D;background:#FEF8F8}
+.rdm-opt.missing-opt:hover{background:#FCEBEB}
+.drs-opt.missing-opt{border-color:#A32D2D;color:#A32D2D;background:#FEF8F8}
+.drs-opt.missing-opt:hover{background:#FCEBEB}
+.drs-item.missing-item .drs-q{color:#A32D2D}
+.input-invalid{border-color:#A32D2D !important;box-shadow:0 0 0 2px rgba(163,45,45,0.15)}
+.btn-secondary.blocked{opacity:.55}
 .kons-note-copy-locked{
   -webkit-user-select:none;
   -moz-user-select:none;
   -ms-user-select:none;
   user-select:none;
 }
-"""
-if css_anchor not in html:
-    raise ValueError("CSS anchor not found.")
-html = html.replace(css_anchor, css_insert, 1)
 
-# 2) Extend refreshCopyState() so consultation note text cannot be selected while copy is blocked
-old = """function refreshCopyState(){
-  var btn=document.getElementById('copy-btn');
-  if(!btn) return;
-  var sosyoEl=document.getElementById('sosyo-input');
-  var sosyo=sosyoEl?sosyoEl.value.trim():'';
-  var ok=!!sosyo && rdmIsFull();
-  btn.classList.toggle('blocked',!ok);
-  if(sosyo && sosyoEl) sosyoEl.classList.remove('input-invalid');
-  if(ok){
-    var msgEl=document.getElementById('copy-block-msg');
-    if(msgEl) msgEl.style.display='none';
+.alkol-toggle-row{display:flex;gap:8px;flex-wrap:wrap}
+.alkol-toggle{flex:1;min-width:180px;padding:12px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;font-size:13px;color:#1a1a1a;text-align:center;font-family:inherit;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.alkol-toggle:hover{background:#f0f0ee}
+.alkol-toggle.selected-no{border:2px solid #3B6D11;background:#EAF3DE;color:#3B6D11;font-weight:500}
+.alkol-toggle.selected-yes{border:2px solid #A32D2D;background:#FCEBEB;color:#A32D2D;font-weight:500}
+.alkol-toggle.missing{border-color:#A32D2D;color:#A32D2D;background:#FEF8F8}
+.alkol-toggle.missing:hover{background:#FCEBEB}
+
+/* DSM-5 kriter, ölçek ve hezeyan stilleri */
+.dsm-warning{background:#FAEEDA;color:#854F0B;border:0.5px solid #EF9F27;padding:10px 12px;border-radius:8px;font-size:13px;line-height:1.5;margin-bottom:14px}
+.dsm-warning strong{display:block;margin-bottom:3px}
+.dsm-section-title{font-size:13px;font-weight:600;color:#1a1a1a;margin:14px 0 8px;text-transform:none}
+.crit-item{border:0.5px solid rgba(0,0,0,0.12);border-radius:8px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:#fff;transition:all 0.15s}
+.crit-item:hover{background:#fafaf8}
+.crit-item.open{border-color:#185FA5;background:#F5F9FE}
+.crit-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.crit-label{font-size:13px;line-height:1.5;flex:1}
+.crit-toggle{font-size:18px;color:#888;line-height:1;margin-top:-2px}
+.crit-item.open .crit-toggle{color:#185FA5}
+.crit-item .crit-toggle::before{content:'+'}
+.crit-item.open .crit-toggle::before{content:'−'}
+.crit-desc{display:none;margin-top:8px;padding-top:8px;border-top:0.5px solid rgba(0,0,0,0.08);font-size:12px;color:#555;line-height:1.6}
+.crit-item.open .crit-desc{display:block}
+.crit-letter{font-weight:600;color:#185FA5;margin-right:6px}
+.organic-list{background:#FCEBEB;border:0.5px solid #F09595;border-radius:8px;padding:10px 12px;margin:10px 0;font-size:12px;line-height:1.7;color:#7A2222}
+.organic-list strong{display:block;margin-bottom:4px;color:#A32D2D}
+.scale-item{border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:10px 12px;margin-bottom:6px}
+.scale-q{font-size:13px;font-weight:500;margin-bottom:6px;line-height:1.4}
+.scale-opts{display:flex;flex-direction:column;gap:4px}
+.scale-opt{padding:7px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;font-size:12px;color:#1a1a1a;text-align:left}
+.scale-opt:hover{background:#f0f0ee}
+.scale-opt.selected{border:2px solid #185FA5;background:#E6F1FB;color:#0C447C}
+.hez-item{padding:10px 12px;border-left:3px solid #6B47C9;background:#FAF8FF;border-radius:0 8px 8px 0;margin-bottom:8px}
+.hez-name{font-size:13px;font-weight:600;color:#3C3489;margin-bottom:3px}
+.hez-desc{font-size:12px;color:#444;line-height:1.55}
+
+</style>
+</head>
+<body>
+<div class="app">
+<div id="rass" class="screen active">
+  <button class="btn-back" onclick="window.location.href='index.html'"><i class="ti ti-arrow-left"></i> Geri</button>
+  <div class="progress"><div class="progress-dot done"></div><div class="progress-dot active"></div><div class="progress-dot"></div><div class="progress-dot"></div></div>
+  <p class="page-title">1. RASS</p>
+  <p class="page-sub" style="margin-bottom:12px">Richmond Agitation-Sedation Scale — Hastayı şu an en iyi tanımlayan seçeneği seçin</p>
+  <div class="rass-grid">
+    <button class="rass-btn" onclick="selectRASS(this,4)"><span class="rass-score">+4</span><span class="rass-label">Kavgacı / şiddetli</span></button>
+    <button class="rass-btn" onclick="selectRASS(this,3)"><span class="rass-score">+3</span><span class="rass-label">Çok ajite</span></button>
+    <button class="rass-btn" onclick="selectRASS(this,2)"><span class="rass-score">+2</span><span class="rass-label">Ajite</span></button>
+    <button class="rass-btn" onclick="selectRASS(this,1)"><span class="rass-score">+1</span><span class="rass-label">Huzursuz</span></button>
+    <button class="rass-btn" onclick="selectRASS(this,0)" style="grid-column:1/-1"><span class="rass-score">0</span><span class="rass-label">Uyanık ve sakin</span></button>
+    <button class="rass-btn" onclick="selectRASS(this,-1)"><span class="rass-score">−1</span><span class="rass-label">Uyukluyor / uyandırılabilir</span></button>
+    <button class="rass-btn" onclick="selectRASS(this,-2)"><span class="rass-score">−2</span><span class="rass-label">Hafif sedasyon</span></button>
+    <button class="rass-btn" onclick="selectRASS(this,-3)"><span class="rass-score">−3</span><span class="rass-label">Orta sedasyon</span></button>
+    <button class="rass-btn" onclick="selectRASS(this,-4)"><span class="rass-score">−4</span><span class="rass-label">Derin sedasyon</span></button>
+    <button class="rass-btn" onclick="selectRASS(this,-5)"><span class="rass-score">−5</span><span class="rass-label">Uyandırılamıyor / koma</span></button>
+  </div>
+  <div id="rass-feedback" style="display:none"></div>
+  <button id="rass-next" class="btn-primary" disabled>Devam →</button>
+</div>
+
+
+<div id="cam" class="screen">
+  <button class="btn-back" onclick="go('rass')"><i class="ti ti-arrow-left"></i> Geri</button>
+  <div class="progress"><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot active"></div><div class="progress-dot"></div></div>
+  <p class="page-title">2. CAM</p>
+  <p class="page-sub">Confusion Assessment Method — 4 özellik değerlendiriliyor</p>
+  <div class="cam-item">
+    <p class="cam-q">Özellik 1: Akut başlangıç ve dalgalı seyir</p>
+    <p class="cam-note">Zihinsel durumda akut değişim var mı? Gün içinde değişkenlik gösteriyor mu?</p>
+    <div class="radio-row">
+      <button class="radio-btn" onclick="setCam(0,1,this)">Evet</button>
+      <button class="radio-btn" onclick="setCam(0,0,this)">Hayır</button>
+    </div>
+  </div>
+  <div class="cam-item">
+    <p class="cam-q">Özellik 2: Dikkat bozukluğu</p>
+    <p class="cam-note">Hasta dikkatini odaklamakta, sürdürmekte veya yönlendirmekte güçlük çekiyor mu?</p>
+    <div class="radio-row">
+      <button class="radio-btn" onclick="setCam(1,1,this)">Evet</button>
+      <button class="radio-btn" onclick="setCam(1,0,this)">Hayır</button>
+    </div>
+  </div>
+  <div class="cam-item">
+    <p class="cam-q">Özellik 3: Düzensiz düşünce</p>
+    <p class="cam-note">Düşünceler dağınık, tutarsız veya anlamsız biçimde mi akıyor?</p>
+    <div class="radio-row">
+      <button class="radio-btn" onclick="setCam(2,1,this)">Evet</button>
+      <button class="radio-btn" onclick="setCam(2,0,this)">Hayır</button>
+    </div>
+  </div>
+  <div class="cam-item">
+    <p class="cam-q">Özellik 4: Bilinç düzeyi değişikliği</p>
+    <p class="cam-note">Uyanık ve dikkatli (normal) dışında herhangi bir bilinç düzeyi? (Uyanık, letarjik, stupor, koma)</p>
+    <div class="radio-row">
+      <button class="radio-btn" onclick="setCam(3,1,this)">Evet</button>
+      <button class="radio-btn" onclick="setCam(3,0,this)">Hayır</button>
+    </div>
+  </div>
+  <div id="cam-feedback" style="display:none"></div>
+  <button id="cam-next" class="btn-primary" disabled>Hesapla →</button>
+</div>
+
+
+<div id="drs" class="screen">
+  <button class="btn-back" onclick="go('cam')"><i class="ti ti-arrow-left"></i> Geri</button>
+  <div class="progress"><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot done"></div><div class="progress-dot active"></div></div>
+  <p class="page-title">3. DRS-R-98</p>
+  <p class="page-sub">Delirium Rating Scale-Revised-98 — Son 24 saati değerlendirin</p>
+  <div id="drs-items"></div>
+  <div id="drs-missing-msg" class="feedback-box fb-warning" style="display:none;font-size:13px;margin-top:4px"></div>
+  <div id="drs-score-display" style="display:none">
+    <div class="score-display">
+      <div><p style="font-size:12px;color:#888;margin-bottom:2px">Toplam puan</p><span class="score-num" id="drs-total">0</span></div>
+      <p class="score-interp" id="drs-interp"></p>
+    </div>
+  </div>
+  <button id="drs-calc" class="btn-primary" onclick="calcDRS()">Hesapla →</button>
+  <button id="drs-next" class="btn-primary" style="display:none" onclick="go('plan')">Yönetim planına geç →</button>
+</div>
+
+<!-- DELIRYUM POZİTİF — YÖNETİM PLANI -->
+
+<div id="plan" class="screen">
+  <button class="btn-back" onclick="go('drs')"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">4. Yönetim planı</p>
+  <p class="page-sub" style="margin-bottom:4px">Deliryum doğrulandı — asgari işler</p>
+
+  <div class="card" style="border-left:3px solid #A32D2D;border-radius:0 12px 12px 0">
+    <p class="section-label" style="color:#A32D2D">A. Kırmızı bayraklar — atlanmaması gerekenler</p>
+    <div class="feedback-box fb-danger" style="margin:0 0 10px 0">
+      <strong>⚠ Önce buradan başlayın.</strong><br>Aşağıdaki başlıkların her birini tek tek açıp okuyun — deliryumun altında yatan sebep bunlardan biri olabilir. Klinik bulgu varsa belirtilen tetkiki yapın.
+    </div>
+    <div id="redflag-list"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">B. Vital değer ve laboratuvar yorumlayıcı <span style="text-transform:none;color:#888;font-weight:400">(isteğe bağlı)</span></p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Değerleri girin; uygulama deliryumu açıklayıp açıklamadığını yorumlar.</p>
+    <div id="lab-grid"></div>
+    <div id="lab-summary" class="summary-box" style="margin-top:10px;display:none"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">C. Non-farmakolojik önlemler <span style="text-transform:none;color:#888;font-weight:400">(nota elle ekleyin)</span></p>
+    <div id="nonfarm-list"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">D. Farmakolojik tedavi notları</p>
+    <div id="farm-list"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">E. Hasta bilgileri</p>
+    <p style="font-size:12px;color:#666;margin-bottom:4px">Konsültasyon notuna eklenecek sosyodemografik bilgi ve şikayet.</p>
+    <p style="font-size:11px;color:#999;margin-bottom:8px;font-style:italic;line-height:1.5">Örnek: 60y evli 2ç IOM emekli marangoz eşiyle Göynük'te yaşıyor şikayeti: ...</p>
+    <textarea id="sosyo-input" style="width:100%;min-height:90px;padding:10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;line-height:1.5" oninput="updateKonsNote()"></textarea>
+  </div>
+
+  <div class="card">
+    <p class="section-label">F. Öyküsü</p>
+    <p style="font-size:12px;color:#666;margin-bottom:4px">Psikiyatriye danışılma şikayetinin öyküsünü buraya yazın.</p>
+    <p style="font-size:11px;color:#999;margin-bottom:8px;font-style:italic;line-height:1.5">Bilinçte, uyanıklıkta, dikkatte ve belirtilerde dalgalanma var ise belirtin. Halüsinatuar davranışlar da bu kısımda yazılır.</p>
+    <textarea id="oyku-input" style="width:100%;min-height:110px;padding:10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;line-height:1.5" oninput="updateKonsNote()"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="rdm-section-head">
+      <p class="section-label" style="margin-bottom:0">G. Ruhsal durum muayenesi (RDM)</p>
+      <button type="button" class="rdm-skip-btn" id="rdm-skip-btn" onclick="toggleRdmSkip()">Gerek yok</button>
+    </div>
+    <p style="font-size:12px;color:#666;margin-top:8px;margin-bottom:10px">Seçenekleri tikleyin — kons notuna RDM: olarak eklenir. Her başlığa "diğer:" ile kendiniz seçenek ekleyebilirsiniz. Bir seçeneğe basılı tutup ipucu görünen kısa açıklamaya bakabilirsiniz.</p>
+    <div id="rdm-container"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">H. Semptomatik tedavi seçimi</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Klinik tabloya göre seçin — kons notuna otomatik eklenir.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="rass-btn" id="btn-norodol" onclick="toggleTedavi('norodol')" style="text-align:center"><span class="rass-score" style="font-size:14px">Norodol</span><span class="rass-label">Hiperaktif</span></button>
+      <button class="rass-btn" id="btn-ketiapin" onclick="toggleTedavi('ketiapin')" style="text-align:center"><span class="rass-score" style="font-size:14px">Ketiapin</span><span class="rass-label">Hipoaktif</span></button>
+    </div>
+    <div id="tedavi-uyari" class="feedback-box fb-warning" style="display:none;margin-top:10px">
+      <strong>⚠ Her iki ilacın da gerekli olduğuna emin misiniz?</strong><br>Norodol ve Ketiapin birlikte seçildi. Klinik gerekçeyi gözden geçirin.
+    </div>
+  </div>
+
+  <div class="card" style="border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <p class="section-label" style="margin-bottom:0">I. Konsültasyon notu</p>
+      <button class="btn-secondary" id="copy-btn" style="margin:0;padding:6px 12px;width:auto;font-size:12px" onclick="copyKonsNote()"><i class="ti ti-copy"></i> Kopyala</button>
+    </div>
+    <div id="kons-note" style="background:#f5f5f3;border-radius:8px;padding:12px;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#1a1a1a;font-family:inherit"></div>
+    <div id="copy-block-msg" class="feedback-box fb-warning" style="display:none;margin-top:10px;font-size:13px"></div>
+  </div>
+
+  <button class="btn-secondary" onclick="window.location.href='index.html'" style="margin-top:8px">Yeni değerlendirme</button>
+</div>
+
+<!-- ALKOL HASTASI YATIRMA CHECKLİSTİ -->
+
+<div id="organik" class="screen">
+  <button class="btn-back" onclick="go('cam')"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">Deliryum düşünülmedi</p>
+  <p class="page-sub">Kliniği açıklayabilecek diğer organik patolojiler değerlendirilmeli</p>
+
+  <div class="feedback-box fb-info">
+    <strong>Akış:</strong> Aşağıdaki organik nedenleri tek tek değerlendirin. Hepsi dışlanırsa → psikiyatrik patoloji düşünülmelidir.
+  </div>
+
+  <div class="card">
+    <p class="section-label">Organik / nörolojik nedenler</p>
+    <div id="organik-list"></div>
+  </div>
+
+  <div class="flow-arrow"><i class="ti ti-arrow-down"></i></div>
+  <p style="text-align:center;font-size:13px;color:#666;margin-bottom:12px">Yukarıdakilerin hepsi dışlandı mı?</p>
+
+  <button class="btn-primary" onclick="go('psikiyatrik')">Evet → Psikiyatrik patolojiye geç</button>
+  <button class="btn-secondary" onclick="window.location.href='index.html'">Ana ekrana dön</button>
+</div>
+
+<!-- PSİKİYATRİK PATOLOJİ -->
+
+<div id="psikiyatrik" class="screen">
+  <button class="btn-back" onclick="go('organik')"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">Psikiyatrik patoloji</p>
+  <p class="page-sub">Organik nedenler dışlandı — kliniği açıklayabilecek psikopatolojiler</p>
+
+  <div class="card">
+    <div id="psik-list"></div>
+  </div>
+
+  <button class="btn-secondary" onclick="window.location.href='index.html'" style="margin-top:8px">Yeni değerlendirme</button>
+</div>
+
+
+</div>
+<script>
+var rassVal=null,camVals=[null,null,null,null],drsVals={};
+var tedaviSec={norodol:false,ketiapin:false};
+var rdmOnayVerildi=false;
+var rdmSkip=false;
+var hezeyanDetayi='';
+
+var RDM_GROUPS=[
+  {key:'katilim',label:'Görüşmeye katılımı',single:true,opts:[
+    {v:'istekli'},{v:'isteksiz'},{v:'umursamaz'},{v:'negativist',tip:'Yapılması istenenin tersini yapma / direnme'}
+  ]},
+  {key:'tutum',label:'Tutumu',single:true,opts:[
+    {v:'işbirliğine giren tutumda'},
+    {v:'saldırgan tutumda',tip:'Sözel veya fiziksel agresyon'},
+    {v:'savunmacı tutumda',tip:'Sorulara karşı kapalı, suçlamayı reddeder gibi'},
+    {v:'alaycı tutumda'},
+    {v:'kuşkucu tutumda',tip:'Görüşmeci/personele yönelik şüpheci tavır'},
+    {v:'çocuksu tutumda',tip:'Yaşına uymayan, regrese davranış'},
+    {v:'apatik tutumda',tip:'İlgisiz, tepkisiz'}
+  ]},
+  {key:'psikomotor',label:'Psikomotor aktivite',single:true,opts:[
+    {v:'olağan'},{v:'artmış'},{v:'azalmış'}
+  ]},
+  {key:'or_yer',label:'Oryantasyon — yer',single:true,opts:[{v:'+'},{v:'-'}]},
+  {key:'or_zaman',label:'Oryantasyon — zaman',single:true,opts:[{v:'+'},{v:'-'}]},
+  {key:'or_kisi',label:'Oryantasyon — kişi',single:true,opts:[{v:'+'},{v:'-'}]},
+  {key:'dikkat_odak',label:'Dikkati odaklama',single:true,opts:[
+    {v:'normal'},{v:'azalmış'}
+  ]},
+  {key:'dikkat_kaydir',label:'Dikkati kaydırma',single:true,opts:[
+    {v:'normal'},{v:'güçlükle'}
+  ]},
+  {key:'duygudurum',label:'Duygudurum',single:false,opts:[
+    {v:'disforik',tip:'Hoşnutsuz, huzursuz, bunaltılı'},
+    {v:'ötimik',tip:'Normal duygudurum'},
+    {v:'taşkın (ekspansif)'},
+    {v:'irritabl',tip:'Çabuk öfkelenen'},
+    {v:'oynak',tip:'Duygudurum dalgalanmaları'},
+    {v:'yükselmiş duygudurum'},
+    {v:'öfori'},
+    {v:'ektazi',tip:'Vecd hali'},
+    {v:'depresyon'},
+    {v:'keder'}
+  ]},
+  {key:'duygulanim',label:'Duygulanım',single:false,opts:[
+    {v:'küntleşmiş',tip:'İfade gücü ileri derecede azalmış'},
+    {v:'kısıtlı'},
+    {v:'düz',tip:'Hiç ifade yok'},
+    {v:'oynak'},
+    {v:'anksiyete'},
+    {v:'korku'},
+    {v:'ajitasyon'},
+    {v:'gerginlik'},
+    {v:'panik'},
+    {v:'apati'},
+    {v:'utanç'},
+    {v:'suçluluk'}
+  ]},
+  {key:'kon_hiz',label:'Konuşma hızı',single:true,opts:[
+    {v:'olağan'},{v:'artmış'},{v:'azalmış'},{v:'değerlendirilemedi'}
+  ]},
+  {key:'kon_mik',label:'Konuşma miktarı',single:false,opts:[
+    {v:'olağan'},{v:'artmış'},{v:'azalmış'},{v:'değerlendirilemedi'},
+    {v:'logore',tip:'Aşırı, durdurulamayan konuşma'},
+    {v:'kekeme'},
+    {v:'duraksayarak'},
+    {v:'aşırı yüksek sesli'},
+    {v:'aşırı alçak sesli'}
+  ]},
+  {key:'dus_surec',label:'Düşünce süreci',single:false,opts:[
+    {v:'sekonder'},
+    {v:'somutlaşmış',tip:'Soyut düşünce kaybı'},
+    {v:'ilişkisiz yanıt'},
+    {v:'fikir uçuşması',tip:'Çağrışımlar hızla değişir'},
+    {v:'klang çağrışım',tip:'Sözcüklerin ses benzerliğine göre çağrışım'}
+  ]},
+  {key:'dus_icer',label:'Düşünce içeriği',single:false,opts:[
+    {v:'hezeyan'},
+    {v:'hipokondriyazis',tip:'Hastalık kapma kaygısı'},
+    {v:'obsesyon'},
+    {v:'kompulsiyon'},
+    {v:'fobi'},
+    {v:'yaşam stresörleri'},
+    {v:'hastalıkla ilgili'}
+  ]},
+  {key:'algi',label:'Algı — Varsanı',single:true,opts:[
+    {v:'gözlendi'},{v:'gözlenmedi'}
+  ]},
+  {key:'muhakeme',label:'Muhakeme',single:true,opts:[
+    {v:'yerinde'},
+    {v:'kısmen korunmuş'},
+    {v:'bozulmuş'},
+    {v:'sosyal muhakeme yerinde'}
+  ]},
+  {key:'suihom',label:'Suisid-homisid düşüncesi',single:true,opts:[
+    {v:'yok'},{v:'var'}
+  ]}
+];
+
+var rdmSel={};
+var rdmCustom={};
+
+var KONS_BASE="Kişinin mevcut hali akut beyin yetmezliği (deliryum) ile uyumludur. Deliryum beynin enerji metablizmasının bozulmasının bir sonucu olup sebep olan tıbbi etiyolojinin saptanması ve düzeltilmesi temel amaçtır. Hastanın enfeksiyon, sıvı-elektrolit, kardiyak, metabolik ve MSS patolojileri açısından değerlendirilmesi; fizik muayenesinde saptanan bulgular doğrultusunda ilgili branş görüşlerinin alınması önerilir.";
+var KONS_NORODOL="Psikiyatrik açıdan ajitasyonun semptomatik tedavisinde norodol 5damla po verilmesi LH 30 dakikada bir doz tekrarı, 24 saat refakat altında kalması, günlük QTc kontrolü ve parkinsonizm açısından gözlemi, pencere kollarının sökülmesi, uyku-uyanıklık döngüsünün korunması önerilir.";
+var KONS_KETIAPIN="Gece gyrex 25 verilmesi (45 dk sonra uykuya dalamaması halinde doz tekrarı; 100 mg/g e kadar tekrar verilebilir) önerilir.";
+
+function buildRdm(){
+  var c=document.getElementById('rdm-container');
+  if(!c) return;
+  c.innerHTML='';
+  RDM_GROUPS.forEach(function(g){
+    var html='<div class="rdm-group"><div class="rdm-title">'+g.label+(g.single?'':' <span style="color:#888;font-weight:400">(çoklu)</span>')+'</div><div class="rdm-opts">';
+    g.opts.forEach(function(o,i){
+      var tipAttr=o.tip?' data-tip="'+o.tip.replace(/"/g,'&quot;')+'"':'';
+      html+='<button type="button" class="rdm-opt" data-group="'+g.key+'" data-val="'+o.v.replace(/"/g,'&quot;')+'"'+tipAttr+' onclick="toggleRdm(\''+g.key+'\',\''+o.v.replace(/'/g,"\\'")+'\','+g.single+')">'+o.v+'</button>';
+    });
+    var customVal=rdmCustom[g.key]||'';
+    html+='<input type="text" class="rdm-other-input" placeholder="diğer: ..." value="'+customVal.replace(/"/g,'&quot;')+'" oninput="setRdmCustom(\''+g.key+'\',this.value)">';
+    html+='</div>';
+    if(g.key==='dus_icer'){
+      html+='<div class="rdm-followup" id="hezeyan-detail-wrap">'+
+        '<div class="rdm-followup-label">Ne hezeyanı?</div>'+
+        '<input type="text" class="rdm-followup-input" id="hezeyan-detay-input" placeholder="Örn: perseküsyon" value="'+hezeyanDetayi.replace(/"/g,'&quot;')+'" oninput="setHezeyanDetayi(this.value)">'+
+      '</div>';
+    }
+    html+='</div>';
+    c.insertAdjacentHTML('beforeend',html);
+  });
+  refreshRdmUI();
+}
+
+function toggleRdmSkip(){
+  rdmSkip=!rdmSkip;
+  rdmOnayVerildi=rdmSkip;
+  refreshRdmSkipUI();
+  updateKonsNote();
+}
+
+function refreshRdmSkipUI(){
+  var btn=document.getElementById('rdm-skip-btn');
+  if(btn) btn.classList.toggle('selected-red',rdmSkip);
+}
+
+function deactivateRdmSkip(){
+  if(!rdmSkip) return;
+  rdmSkip=false;
+  rdmOnayVerildi=false;
+  refreshRdmSkipUI();
+}
+
+function toggleRdm(group,val,single){
+  deactivateRdmSkip();
+  if(single){
+    rdmSel[group]=(rdmSel[group]===val)?null:val;
+  } else {
+    if(!rdmSel[group]) rdmSel[group]=[];
+    var arr=rdmSel[group];
+    var idx=arr.indexOf(val);
+    if(idx>=0) arr.splice(idx,1); else arr.push(val);
+    if(arr.length===0) delete rdmSel[group];
   }
-}"""
+  refreshRdmUI();
+  updateKonsNote();
+}
 
-new = """function refreshCopyState(){
+function setRdmCustom(group,val){
+  deactivateRdmSkip();
+  rdmCustom[group]=val;
+  updateKonsNote();
+}
+
+function setHezeyanDetayi(val){
+  deactivateRdmSkip();
+  hezeyanDetayi=val;
+  updateKonsNote();
+}
+
+function hezeyanSeciliMi(){
+  var sel=rdmSel.dus_icer;
+  return Array.isArray(sel) && sel.indexOf('hezeyan')>=0;
+}
+
+function refreshHezeyanDetayUI(){
+  var wrap=document.getElementById('hezeyan-detail-wrap');
+  if(wrap) wrap.classList.toggle('open',hezeyanSeciliMi());
+}
+
+function refreshRdmUI(){
+  var btns=document.querySelectorAll('.rdm-opt');
+  btns.forEach(function(b){
+    var g=b.getAttribute('data-group'),v=b.getAttribute('data-val');
+    var sel=rdmSel[g];
+    var active=false;
+    if(Array.isArray(sel)) active=sel.indexOf(v)>=0;
+    else active=(sel===v);
+    b.classList.toggle('selected',active);
+  });
+  refreshRdmSkipUI();
+  refreshHezeyanDetayUI();
+  refreshRdmMissingUI();
+  refreshCopyState();
+}
+
+function rdmIsFull(){
+  if(rdmSkip) return true;
+  for(var i=0;i<RDM_GROUPS.length;i++){
+    var vals=getRdmVals(RDM_GROUPS[i].key);
+    if(vals.length===0) return false;
+  }
+  return true;
+}
+
+function refreshRdmMissingUI(){
+  var groups=document.querySelectorAll('#rdm-container .rdm-group');
+  groups.forEach(function(group,idx){
+    var key=RDM_GROUPS[idx] && RDM_GROUPS[idx].key;
+    if(!key) return;
+    var vals=getRdmVals(key);
+    var missing=!rdmSkip && vals.length===0;
+    var title=group.querySelector('.rdm-title');
+    if(title) title.classList.toggle('rdm-missing',missing);
+    var opts=group.querySelectorAll('.rdm-opt');
+    opts.forEach(function(o){o.classList.toggle('missing-opt',missing)});
+  });
+}
+
+function refreshCopyState(){
   var btn=document.getElementById('copy-btn');
   if(!btn) return;
   var sosyoEl=document.getElementById('sosyo-input');
@@ -52,13 +617,1491 @@ new = """function refreshCopyState(){
     var msgEl=document.getElementById('copy-block-msg');
     if(msgEl) msgEl.style.display='none';
   }
-}"""
+}
 
-if old not in html:
-    raise ValueError("refreshCopyState function not found exactly.")
-html = html.replace(old, new, 1)
+function rdmHasSelection(){
+  for(var k in rdmSel){
+    var s=rdmSel[k];
+    if(Array.isArray(s)){if(s.length>0) return true}
+    else if(s) return true;
+  }
+  for(var k2 in rdmCustom){if(rdmCustom[k2] && rdmCustom[k2].trim()) return true}
+  return false;
+}
 
-out = Path("/mnt/data/deliryum_kopya_secim_kilitli.html")
-out.write_text(html, encoding="utf-8")
+function getRdmVals(key){
+  var sel=rdmSel[key];
+  var vals=[];
+  if(Array.isArray(sel)) vals=sel.slice();
+  else if(sel) vals=[sel];
+  var custom=(rdmCustom[key]||'').trim();
+  if(custom) vals.push(custom);
+  return vals;
+}
 
-print(f"Güncellenmiş dosya hazır: {out.name}")
+function joinRdmVals(vals){
+  return vals.join(', ');
+}
+
+function formatOrientationItem(label,val){
+  if(val==='+' || val==='-') return label+val;
+  return label+' '+val;
+}
+
+function formatHezeyanVal(){
+  var d=(hezeyanDetayi||'').trim();
+  if(!d) return 'hezeyan';
+  if(/hezeyanı?$/.test(d.toLocaleLowerCase('tr-TR'))) return d;
+  return d+' hezeyanı';
+}
+
+function formatThoughtContentVals(vals){
+  return vals.map(function(v){
+    return v==='hezeyan' ? formatHezeyanVal() : v;
+  });
+}
+
+function buildRdmText(){
+  if(rdmSkip) return '';
+  var parts=[];
+  var kat=getRdmVals('katilim');
+  var tut=getRdmVals('tutum');
+  var psiko=getRdmVals('psikomotor');
+  var oy=getRdmVals('or_yer');
+  var oz=getRdmVals('or_zaman');
+  var ok=getRdmVals('or_kisi');
+  var odak=getRdmVals('dikkat_odak');
+  var kaydir=getRdmVals('dikkat_kaydir');
+  var dd=getRdmVals('duygudurum');
+  var da=getRdmVals('duygulanim');
+  var kh=getRdmVals('kon_hiz');
+  var km=getRdmVals('kon_mik');
+  var ds=getRdmVals('dus_surec');
+  var di=formatThoughtContentVals(getRdmVals('dus_icer'));
+  var algi=getRdmVals('algi');
+  var muh=getRdmVals('muhakeme');
+  var sui=getRdmVals('suihom');
+
+  if(kat.length && tut.length) parts.push('Görüşmeye katılımı '+joinRdmVals(kat)+', '+joinRdmVals(tut)+'.');
+  else if(kat.length) parts.push('Görüşmeye katılımı '+joinRdmVals(kat)+'.');
+  else if(tut.length) parts.push('Tutumu '+joinRdmVals(tut)+'.');
+
+  if(psiko.length) parts.push('Psikomotor aktivite '+joinRdmVals(psiko)+'.');
+
+  var orParts=[];
+  if(oy.length) orParts.push(formatOrientationItem('yer',oy[0]));
+  if(oz.length) orParts.push(formatOrientationItem('zaman',oz[0]));
+  if(ok.length) orParts.push(formatOrientationItem('kişi',ok[0]));
+  if(orParts.length) parts.push('Oryantasyon: '+orParts.join(' ')+'.');
+
+  if(odak.length && kaydir.length) parts.push('Dikkati odaklama '+joinRdmVals(odak)+', kaydırma '+joinRdmVals(kaydir)+'.');
+  else if(odak.length) parts.push('Dikkati odaklama '+joinRdmVals(odak)+'.');
+  else if(kaydir.length) parts.push('Dikkati kaydırma '+joinRdmVals(kaydir)+'.');
+
+  if(dd.length && da.length) parts.push('Duygudurum '+joinRdmVals(dd)+', duygulanım '+joinRdmVals(da)+'.');
+  else if(dd.length) parts.push('Duygudurum '+joinRdmVals(dd)+'.');
+  else if(da.length) parts.push('Duygulanım '+joinRdmVals(da)+'.');
+
+  if(kh.length && km.length) parts.push('Konuşma hızı '+joinRdmVals(kh)+', miktarı: '+joinRdmVals(km)+'.');
+  else if(kh.length) parts.push('Konuşma hızı '+joinRdmVals(kh)+'.');
+  else if(km.length) parts.push('Konuşma miktarı: '+joinRdmVals(km)+'.');
+
+  if(ds.length && di.length) parts.push('Düşünce süreci '+joinRdmVals(ds)+', içeriği '+joinRdmVals(di)+'.');
+  else if(ds.length) parts.push('Düşünce süreci '+joinRdmVals(ds)+'.');
+  else if(di.length) parts.push('Düşünce içeriği '+joinRdmVals(di)+'.');
+
+  if(algi.length) parts.push('Varsanı '+joinRdmVals(algi)+'.');
+  if(muh.length) parts.push('Muhakeme '+joinRdmVals(muh)+'.');
+  if(sui.length) parts.push('Suisid-homisid düşüncesi '+joinRdmVals(sui)+'.');
+
+  return parts.length?('RDM: '+parts.join(' ')):'';
+}
+
+function updateKonsNote(){
+  var note=document.getElementById('kons-note');
+  if(!note) return;
+  var sosyoEl=document.getElementById('sosyo-input');
+  var oykuEl=document.getElementById('oyku-input');
+  var sosyo=sosyoEl?sosyoEl.value.trim():'';
+  var oyku=oykuEl?oykuEl.value.trim():'';
+  var rdmTxt=buildRdmText();
+  var out='';
+  if(sosyo) out+=sosyo+'\n\n';
+  if(oyku) out+='Öyküsü: '+oyku+'\n\n';
+  else if(sosyo) out+='Psikiyatrik hastalık öyküsü yok.\n\n';
+  if(rdmTxt) out+=rdmTxt+'\n\n';
+  out+=KONS_BASE;
+  if(tedaviSec.norodol) out+='\n\n'+KONS_NORODOL;
+  if(tedaviSec.ketiapin) out+='\n\n'+KONS_KETIAPIN;
+  note.textContent=out;
+  refreshCopyState();
+}
+
+function toggleTedavi(key){
+  tedaviSec[key]=!tedaviSec[key];
+  var btn=document.getElementById('btn-'+key);
+  btn.classList.toggle('selected',tedaviSec[key]);
+  var uy=document.getElementById('tedavi-uyari');
+  if(uy) uy.style.display=(tedaviSec.norodol && tedaviSec.ketiapin)?'block':'none';
+  updateKonsNote();
+}
+
+function copyKonsNote(){
+  var sosyoEl=document.getElementById('sosyo-input');
+  var sosyo=sosyoEl?sosyoEl.value.trim():'';
+  var msgEl=document.getElementById('copy-block-msg');
+
+  if(!sosyo){
+    if(msgEl){
+      msgEl.innerHTML='<strong>⚠ E. Hasta bilgileri boş.</strong><br>Devam etmek için sosyodemografik bilgileri girin.';
+      msgEl.style.display='block';
+    }
+    if(sosyoEl){
+      sosyoEl.classList.add('input-invalid');
+      sosyoEl.scrollIntoView({behavior:'smooth',block:'center'});
+      sosyoEl.focus();
+      setTimeout(function(){sosyoEl.classList.remove('input-invalid')},2500);
+    }
+    return;
+  }
+
+  if(!rdmIsFull()){
+    refreshRdmMissingUI();
+    var missingCount=RDM_GROUPS.filter(function(g){return getRdmVals(g.key).length===0}).length;
+    if(msgEl){
+      msgEl.innerHTML='<strong>⚠ RDM eksik.</strong><br>'+missingCount+' başlık doldurulmadı. Tamamlayın veya G. başlığındaki <em>Gerek yok</em> butonuna basın.';
+      msgEl.style.display='block';
+    }
+    var firstMissing=document.querySelector('.rdm-title.rdm-missing');
+    if(firstMissing) firstMissing.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+
+  if(msgEl) msgEl.style.display='none';
+
+  var txt=document.getElementById('kons-note').textContent;
+  var btn=document.getElementById('copy-btn');
+  var orig=btn.innerHTML;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){
+      btn.innerHTML='<i class="ti ti-check"></i> Kopyalandı';
+      setTimeout(function(){btn.innerHTML=orig},1500);
+    }).catch(function(){fallbackCopy(txt,btn,orig)});
+  } else {
+    fallbackCopy(txt,btn,orig);
+  }
+}
+
+function rdmOnayla(){
+  document.getElementById('copy-btn').click();
+}
+
+function rdmKapat(){
+  var rdmCard=document.getElementById('rdm-container');
+  if(rdmCard) rdmCard.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function fallbackCopy(txt,btn,orig){
+  var ta=document.createElement('textarea');
+  ta.value=txt;
+  ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);
+  ta.select();
+  try{document.execCommand('copy');btn.innerHTML='<i class="ti ti-check"></i> Kopyalandı';}
+  catch(e){btn.innerHTML='Kopyalanamadı';}
+  document.body.removeChild(ta);
+  setTimeout(function(){btn.innerHTML=orig},1500);
+}
+
+var CIWA_ITEMS=[
+  {id:'nausea',label:'1. Bulantı-kusma',opts:[
+    '0 — Yok','1 — Hafif bulantı, kusma yok','2','3',
+    '4 — Aralıklı bulantı, kuru öğürme','5','6','7 — Sürekli bulantı, sık kusma'
+  ]},
+  {id:'tremor',label:'2. Tremor (kollar önde, parmaklar açık)',opts:[
+    '0 — Yok','1 — Hissedilir ama görünmez','2','3',
+    '4 — Kollar açıkken orta','5','6','7 — Şiddetli, kollar açık olmasa da'
+  ]},
+  {id:'sweats',label:'3. Paroksismal terleme',opts:[
+    '0 — Yok','1 — Avuçlarda hafif nem','2','3',
+    '4 — Belirgin alın terlemesi','5','6','7 — Yoğun terleme'
+  ]},
+  {id:'anxiety',label:'4. Anksiyete',opts:[
+    '0 — Yok, rahat','1 — Hafif anksiyöz','2','3',
+    '4 — Orta anksiyöz, savunmacı','5','6','7 — Akut panik atak gibi'
+  ]},
+  {id:'agit',label:'5. Ajitasyon',opts:[
+    '0 — Normal aktivite','1 — Hafif artmış aktivite','2','3',
+    '4 — Orta huzursuz, kıpır kıpır','5','6','7 — Görüşme süresince sürekli savrulma'
+  ]},
+  {id:'tactile',label:'6. Taktil bozukluk (kaşıntı, iğnelenme, böcek hissi)',opts:[
+    '0 — Yok','1 — Çok hafif','2 — Hafif','3 — Orta',
+    '4 — Orta-şiddetli halüsinasyon','5 — Şiddetli','6 — Aşırı şiddetli','7 — Sürekli halüsinasyon'
+  ]},
+  {id:'aud',label:'7. İşitsel bozukluk',opts:[
+    '0 — Yok','1 — Çok hafif keskinlik','2 — Hafif','3 — Orta',
+    '4 — Orta-şiddetli halüsinasyon','5 — Şiddetli','6 — Aşırı şiddetli','7 — Sürekli halüsinasyon'
+  ]},
+  {id:'vis',label:'8. Görsel bozukluk',opts:[
+    '0 — Yok','1 — Çok hafif duyarlılık','2 — Hafif','3 — Orta',
+    '4 — Orta-şiddetli halüsinasyon','5 — Şiddetli','6 — Aşırı şiddetli','7 — Sürekli halüsinasyon'
+  ]},
+  {id:'head',label:'9. Baş ağrısı / başta dolgunluk',opts:[
+    '0 — Yok','1 — Çok hafif','2 — Hafif','3 — Orta',
+    '4 — Orta-şiddetli','5 — Şiddetli','6 — Çok şiddetli','7 — Aşırı şiddetli'
+  ]},
+  {id:'orient',label:'10. Oryantasyon ve sensoryum',opts:[
+    '0 — Tam yönelimli, ardışık toplama yapabilir',
+    '1 — Toplama yapamaz veya tarihte emin değil',
+    '2 — Tarihte ≤2 gün yanılma',
+    '3 — Tarihte >2 gün yanılma',
+    '4 — Yer/kişi yönelim bozukluğu'
+  ]}
+];
+var ciwaVals={};
+var bzdContra=null;
+
+function openAlkol(){
+  ciwaVals={};
+  bzdContra=null;
+  buildCiwa();
+  var disp=document.getElementById('ciwa-score-display');
+  if(disp) disp.style.display='none';
+  var low=document.getElementById('ciwa-low-warn');
+  if(low) low.style.display='none';
+  var miss=document.getElementById('ciwa-missing-msg');
+  if(miss) miss.style.display='none';
+  refreshBzdContraUI();
+  go('alkol');
+}
+
+function buildCiwa(){
+  var c=document.getElementById('ciwa-items');
+  if(!c) return;
+  c.innerHTML='';
+  CIWA_ITEMS.forEach(function(item){
+    var d=document.createElement('div');
+    d.className='drs-item';
+    d.setAttribute('data-ciwa-id',item.id);
+    var q=document.createElement('p');
+    q.className='drs-q';
+    q.textContent=item.label;
+    d.appendChild(q);
+    var opts=document.createElement('div');
+    opts.className='drs-options';
+    item.opts.forEach(function(opt,i){
+      var b=document.createElement('button');
+      b.className='drs-opt';
+      b.textContent=opt;
+      b.onclick=(function(id,score,btn,optsWrap,itemEl){
+        return function(){
+          optsWrap.querySelectorAll('.drs-opt').forEach(function(x){x.classList.remove('selected');x.classList.remove('missing-opt')});
+          btn.classList.add('selected');
+          itemEl.classList.remove('missing-item');
+          ciwaVals[id]=score;
+          var fb=document.getElementById('ciwa-missing-msg');
+          if(fb && document.querySelectorAll('#ciwa-items .drs-item.missing-item').length===0) fb.style.display='none';
+          refreshBzdContraUI();
+        };
+      })(item.id,i,b,opts,d);
+      opts.appendChild(b);
+    });
+    d.appendChild(opts);
+    c.appendChild(d);
+  });
+}
+
+function markMissingCiwa(){
+  var items=document.querySelectorAll('#ciwa-items .drs-item');
+  var firstMissing=null;
+  items.forEach(function(d){
+    var id=d.getAttribute('data-ciwa-id');
+    var missing=!(id in ciwaVals);
+    d.classList.toggle('missing-item',missing);
+    d.querySelectorAll('.drs-opt').forEach(function(o){
+      if(missing && !o.classList.contains('selected')) o.classList.add('missing-opt');
+      else o.classList.remove('missing-opt');
+    });
+    if(missing && !firstMissing) firstMissing=d;
+  });
+  return firstMissing;
+}
+
+function ciwaTotal(){
+  var t=0;
+  for(var k in ciwaVals) t+=ciwaVals[k];
+  return t;
+}
+
+function ciwaComplete(){
+  return Object.keys(ciwaVals).length===CIWA_ITEMS.length;
+}
+
+function calcCiwa(){
+  // BZD kontrendikasyon seçimi zorunlu
+  if(bzdContra===null){
+    markMissingBzd();
+    var fb1=document.getElementById('ciwa-missing-msg');
+    if(fb1){
+      fb1.innerHTML='<strong>⚠ Benzodiazepin kontrendikasyonu seçimi yapılmadı.</strong><br>"Yok" veya "Var" seçeneklerinden birini işaretleyin.';
+      fb1.style.display='block';
+    }
+    var noBtnEl=document.getElementById('bzd-no-btn');
+    if(noBtnEl) noBtnEl.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  if(!ciwaComplete()){
+    markMissingCiwa();
+    var miss=CIWA_ITEMS.length-Object.keys(ciwaVals).length;
+    var fb=document.getElementById('ciwa-missing-msg');
+    if(fb){
+      fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Kırmızı işaretli maddeleri doldurun.';
+      fb.style.display='block';
+    }
+    var first=document.querySelector('#ciwa-items .drs-item.missing-item');
+    if(first) first.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  var fbHide=document.getElementById('ciwa-missing-msg');
+  if(fbHide) fbHide.style.display='none';
+  var total=ciwaTotal();
+  var interp='';
+  if(total<10) interp='Hafif/yok abstinans (< 10) — ek BZD endikasyonu yok';
+  else if(total<16) interp='Hafif-orta abstinans (10–15) — sabit doz BZD';
+  else if(total<20) interp='Orta-ağır abstinans (16–19) — sıkı BZD + yakın takip';
+  else interp='Ağır abstinans (≥ 20) — deliryum tremens riski';
+  document.getElementById('ciwa-total').textContent=total;
+  document.getElementById('ciwa-interp').textContent=interp;
+  document.getElementById('ciwa-score-display').style.display='flex';
+  var low=document.getElementById('ciwa-low-warn');
+  if(low) low.style.display=(total<10)?'block':'none';
+  refreshBzdContraUI();
+}
+
+function markMissingBzd(){
+  var noBtn=document.getElementById('bzd-no-btn');
+  var yesBtn=document.getElementById('bzd-yes-btn');
+  if(noBtn) noBtn.classList.add('missing');
+  if(yesBtn) yesBtn.classList.add('missing');
+}
+
+function setBzdContra(hasContra){
+  bzdContra=hasContra;
+  var noBtn=document.getElementById('bzd-no-btn');
+  var yesBtn=document.getElementById('bzd-yes-btn');
+  if(noBtn) noBtn.classList.remove('missing');
+  if(yesBtn) yesBtn.classList.remove('missing');
+  var fb=document.getElementById('ciwa-missing-msg');
+  if(fb && fb.innerHTML.indexOf('kontrendikasyonu seçimi')>=0) fb.style.display='none';
+  refreshBzdContraUI();
+}
+
+function refreshBzdContraUI(){
+  var noBtn=document.getElementById('bzd-no-btn');
+  var yesBtn=document.getElementById('bzd-yes-btn');
+  var tick=document.getElementById('bzd-no-tick');
+  var ybu=document.getElementById('bzd-ybu-warn');
+  if(noBtn){
+    var isNo=(bzdContra===false);
+    noBtn.classList.toggle('selected-no',isNo);
+    if(tick) tick.style.display=isNo?'inline':'none';
+  }
+  if(yesBtn) yesBtn.classList.toggle('selected-yes',bzdContra===true);
+  if(ybu){
+    var dtRisk=ciwaComplete() && ciwaTotal()>=20;
+    ybu.style.display=(bzdContra===true && dtRisk)?'block':'none';
+  }
+}
+
+var drsItems=[
+  {id:'sleep',label:'Uyku-uyanıklık döngüsü bozukluğu',opts:['0 — Normal','1 — Hafif bozulma','2 — Orta (< 4 saat gece uykusu)','3 — Ağır (döngü tamamen bozulmuş)']},
+  {id:'perc',label:'Algı bozukluğu',opts:['0 — Yok','1 — Hipervijilans / yanlış yorumlama','2 — İllüzyon / yanılsama','3 — Belirgin halüsinasyon']},
+  {id:'affect',label:'Duygulanım labilliği',opts:['0 — Yok','1 — Hafif dalgalanma','2 — Orta labilite','3 — Ağır labilite']},
+  {id:'motor',label:'Motor ajitasyon',opts:['0 — Yok','1 — Huzursuz hareketler','2 — Gereksiz hareket, duramıyor','3 — Kısıtlama gerektirecek ajitasyon']},
+  {id:'retard',label:'Motor yavaşlama (retardasyon)',opts:['0 — Yok','1 — Hafif yavaşlama','2 — Belirgin yavaşlama','3 — Stupor']},
+  {id:'orient',label:'Yönelim bozukluğu',opts:['0 — Tam yönelimli','1 — 1 alanda yanlış','2 — 2 alanda yanlış','3 — 3 alanda yanlış']},
+  {id:'attn',label:'Dikkat bozukluğu',opts:['0 — Normal','1 — Hafif dağınık','2 — Orta','3 — Ağır']},
+  {id:'verbal',label:'Konuşma bozukluğu',opts:['0 — Normal','1 — Hafif tutarsızlık','2 — Orta','3 — Tutarsız / anlamsız']},
+  {id:'thought',label:'Düşünce içeriği bozukluğu',opts:['0 — Yok','1 — Anormal düşünce / şüphecilik','2 — Sistematize olmayan sanrı','3 — Sistematize sanrı']},
+  {id:'memory',label:'Bellek bozukluğu',opts:['0 — Normal','1 — Yakın bellek bozuk','2 — Yakın + uzak bozuk','3 — Ağır']},
+  {id:'onset',label:'Başlangıç hızı',opts:['0 — > 1 ay','1 — Subakut (haftalar)','2 — Akut (günler)']},
+  {id:'fluct',label:'Dalgalanma (fluktuasyon)',opts:['0 — Yok','1 — Hafif','2 — Orta']},
+  {id:'phys',label:'Fiziksel bozukluk',opts:['0 — Yok','1 — Hafif sistemik bozukluk','2 — Ağır sistemik bozukluk']},
+];
+
+// LAB YORUMLAYICI
+var labItems=[
+  {id:'na',name:'Sodyum (Na)',unit:'mEq/L',ranges:[
+    {min:135,max:145,type:'normal',msg:'Normal'},
+    {min:130,max:135,type:'mild',msg:'Hafif hiponatremi — yardımcı faktör olabilir'},
+    {min:125,max:130,type:'mild',msg:'Orta hiponatremi — deliryuma katkı sağlar'},
+    {min:0,max:125,type:'severe',msg:'Ağır hiponatremi — TEK BAŞINA deliryumu açıklar'},
+    {min:145,max:155,type:'mild',msg:'Hafif hipernatremi'},
+    {min:155,max:999,type:'severe',msg:'Ağır hipernatremi — bilinç bozukluğunu açıklar'},
+  ]},
+  {id:'glu',name:'Glukoz',unit:'mg/dL',ranges:[
+    {min:0,max:54,type:'severe',msg:'Ağır hipoglisemi — bilinç bozukluğunun BİRİNCİ nedeni, hemen IV dekstroz'},
+    {min:54,max:70,type:'mild',msg:'Hipoglisemi — semptom verir, düzelt'},
+    {min:70,max:180,type:'normal',msg:'Normal aralık'},
+    {min:180,max:400,type:'mild',msg:'Hiperglisemi — DKA/HHS açısından keton ve osmolarite bak'},
+    {min:400,max:9999,type:'severe',msg:'Belirgin hiperglisemi — HHS/DKA olası, hemen iv hidrasyon + insülin'},
+  ]},
+  {id:'sat',name:'O₂ satürasyonu',unit:'%',ranges:[
+    {min:95,max:100,type:'normal',msg:'Normal'},
+    {min:90,max:95,type:'mild',msg:'Hafif hipoksemi — O₂ desteği ver, ABG değerlendir'},
+    {min:0,max:90,type:'severe',msg:'Ağır hipoksi — bilinç bozukluğunu açıklar, ABG + acil O₂'},
+  ]},
+  {id:'crp',name:'CRP',unit:'mg/L',ranges:[
+    {min:0,max:10,type:'normal',msg:'Normal'},
+    {min:10,max:50,type:'mild',msg:'Hafif inflamasyon — odak ara'},
+    {min:50,max:150,type:'mild',msg:'Orta inflamasyon — bakteriyel enfeksiyon olası, kültür al'},
+    {min:150,max:9999,type:'severe',msg:'Belirgin inflamasyon — sepsis/ensefalopati araştır, ampirik AB düşün'},
+  ]},
+  {id:'cre',name:'Kreatinin',unit:'mg/dL',ranges:[
+    {min:0,max:1.3,type:'normal',msg:'Normal'},
+    {min:1.3,max:2.5,type:'mild',msg:'Böbrek fonksiyonu bozuk — üremi düşün, ilaç dozları gözden geçir'},
+    {min:2.5,max:99,type:'severe',msg:'Belirgin böbrek yetmezliği — üremik ensefalopati olabilir'},
+  ]},
+  {id:'nh3',name:'Amonyak (NH₃)',unit:'μmol/L',ranges:[
+    {min:0,max:50,type:'normal',msg:'Normal'},
+    {min:50,max:100,type:'mild',msg:'Yüksek amonyak — hepatik ensefalopati ön planda'},
+    {min:100,max:9999,type:'severe',msg:'Ağır hiperamonemi — hepatik ensefalopati, laktüloz + KC fonksiyonları'},
+  ]},
+  {id:'tsh',name:'TSH',unit:'mIU/L',ranges:[
+    {min:0,max:0.4,type:'mild',msg:'Düşük TSH — tirotoksikoz / fırtına olabilir, sT3-sT4 iste'},
+    {min:0.4,max:4.5,type:'normal',msg:'Normal'},
+    {min:4.5,max:10,type:'mild',msg:'Hafif yüksek — subklinik hipotiroidi'},
+    {min:10,max:9999,type:'severe',msg:'Belirgin yüksek — miksödem koması düşün, kortizol + sT4 iste'},
+  ]},
+  {id:'ph',name:'Kan pH',unit:'',ranges:[
+    {min:0,max:7.30,type:'severe',msg:'Belirgin asidoz — DKA, sepsis, laktik asidoz, intoksikasyon değerlendir'},
+    {min:7.30,max:7.35,type:'mild',msg:'Hafif asidoz'},
+    {min:7.35,max:7.45,type:'normal',msg:'Normal'},
+    {min:7.45,max:7.55,type:'mild',msg:'Hafif alkaloz'},
+    {min:7.55,max:9,type:'severe',msg:'Belirgin alkaloz — neden araştır'},
+  ]},
+  {id:'ate',name:'Vücut ısısı',unit:'°C',ranges:[
+    {min:0,max:35,type:'severe',msg:'Hipotermi — sepsis, hipotiroidi, ekspozure düşün'},
+    {min:35,max:38,type:'normal',msg:'Normal aralık'},
+    {min:38,max:39,type:'mild',msg:'Ateş — enfeksiyon kaynağı ara, kan-idrar kültürü'},
+    {min:39,max:99,type:'severe',msg:'Yüksek ateş — sepsis, menenjit, ensefalit; LP eşiği düşük tutulmalı'},
+  ]},
+];
+
+// KIRMIZI BAYRAKLAR
+var redFlags=[
+  {title:'Beyin kanaması / iskemik SVO',clues:'Fokal nörolojik bulgu (hemiparezi, fasiyal asimetri, dizartri, görme alanı defekti), ani başlangıç, antikoagülan/antiagregan kullanımı, kafa travması öyküsü, ağır başağrısı, kusma, NIHSS skoru.',action:'ACİL beyin BT (kontrastsız); kanama yoksa MR-DAG'},
+  {title:'Menenjit / ensefalit',clues:'Ateş + ense sertliği + başağrısı (klasik triad), peteşi, fotofobi, jeneralize konvülziyon, immün yetmezlik, son zamanlarda kafa-yüz enfeksiyonu.',action:'BT sonrası lomber ponksiyon; sonuç beklenmeden ampirik seftriakson 2 g IV + vankomisin (+ asiklovir HSV şüphesinde)'},
+  {title:'Non-konvülzif status epileptikus (NCSE)',clues:'Otomatizmler (dudak şapırdatma, çiğneme), göz deviasyonu, ritmik kas seğirmeleri, dalgalı bilinç bozukluğu açıklanamıyor, epilepsi öyküsü, antiepileptik kesilmesi.',action:'EEG (acil); nöroloji konsültasyonu'},
+  {title:'Wernicke ensefalopatisi',clues:'Alkol kullanım bozukluğu, malnütrisyon, hiperemezis gravidarum, bariatrik cerrahi, uzun süreli iv glukoz; oftalmopleji + ataksi + konfüzyon triadı (sadece %16 hastada tamamı).',action:'IV TİAMİN 500 mg TID, 2-3 gün — TANI BEKLENMEZ, glukozdan ÖNCE verilmeli'},
+  {title:'Hipoglisemi',clues:'Diyabet + insülin/sulfonilüre kullanımı, açlık, alkol, karaciğer yetmezliği, sepsis. Terleme, taşikardi, tremor olabilir.',action:'Parmak ucu glukoz — her bilinç bozukluğunda İLK 60 SANİYE; düşükse IV %50 dekstroz 50 cc'},
+  {title:'Karbon monoksiyum (CO) zehirlenmesi',clues:'Soba, şofben, jeneratör kullanımı; kış ayları; aynı evde benzer şikayetler; başağrısı, bulantı, kiraz kırmızısı cilt.',action:'COHb düzeyi; %100 O₂ rezervuarlı maske; ağır olguda hiperbarik O₂'},
+  {title:'Hipertansif ensefalopati / PRES',clues:'Çok yüksek TA (genelde > 180/120), başağrısı, görme bozukluğu, konvülziyon, eklampsi, immünosüpresif kullanımı.',action:'MR (PRES için T2/FLAIR posterior); kontrollü TA düşürme (24 saatte %25)'},
+  {title:'Hepatik ensefalopati',clues:'Bilinen siroz/hepatit, sarılık, asit, asteriksis, fetor hepaticus, GİS kanama veya enfeksiyon tetikleyici.',action:'NH₃, KCFT, INR, laktüloz başla; SBP açısından parasentez'},
+  {title:'Üremik ensefalopati',clues:'Kronik böbrek yetmezliği öyküsü, üremi semptomları (kaşıntı, bulantı), asteriksis, perikard sürtünmesi.',action:'BUN, kreatinin, K, asidoz; diyaliz endikasyonu için nefroloji'},
+  {title:'İlaç / alkol intoksikasyonu veya yoksunluğu',clues:'Reçeteli/illegal madde kullanım öyküsü, polifarmasi (özellikle yaşlıda antikolinerjik), benzo/opioid/alkol kesilmesi, dilate/myotik pupil, terleme, taşikardi.',action:'İlaç listesi gözden geçir; spesifik antidot (nalokson, flumazenil); CIWA-Ar, COWS skorları'},
+];
+
+var etyoItems=[
+  {t:'Tam kan sayımı + CRP / PCT',s:'Enfeksiyon odağı'},
+  {t:'Elektrolit paneli (Na, K, Ca, Mg, P)',s:'Metabolik bozukluk'},
+  {t:'BUN / kreatinin / KCFT',s:'Böbrek – karaciğer yetmezliği'},
+  {t:'Kan glikozu + HbA1c',s:'Hipo / hiperglisemi'},
+  {t:'TFT (TSH, sT3, sT4)',s:'Tiroid ensefaliti / miksödem'},
+  {t:'Arteriyel kan gazı + laktat',s:'Hipoksi, asidoz, sepsis'},
+  {t:'Amonyak (klinik şüphe varsa)',s:'Hepatik ensefalopati'},
+  {t:'İdrar analizi + kültür',s:'İdrar yolu enfeksiyonu (yaşlıda sık)'},
+  {t:'Kan kültürü ×2',s:'Bakteriyemi / sepsis şüphesinde'},
+  {t:'EKG',s:'Aritmi, QTc, MI'},
+  {t:'Akciğer grafisi',s:'Pnömoni, atelektazi'},
+  {t:'B12, folik asit, tiamin',s:'Vitamin eksikliği'},
+  {t:'İlaç listesi gözden geçirme',s:'Antikolinerjik, opioid, benzo, steroid, dijital'},
+  {t:'İdrar/serum toksikoloji',s:'Madde kullanımı şüphesinde'},
+];
+
+var nonfarmItems=[
+  {t:'Yönelim desteği',s:'Takvim, saat, tanıdık yüzler; adıyla seslen'},
+  {t:'Uyku-uyanıklık döngüsü',s:'Gündüz ışık, gece karanlık ve sessizlik'},
+  {t:'Erken mobilizasyon',s:'Mümkünse günlük fizyoterapi'},
+  {t:'Duyu desteği',s:'Gözlük ve işitme cihazı takılı kalmalı'},
+  {t:'Hidrasyon ve beslenme',s:'Oral alım yetersizse parenteral'},
+  {t:'Kateter / kısıtlama gözden geçir',s:'Mümkün olduğunca çıkar (HELP protokolü)'},
+  {t:'Aile / bakıcı bilgilendirme',s:'Deliryum nedenini ve seyri açıkla'},
+];
+
+var farmItems=[
+  {t:'Hiperaktif deliryum / ajitasyon',s:'Haloperidol 0.5–1 mg PO/IM (yaşlıda düşük doz); QTc > 500 ms ise dikkat'},
+  {t:'Demans zemininde deliryum',s:'Ketiyapin 12.5–25 mg PO tercih edilebilir'},
+  {t:'Deliryumda benzodiyazepin',s:'Alkol / benzo yoksunluğu DIŞINDA kullanma — ajitasyonu artırabilir'},
+  {t:'Yoksunluk şüphesi',s:'CIWA-Ar veya COWS değerlendir; lorazepam veya klordiazepoksit'},
+];
+
+var konsultItems=[
+  {t:'Nöroloji',s:'Fokal nörolojik bulgu, NCSE şüphesi, ilk nöbet, ani başlangıç, görüntülemede patoloji'},
+  {t:'Enfeksiyon hastalıkları',s:'Ateş + bilinç bozukluğu, sepsis, menenjit/ensefalit şüphesi, immün yetmezlikli hasta'},
+  {t:'Dahiliye / yoğun bakım',s:'Sepsis, ağır metabolik bozukluk, çoklu organ yetmezliği'},
+  {t:'Endokrinoloji',s:'Tiroid fırtınası / miksödem koması, ağır hipoglisemi (rekürren), Addison krizi'},
+  {t:'Nefroloji',s:'Üremik ensefalopati, akut diyaliz endikasyonu, ağır elektrolit bozukluğu'},
+  {t:'Gastroenteroloji',s:'Hepatik ensefalopati, akut karaciğer yetmezliği'},
+  {t:'Kardiyoloji',s:'Aritmi, akut koroner sendrom + bilinç bozukluğu, kalp yetmezliği dekompansasyonu'},
+  {t:'KBB',s:'Üst hava yolu enfeksiyonu kafa içi yayılım şüphesi, mastoidit, otitis'},
+  {t:'Beyin cerrahisi',s:'İntrakraniyal kanama, kafa travması, kitle, hidrosefali'},
+  {t:'Toksikoloji / AMATEM',s:'İntoksikasyon, yoksunluk deliryumu, substance use sürdürümü'},
+];
+
+// ORGANİK PATOLOJİLER (CAM NEGATİF AKIŞI)
+var organikItems=[
+  {t:'Demans (özellikle Lewy cisimcikli)',
+   c:'Sinsi başlangıç (aylar–yıllar), bellek + en az 1 kognitif alan etkilenmiş, fonksiyonel kayıp. LCD\'de görsel halüsinasyon ve dalgalanma vardır — deliryum ile karışır.',
+   a:'MMSE / MoCA, beyin MR, Alzheimer paneli (B12, TSH, sifiliz)',
+   b:'amber'},
+  {t:'Hafif kognitif bozukluk (MCI)',
+   c:'Yakın bellek şikayeti var, ancak günlük yaşam aktiviteleri korunmuş. Akut bilinç bozukluğunu açıklamaz, ama deliryum riskini artırır.',
+   a:'Nöropsikolojik test, kontrollü takip',
+   b:'blue'},
+  {t:'Hipotiroidi / miksödem',
+   c:'Yavaşlama, hipotermi, bradikardi, kuru cilt, ödem; subakut başlangıç olabilir.',
+   a:'TSH, sT4, kortizol; ağırda IV levotiroksin',
+   b:'amber'},
+  {t:'Vitamin B12 eksikliği',
+   c:'Bellek bozukluğu, nöropati, makrositik anemi; alkol kullanımı, vejetaryen, atrofik gastrit, metformin.',
+   a:'B12, MMA, homosistein; IM B12 replasmanı',
+   b:'amber'},
+  {t:'Subakut iskemik SVO',
+   c:'Fokal nörolojik bulgu, davranış değişikliği (özellikle frontal/sağ hemisfer infarktları), MR DAG\'da hiperintensite.',
+   a:'Beyin MR + DAG, kardiyoemboli kaynak araması (EKO, holter)',
+   b:'red'},
+  {t:'Kronik subdural hematom',
+   c:'Düşme öyküsü (yaşlıda çok hafif olabilir), antikoagülan kullanımı, dalgalı kognitif bozukluk, yürüme bozukluğu.',
+   a:'Kontrastsız beyin BT, beyin cerrahisi konsültasyonu',
+   b:'red'},
+  {t:'Normal basınçlı hidrosefali',
+   c:'Demans + idrar inkontinansı + yürüme bozukluğu triadı (Hakim-Adams).',
+   a:'Beyin MR, BOS shunt cerrahisine yanıt',
+   b:'amber'},
+  {t:'Otoimmün ensefalit (anti-NMDAR vb.)',
+   c:'Subakut psikiyatrik tablo (psikoz, ajitasyon) + nöbet + otonom disfonksiyon + hareket bozukluğu. Genç kadın.',
+   a:'BOS otoantikor paneli, MR, EEG, paraneoplastik tarama (over teratomu)',
+   b:'red'},
+  {t:'Sifiliz / HIV ensefalopatisi',
+   c:'Davranış değişikliği, demans, psikoz; cinsel risk öyküsü, immün yetmezlik.',
+   a:'VDRL/RPR, HIV testi, BOS VDRL',
+   b:'amber'},
+  {t:'Beyin tümörü / metastaz',
+   c:'Subakut kişilik / kognitif değişim, başağrısı (özellikle sabah, kusma ile), fokal bulgu, nöbet.',
+   a:'Kontrastlı beyin MR, tüm sistem tarama (primer kaynak)',
+   b:'red'},
+];
+
+// PSİKİYATRİK PATOLOJİLER
+var psikItems=[
+  {t:'Major depresif bozukluk (psödo-demans)',
+   c:'Belirgin depresif duygu durum, anhedoni, geri çekilme, "bilmiyorum" cevapları (gerçek demansta konfabulasyon olur). Kognitif yakınma kişinin kendisinden gelir, yakınlar farkında değildir.',
+   a:'BDI / HDRS, antidepresan denemesi',
+   b:'blue'},
+  {t:'Akut psikotik bozukluk / şizofreniform',
+   c:'Bilinç berrak, yönelim korunmuş. Sanrı ve halüsinasyon var ama dikkat sürekliliği bozulmamış. Akut başlangıç.',
+   a:'PANSS, antipsikotik başla, ayrımı için organik tarama (BT, paneller)',
+   b:'purple'},
+  {t:'Manik / karma epizod',
+   c:'Artmış enerji, azalmış uyku ihtiyacı, grandiyozite, hızlanmış konuşma; ajitasyon deliryum gibi görünebilir.',
+   a:'YMRS, mood stabilizer + antipsikotik, bipolar öyküsü sorgula',
+   b:'purple'},
+  {t:'Dissosiyatif bozukluk (fugue, amnezi)',
+   c:'Travmatik tetikleyici, kişisel kimlik bilgilerinde seçici kayıp, EEG ve BT normal, semptomlar inkonsistan.',
+   a:'Travma öyküsü, psikiyatrik değerlendirme, organik dışlandıktan sonra tanı',
+   b:'pink'},
+  {t:'Konversiyon / fonksiyonel nörolojik bozukluk',
+   c:'Nörolojik tablo organik korelasyon göstermez, dikkati dağıtınca semptom kaybolur, la belle indifference olabilir.',
+   a:'Detaylı nörolojik muayene, Hoover testi, psikiyatri konsültasyonu',
+   b:'pink'},
+  {t:'Faktitik bozukluk / simülasyon',
+   c:'Tutarsız semptomlar, sekonder kazanç (simülasyon) veya hasta rolü (faktitik), gözlem altında tabloda değişim, elle göz kapaklarını açmaya direnç.',
+   a:'Detaylı öykü, geçmiş kayıtlar, gözlem',
+   b:'blue'},
+];
+
+// LAB AKTARMA
+function buildLab(){
+  var c=document.getElementById('lab-grid');
+  c.innerHTML='';
+  labItems.forEach(function(item){
+    var row=document.createElement('div');
+    row.innerHTML='<div class="lab-row">'+
+      '<div><p class="lab-name">'+item.name+'</p><p class="lab-unit">'+item.unit+'</p></div>'+
+      '<input class="lab-input" type="number" step="0.1" id="lab-'+item.id+'" placeholder="değer">'+
+      '<button class="btn-secondary" style="margin:0;padding:6px 8px;font-size:12px" onclick="checkLab(\''+item.id+'\')">Yorumla</button>'+
+    '</div>'+
+    '<div class="lab-result" id="res-'+item.id+'"></div>';
+    c.appendChild(row);
+  });
+}
+
+function checkLab(id){
+  var v=parseFloat(document.getElementById('lab-'+id).value);
+  var res=document.getElementById('res-'+id);
+  if(isNaN(v)){res.classList.remove('shown');return}
+  var item=labItems.find(function(x){return x.id===id});
+  var r=item.ranges.find(function(rng){return v>=rng.min && v<rng.max});
+  if(!r){res.classList.remove('shown');return}
+  res.className='lab-result shown lab-'+r.type;
+  res.textContent=r.msg;
+  updateLabSummary();
+}
+
+function updateLabSummary(){
+  var abnormal=[];
+  labItems.forEach(function(item){
+    var v=parseFloat(document.getElementById('lab-'+item.id).value);
+    if(isNaN(v)) return;
+    var r=item.ranges.find(function(rng){return v>=rng.min && v<rng.max});
+    if(r && r.type!=='normal') abnormal.push(item.name+' ('+v+' '+item.unit+'): '+r.msg);
+  });
+  var s=document.getElementById('lab-summary');
+  if(abnormal.length===0){s.style.display='none';return}
+  s.style.display='block';
+  s.innerHTML='<strong>Anormal değerler özeti:</strong><br>• '+abnormal.join('<br>• ');
+}
+
+function buildRedFlags(){
+  var c=document.getElementById('redflag-list');
+  c.innerHTML='';
+  redFlags.forEach(function(rf,i){
+    var d=document.createElement('div');
+    d.className='red-flag';
+    d.innerHTML='<div class="rf-head" onclick="toggleRF('+i+')">'+
+      '<span class="rf-title">'+rf.title+'</span>'+
+      '<span class="rf-toggle" id="rf-tog-'+i+'">+</span></div>'+
+      '<div class="rf-body" id="rf-body-'+i+'">'+
+        '<p class="rf-clues"><strong>İpuçları:</strong> '+rf.clues+'</p>'+
+        '<p class="rf-action"><i class="ti ti-stethoscope"></i> '+rf.action+'</p>'+
+      '</div>';
+    c.appendChild(d);
+  });
+}
+
+function toggleRF(i){
+  var body=document.getElementById('rf-body-'+i);
+  var tog=document.getElementById('rf-tog-'+i);
+  var open=body.classList.toggle('open');
+  tog.textContent=open?'−':'+';
+}
+
+function buildKonsult(){
+  var c=document.getElementById('konsult-list');
+  c.innerHTML='';
+  konsultItems.forEach(function(k){
+    var d=document.createElement('div');
+    d.className='konsult-item';
+    d.innerHTML='<p class="konsult-name">'+k.t+'</p><p class="konsult-when">'+k.s+'</p>';
+    c.appendChild(d);
+  });
+}
+
+function buildDiff(containerId, items){
+  var c=document.getElementById(containerId);
+  c.innerHTML='';
+  items.forEach(function(item){
+    var d=document.createElement('div');
+    d.className='dd-section';
+    d.innerHTML='<p class="dd-title">'+item.t+' <span class="badge badge-'+item.b+'">'+(item.b==='red'?'Acil':item.b==='amber'?'Subakut':item.b==='blue'?'Fonksiyonel':item.b==='purple'?'Psikotik':'Diğer')+'</span></p>'+
+      '<p class="dd-criteria"><strong>Klinik:</strong> '+item.c+'</p>'+
+      '<p class="dd-action"><strong>Yapılacak:</strong> '+item.a+'</p>';
+    c.appendChild(d);
+  });
+}
+
+function go(id){
+  if(id==='home'){window.location.href='index.html';return;}
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function selectRASS(btn,val){
+  document.querySelectorAll('.rass-btn').forEach(function(b){b.classList.remove('selected')});
+  btn.classList.add('selected');
+  rassVal=val;
+  var fb=document.getElementById('rass-feedback');
+  var next=document.getElementById('rass-next');
+  fb.style.display='block';
+  next.disabled=false;
+  if(val<=-4){
+    fb.className='feedback-box fb-danger';
+    fb.innerHTML='<strong>⚠ Deliryum değerlendirmesi yapılamaz.</strong><br>Hasta yanıt veremiyor (RASS '+val+'). Stupor / koma etyolojisine yönel.';
+    next.textContent='Organik patoloji taramasına geç →';
+    next.onclick=function(){buildOrganik();go('organik')};
+  } else if(val<=-1){
+    fb.className='feedback-box fb-warning';
+    fb.innerHTML='<strong>Uyarı:</strong> Hasta sedatif görünüyor (RASS '+val+'). Uyandırılabiliyorsa CAM uygulanabilir.';
+    next.textContent='CAM ile devam et →';
+    next.onclick=function(){go('cam')};
+  } else {
+    fb.className='feedback-box fb-success';
+    fb.innerHTML='<strong>Uyanık / ajite hasta</strong> (RASS '+val+'). Deliryum değerlendirmesi uygulanabilir.';
+    next.textContent="CAM'a geç →";
+    next.onclick=function(){go('cam')};
+  }
+}
+
+function setCam(idx,val,btn){
+  var row=btn.parentElement;
+  row.querySelectorAll('.radio-btn').forEach(function(b){b.classList.remove('selected-evet','selected-hayir')});
+  btn.classList.add(val===1?'selected-evet':'selected-hayir');
+  camVals[idx]=val;
+  var filled=camVals.filter(function(v){return v!==null}).length;
+  document.getElementById('cam-next').disabled=(filled<4);
+  if(filled===4) showCamFeedback();
+}
+
+function showCamFeedback(){
+  var pos=camVals[0]===1&&camVals[1]===1&&(camVals[2]===1||camVals[3]===1);
+  var fb=document.getElementById('cam-feedback');
+  fb.style.display='block';
+  if(pos){
+    fb.className='feedback-box fb-danger';
+    fb.innerHTML="<strong>CAM POZİTİF</strong> — Özellik 1+2 ve (3 veya 4) karşılandı. Deliryum taraması pozitif. DRS-R-98 ile şiddet değerlendirmesine geç.";
+    document.getElementById('cam-next').textContent="DRS-R-98'e geç →";
+    document.getElementById('cam-next').onclick=function(){buildDRS();go('drs')};
+  } else {
+    fb.className='feedback-box fb-success';
+    fb.innerHTML='<strong>CAM NEGATİF</strong> — Deliryum kriterleri karşılanmadı. Diğer organik patolojiler değerlendirilmeli.';
+    document.getElementById('cam-next').textContent='Organik patoloji taramasına geç →';
+    document.getElementById('cam-next').onclick=function(){buildOrganik();go('organik')};
+  }
+}
+
+function buildDRS(){
+  var container=document.getElementById('drs-items');
+  container.innerHTML='';
+  drsItems.forEach(function(item){
+    var d=document.createElement('div');
+    d.className='drs-item';
+    d.setAttribute('data-drs-id',item.id);
+    var q=document.createElement('p');
+    q.className='drs-q';
+    q.textContent=item.label;
+    d.appendChild(q);
+    var opts=document.createElement('div');
+    opts.className='drs-options';
+    item.opts.forEach(function(opt,i){
+      var b=document.createElement('button');
+      b.className='drs-opt';
+      b.textContent=opt;
+      b.onclick=(function(id,score,btn,optsWrap,itemEl){
+        return function(){
+          optsWrap.querySelectorAll('.drs-opt').forEach(function(x){x.classList.remove('selected');x.classList.remove('missing-opt')});
+          btn.classList.add('selected');
+          itemEl.classList.remove('missing-item');
+          drsVals[id]=score;
+          var fb=document.getElementById('drs-missing-msg');
+          if(fb && document.querySelectorAll('#drs-items .drs-item.missing-item').length===0) fb.style.display='none';
+        };
+      })(item.id,i,b,opts,d);
+      opts.appendChild(b);
+    });
+    d.appendChild(opts);
+    container.appendChild(d);
+  });
+}
+
+function markMissingDRS(){
+  var items=document.querySelectorAll('#drs-items .drs-item');
+  var firstMissing=null;
+  items.forEach(function(d){
+    var id=d.getAttribute('data-drs-id');
+    var missing=!(id in drsVals);
+    d.classList.toggle('missing-item',missing);
+    d.querySelectorAll('.drs-opt').forEach(function(o){
+      if(missing && !o.classList.contains('selected')) o.classList.add('missing-opt');
+      else o.classList.remove('missing-opt');
+    });
+    if(missing && !firstMissing) firstMissing=d;
+  });
+  return firstMissing;
+}
+
+function calcDRS(){
+  var total=0;
+  var filled=Object.keys(drsVals).length;
+  if(filled<drsItems.length){
+    var firstMissing=markMissingDRS();
+    var fb=document.getElementById('drs-missing-msg');
+    if(fb){
+      fb.innerHTML='<strong>⚠ '+(drsItems.length-filled)+' madde eksik.</strong><br>Kırmızı işaretli maddeleri doldurun.';
+      fb.style.display='block';
+    }
+    if(firstMissing) firstMissing.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  for(var k in drsVals) total+=drsVals[k];
+  var interp='';
+  if(total<12) interp='Deliryum eşiği altında (< 12)';
+  else if(total<18) interp='Hafif-orta deliryum (12–17)';
+  else if(total<23) interp='Orta-ağır deliryum (18–22)';
+  else interp='Ağır deliryum (≥ 23)';
+  document.getElementById('drs-total').textContent=total;
+  document.getElementById('drs-interp').textContent=interp;
+  document.getElementById('drs-score-display').style.display='flex';
+  document.getElementById('drs-calc').style.display='none';
+  document.getElementById('drs-next').style.display='block';
+  buildPlan();
+}
+
+function buildPlan(){
+  buildLab();
+  buildRedFlags();
+  buildChecklist('nonfarm-list',nonfarmItems);
+  buildChecklist('farm-list',farmItems);
+  tedaviSec={norodol:false,ketiapin:false};
+  rdmSel={};rdmCustom={};rdmOnayVerildi=false;
+  var bn=document.getElementById('btn-norodol'),bk=document.getElementById('btn-ketiapin');
+  if(bn) bn.classList.remove('selected');
+  if(bk) bk.classList.remove('selected');
+  var uy=document.getElementById('tedavi-uyari');
+  if(uy) uy.style.display='none';
+  var onay=document.getElementById('rdm-onay');
+  if(onay) onay.style.display='none';
+  var oyku=document.getElementById('oyku-input'),sosyo=document.getElementById('sosyo-input');
+  if(oyku) oyku.value='';
+  if(sosyo) sosyo.value='';
+  buildRdm();
+  updateKonsNote();
+}
+
+function buildOrganik(){
+  buildDiff('organik-list',organikItems);
+  buildDiff('psik-list',psikItems);
+}
+
+function buildChecklist(containerId,items){
+  var c=document.getElementById(containerId);
+  c.innerHTML='';
+  items.forEach(function(item,i){
+    var div=document.createElement('div');
+    div.className='checklist-item';
+    var box=document.createElement('div');
+    box.className='check-box';
+    box.onclick=(function(b){
+      return function(){
+        var done=!b.classList.contains('checked');
+        b.classList.toggle('checked',done);
+        b.innerHTML=done?'<i class="ti ti-check"></i>':'';
+      };
+    })(box);
+    var txt=document.createElement('div');
+    txt.innerHTML='<p class="check-text">'+item.t+'</p><p class="check-sub">'+item.s+'</p>';
+    div.appendChild(box);
+    div.appendChild(txt);
+    c.appendChild(div);
+  });
+}
+
+/* ========================================================== */
+/* ============= DSM-5 KRİTERLER + ÖLÇEKLER ================= */
+/* ========================================================== */
+
+// Genel: kliklenebilir kriter inşa eden yardımcı
+function buildCriteria(containerId, items){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(it,i){
+    var d=document.createElement('div');
+    d.className='crit-item';
+    d.onclick=(function(el){return function(){el.classList.toggle('open')}})(d);
+    var letter=it.l?'<span class="crit-letter">'+it.l+'.</span>':'';
+    d.innerHTML='<div class="crit-head">'+
+        '<p class="crit-label">'+letter+it.t+'</p>'+
+        '<span class="crit-toggle"></span>'+
+      '</div>'+
+      '<div class="crit-desc">'+it.d+'</div>';
+    c.appendChild(d);
+  });
+}
+
+// Genel: ölçek inşa eden yardımcı
+function buildScale(containerId, items, valsObj){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(item){
+    var d=document.createElement('div');
+    d.className='scale-item';
+    d.setAttribute('data-scale-id',item.id);
+    var q=document.createElement('p');
+    q.className='scale-q';
+    q.textContent=item.label;
+    d.appendChild(q);
+    if(item.hint){
+      var h=document.createElement('p');
+      h.className='cam-note';
+      h.style.marginBottom='6px';
+      h.textContent=item.hint;
+      d.appendChild(h);
+    }
+    var opts=document.createElement('div');
+    opts.className='scale-opts';
+    item.opts.forEach(function(opt){
+      var b=document.createElement('button');
+      b.className='scale-opt';
+      b.textContent=opt.t;
+      b.onclick=(function(id,score,btn,wrap){
+        return function(){
+          wrap.querySelectorAll('.scale-opt').forEach(function(x){x.classList.remove('selected')});
+          btn.classList.add('selected');
+          valsObj[id]=score;
+        };
+      })(item.id,opt.s,b,opts);
+      opts.appendChild(b);
+    });
+    d.appendChild(opts);
+    c.appendChild(d);
+  });
+}
+
+function scaleAllFilled(items, valsObj){
+  return items.every(function(it){return it.id in valsObj});
+}
+
+function scaleSum(valsObj){
+  var t=0;for(var k in valsObj) t+=valsObj[k];return t;
+}
+
+/* =============== DSM-5 MAJOR DEPRESYON =============== */
+var DSM_DEP_A=[
+  {l:'A1',t:'Çökkün duygudurum (depresif mood)',
+   d:'Günün büyük bölümünde, neredeyse her gün hissedilen üzüntü, boşluk veya umutsuzluk; öznel bildirim ya da gözlem ile (çocuk-ergende irritabilite olabilir).'},
+  {l:'A2',t:'İlgi/zevk kaybı (anhedoni)',
+   d:'Hemen tüm etkinliklere karşı ilgi veya zevk almada belirgin azalma. Hobiler, sosyal aktiviteler ve cinsel ilgi geri çekilir.'},
+  {l:'A3',t:'Belirgin kilo değişikliği veya iştah değişikliği',
+   d:'Diyet yapmadan ayda > %5 kilo kaybı/alımı veya neredeyse her gün iştah artışı/azalması (çocukta beklenen kilo artışını yapamama).'},
+  {l:'A4',t:'Uykusuzluk veya aşırı uyuma',
+   d:'Neredeyse her gün insomni (sıklıkla erken uyanma) veya hipersomni. Atipik depresyonda hipersomni baskındır.'},
+  {l:'A5',t:'Psikomotor ajitasyon veya retardasyon',
+   d:'Başkalarınca gözlenebilen — yalnızca öznel huzursuzluk veya yavaşlama hissi değil. Konuşma, düşünce ve hareket yavaşlığı (retardasyon) ya da kıpır kıpır huzursuzluk (ajitasyon).'},
+  {l:'A6',t:'Yorgunluk veya enerji kaybı',
+   d:'Neredeyse her gün. Küçük işler bile büyük çaba gerektiriyormuş gibi hissedilir.'},
+  {l:'A7',t:'Değersizlik veya aşırı/uygunsuz suçluluk',
+   d:'Sanrısal düzeyde olabilir. Sadece hasta olmaktan kaynaklanan suçluluk veya kendini sitemden farklıdır; "kötü insanım, hak etmiyorum" gibi temalar.'},
+  {l:'A8',t:'Düşünme/konsantrasyon güçlüğü veya kararsızlık',
+   d:'Öznel bildirim veya gözlem ile. Yaşlılarda demansla karışabilir (psödo-demans).'},
+  {l:'A9',t:'Yineleyen ölüm düşünceleri / intihar düşüncesi veya girişimi',
+   d:'Sadece ölüm korkusu değil, ölmeyi düşünme; özgül planı olmayan yineleyici intihar düşüncesi, intihar girişimi veya özgül bir intihar planı.'}
+];
+
+var DSM_DEP_OTHER=[
+  {l:'B',t:'Klinik anlamlı sıkıntı / işlevsellikte bozulma',
+   d:'Belirtiler sosyal, mesleki veya diğer önemli alanlarda belirgin sıkıntıya ya da işlevsellik bozulmasına neden olur.'},
+  {l:'C',t:'Madde veya başka tıbbi duruma bağlanamaz',
+   d:'Belirtiler bir maddenin fizyolojik etkilerine veya başka bir tıbbi duruma (örn. hipotiroidi) bağlanamaz.'},
+  {l:'D',t:'Şizofreni spektrumu / diğer psikotik bozukluklarla daha iyi açıklanamaz',
+   d:'Şizoaffektif bozukluk, şizofreni, şizofreniform, sanrılı veya diğer tanımlanmış/tanımlanmamış psikotik bozuklukla daha iyi açıklanamaz.'},
+  {l:'E',t:'Hiçbir zaman manik veya hipomanik epizod görülmemiş',
+   d:'Manik veya hipomanik epizod öyküsü bipolar bozukluk tanısı düşündürür. Madde/tıbbi duruma bağlı manik benzeri epizodlar bu kriteri ihlal etmez.'}
+];
+
+/* =============== HAMILTON DEPRESYON ÖLÇEĞİ (HAM-D 17) =============== */
+var HAMD_ITEMS=[
+  {id:'mood',label:'1. Çökkün duygudurum',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Sadece sorulunca belirtir',s:1},{t:'2 — Kendiliğinden sözel olarak belirtir',s:2},
+    {t:'3 — Yüz ifadesi, ses tonu, ağlama eğilimi ile sözel olmayan biçimde de iletir',s:3},
+    {t:'4 — Hemen tamamen bu duyguları yansıtır (sözel + sözel olmayan)',s:4}
+  ]},
+  {id:'guilt',label:'2. Suçluluk duyguları',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Kendini kötüleme, başkalarını hayal kırıklığına uğrattığını hisseder',s:1},
+    {t:'2 — Suçluluk fikri, geçmiş hatalar üzerinde durma',s:2},
+    {t:'3 — Şimdiki hastalığı ceza olarak görme; suçluluk sanrıları',s:3},
+    {t:'4 — Suçlayıcı veya itham edici sesler işitir; tehdit edici görsel halüsinasyonlar',s:4}
+  ]},
+  {id:'suicide',label:'3. İntihar',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Yaşamın değersizliği hissi',s:1},
+    {t:'2 — Ölme isteği veya kendi ölümüyle ilgili düşünceler',s:2},
+    {t:'3 — İntihar düşünceleri veya hareketleri',s:3},
+    {t:'4 — İntihar girişimi (her ciddi girişim 4 puan)',s:4}
+  ]},
+  {id:'ins_early',label:'4. Uykuya dalmada güçlük (erken insomni)',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Ara sıra (yarım saatten fazla uykuya dalamama)',s:1},{t:'2 — Her gece',s:2}
+  ]},
+  {id:'ins_mid',label:'5. Gece ortasında uyanma (orta insomni)',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Huzursuz, dağınık uyku, gece boyu uyanma',s:1},{t:'2 — Tuvalete gitme dışındaki tüm uyanmalar',s:2}
+  ]},
+  {id:'ins_late',label:'6. Erken uyanma (geç insomni)',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Erken uyanır ama tekrar uyur',s:1},{t:'2 — Bir kez uyandıktan sonra tekrar uyuyamama',s:2}
+  ]},
+  {id:'work',label:'7. İş ve aktiviteler',opts:[
+    {t:'0 — Güçlük yok',s:0},{t:'1 — Aktivitelere yetersizlik, yorgunluk düşünceleri',s:1},
+    {t:'2 — Hobilerine, işine ilgi kaybı (doğrudan belirti veya kayıtsızlık)',s:2},
+    {t:'3 — Etkinlik için harcanan zamanda azalma veya verimde düşme',s:3},
+    {t:'4 — Hastalık nedeniyle çalışamama (hastane içinde günlük rutin işleri yapamama da 4)',s:4}
+  ]},
+  {id:'retard',label:'8. Retardasyon (yavaşlama)',opts:[
+    {t:'0 — Normal konuşma ve düşünme',s:0},{t:'1 — Görüşmede hafif yavaşlama',s:1},
+    {t:'2 — Görüşmede belirgin yavaşlama',s:2},{t:'3 — Görüşme güçleşmiştir',s:3},
+    {t:'4 — Tam stupor',s:4}
+  ]},
+  {id:'agit',label:'9. Ajitasyon',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Kıpır kıpır',s:1},{t:'2 — Ellerle, saçla oynama',s:2},
+    {t:'3 — Yerinde duramama, sürekli hareket etme',s:3},
+    {t:'4 — Ellerini ovuşturma, tırnak yeme, saç çekme, dudak ısırma',s:4}
+  ]},
+  {id:'anx_psy',label:'10. Psişik anksiyete',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Öznel gerginlik ve irritabilite',s:1},
+    {t:'2 — Önemsiz şeyler için endişelenme',s:2},{t:'3 — Yüz ifadesi veya konuşmada kaygılı tutum',s:3},
+    {t:'4 — Sorulmadan ifade edilen korkular',s:4}
+  ]},
+  {id:'anx_som',label:'11. Somatik anksiyete',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif',s:1},{t:'2 — Orta',s:2},{t:'3 — Şiddetli',s:3},
+    {t:'4 — Yeti yitimine yol açan (GIS, KVS, solunum, ürogenital, otonom semptomlar)',s:4}
+  ]},
+  {id:'gi',label:'12. Gastrointestinal somatik belirtiler',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — İştah kaybı, ama personel olmadan yer; epigastrik ağırlık',s:1},
+    {t:'2 — Yemek yemekte güçlük, laksatif/GIS ilaç ihtiyacı',s:2}
+  ]},
+  {id:'genel_som',label:'13. Genel somatik belirtiler',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Sırt-baş ağrısı, sırt kaslarında ağrılar; halsizlik, enerji kaybı, yorgunluk',s:1},
+    {t:'2 — Belirgin somatik belirtiler',s:2}
+  ]},
+  {id:'sexual',label:'14. Genital belirtiler',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif (libido kaybı, menstrüel düzensizlik)',s:1},{t:'2 — Belirgin',s:2}
+  ]},
+  {id:'hypochon',label:'15. Hipokondriyazis',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Vücut işlevlerine yönelik aşırı uğraşı',s:1},
+    {t:'2 — Sağlık konusunda aşırı uğraşı',s:2},
+    {t:'3 — Sık şikayetler, yardım çağrıları',s:3},
+    {t:'4 — Hipokondriyazis sanrıları',s:4}
+  ]},
+  {id:'insight',label:'16. İçgörü',opts:[
+    {t:'0 — Hasta olduğunu kabul eder',s:0},
+    {t:'1 — Hasta olduğunu kabul eder ama hastalığı kötü beslenme, iklim, aşırı çalışma, virüse bağlar',s:1},
+    {t:'2 — Hasta olduğunu tamamen reddeder',s:2}
+  ]},
+  {id:'weight',label:'17. Kilo kaybı',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafta başına 0.5 kg\'dan az',s:1},{t:'2 — Hafta başına 0.5 kg\'dan fazla',s:2}
+  ]}
+];
+var hamdVals={};
+function calcHamD(){
+  if(!scaleAllFilled(HAMD_ITEMS,hamdVals)){
+    var miss=HAMD_ITEMS.length-Object.keys(hamdVals).length;
+    var fb=document.getElementById('hamd-missing-msg');
+    fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Tüm maddeleri doldurun.';
+    fb.style.display='block';
+    return;
+  }
+  document.getElementById('hamd-missing-msg').style.display='none';
+  var total=scaleSum(hamdVals);
+  var interp='';
+  if(total<=7) interp='Normal / remisyon (0–7)';
+  else if(total<=13) interp='Hafif depresyon (8–13)';
+  else if(total<=18) interp='Orta depresyon (14–18)';
+  else if(total<=22) interp='Şiddetli depresyon (19–22)';
+  else interp='Çok şiddetli depresyon (≥ 23)';
+  document.getElementById('hamd-total').textContent=total;
+  document.getElementById('hamd-interp').textContent=interp;
+  document.getElementById('hamd-score-display').style.display='flex';
+}
+function openDsmDep(){
+  hamdVals={};
+  document.getElementById('hamd-score-display').style.display='none';
+  document.getElementById('hamd-missing-msg').style.display='none';
+  buildCriteria('dsm-dep-criteria',DSM_DEP_A);
+  buildCriteria('dsm-dep-other',DSM_DEP_OTHER);
+  buildScale('hamd-items',HAMD_ITEMS,hamdVals);
+  go('dsm-dep');
+}
+
+/* =============== DSM-5 YAB =============== */
+var DSM_YAB=[
+  {l:'A',t:'En az 6 ay süre ile günlerin çoğunda aşırı kaygı / endişe',
+   d:'Birden çok olay veya etkinliği (örn. iş, okul performansı) içeren kaygı ve aşırı endişe. Süre kriteri YAB için kritiktir; daha kısa süreler "tanımlanmış başka bir anksiyete bozukluğu" olarak kodlanır.'},
+  {l:'B',t:'Endişeyi kontrol etmekte güçlük',
+   d:'Kişi endişesinin orantısız ve kontrolsüz olduğunu farkındadır ama durduramaz. "Endişelenmeyi bırakamıyorum" tipik bir ifadedir.'},
+  {l:'C',t:'≥ 3 fiziksel/bilişsel semptom (çocukta yalnızca 1 yeterli)',
+   d:'Aşağıdaki 6 belirtiden en az 3 (son 6 ay içinde günlerin çoğu): (1) huzursuzluk/sinirlilik, (2) kolay yorulma, (3) konsantrasyon güçlüğü/zihin boşalması, (4) irritabilite, (5) kas gerginliği, (6) uyku bozukluğu. Çocuklarda 1 belirti yeterlidir.'},
+  {l:'D',t:'Klinik anlamlı sıkıntı / işlevsellikte bozulma',
+   d:'Belirtiler sosyal, mesleki veya diğer önemli alanlarda belirgin sıkıntıya ya da işlevsellik bozulmasına neden olur.'},
+  {l:'E',t:'Madde / tıbbi duruma bağlanamaz',
+   d:'Belirtiler bir maddenin (örn. kafein, kokain) veya başka bir tıbbi durumun (örn. hipertiroidi) fizyolojik etkilerine bağlanamaz. Bu yüzden organik ekartasyon zorunludur.'},
+  {l:'F',t:'Başka bir mental bozuklukla daha iyi açıklanamaz',
+   d:'Örn. panik bozukluğunda panik atak öncesi anksiyete, sosyal anksiyetede sosyal değerlendirme korkusu, OKB\'de kontaminasyon obsesyonu, ayrılma anksiyetesinde bağlanma figürlerinden ayrılık, PTSD\'de travma hatırlatıcıları, somatik belirti bozukluğunda hastalığa odaklı kaygı ile daha iyi açıklanmamalıdır.'}
+];
+
+/* =============== HAMILTON ANKSİYETE ÖLÇEĞİ (HAM-A) =============== */
+function hamaOpts(){
+  return [
+    {t:'0 — Yok',s:0},{t:'1 — Hafif',s:1},{t:'2 — Orta',s:2},{t:'3 — Şiddetli',s:3},{t:'4 — Çok şiddetli / yeti yitimine yol açan',s:4}
+  ];
+}
+var HAMA_ITEMS=[
+  {id:'anx_mood',label:'1. Anksiyöz duygudurum',opts:hamaOpts(),hint:'Endişeler, kötü şeyler olacak beklentisi, kaygılı bekleyiş, irritabilite'},
+  {id:'tension',label:'2. Gerginlik',opts:hamaOpts(),hint:'Gerginlik hissi, kolay yorulma, irkilme, ağlama eğilimi, titreme, gevşeyememe'},
+  {id:'fears',label:'3. Korkular',opts:hamaOpts(),hint:'Karanlık, yabancı, yalnız kalma, trafik, kalabalık, hayvan korkusu vb.'},
+  {id:'insomnia',label:'4. İnsomni',opts:hamaOpts(),hint:'Uykuya dalmada güçlük, parçalı uyku, yetersiz uyku, kabuslar, gece terlemesi'},
+  {id:'intellect',label:'5. Entelektüel (bilişsel)',opts:hamaOpts(),hint:'Konsantrasyon güçlüğü, bellek zayıflığı'},
+  {id:'depressed',label:'6. Depresif duygudurum',opts:hamaOpts(),hint:'İlgi kaybı, hobilerden zevk alamama, üzüntü, erken uyanma, diurnal değişim'},
+  {id:'somatic_m',label:'7. Somatik — kas',opts:hamaOpts(),hint:'Ağrılar, sızılar, kasılma, miyoklonik seğirme, diş gıcırdatma, ses titremesi, kas tonusunda artış'},
+  {id:'somatic_s',label:'8. Somatik — duyusal',opts:hamaOpts(),hint:'Kulak çınlaması, görmede bulanıklık, sıcak-soğuk basması, halsizlik hissi, karıncalanma'},
+  {id:'cardio',label:'9. Kardiyovasküler',opts:hamaOpts(),hint:'Çarpıntı, taşikardi, göğüste ağrı/atışlar, damarlarda zonklama, baygınlık hissi, ekstrasistoller'},
+  {id:'respir',label:'10. Solunum',opts:hamaOpts(),hint:'Göğüste sıkışma, boğulma hissi, iç çekme, dispne'},
+  {id:'gi',label:'11. Gastrointestinal',opts:hamaOpts(),hint:'Yutma güçlüğü, mide bulantısı, kusma, abdominal ağrı, gürültü, ishal, kilo kaybı, kabızlık'},
+  {id:'urog',label:'12. Genitoüriner',opts:hamaOpts(),hint:'Sık idrara çıkma, aciliyet, amenore, menoraji, frijidite, erken boşalma, libido kaybı, empotans'},
+  {id:'auton',label:'13. Otonom',opts:hamaOpts(),hint:'Ağız kuruluğu, kızarma, solgunluk, terleme, baş dönmesi, gerilim tipi başağrısı, tüylerin diken diken olması'},
+  {id:'behav',label:'14. Görüşmedeki davranış',opts:hamaOpts(),hint:'Huzursuzluk, kıpırdanma, tremor, kaşları çatma, gergin yüz, iç çekme, hızlı solunum, terleme, göz kapağı seğirmesi'}
+];
+var hamaVals={};
+function calcHamA(){
+  if(!scaleAllFilled(HAMA_ITEMS,hamaVals)){
+    var miss=HAMA_ITEMS.length-Object.keys(hamaVals).length;
+    var fb=document.getElementById('hama-missing-msg');
+    fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Tüm maddeleri doldurun.';
+    fb.style.display='block';
+    return;
+  }
+  document.getElementById('hama-missing-msg').style.display='none';
+  var total=scaleSum(hamaVals);
+  var interp='';
+  if(total<=17) interp='Hafif anksiyete (≤ 17)';
+  else if(total<=24) interp='Hafif-orta anksiyete (18–24)';
+  else if(total<=30) interp='Orta-şiddetli anksiyete (25–30)';
+  else interp='Şiddetli anksiyete (> 30)';
+  document.getElementById('hama-total').textContent=total;
+  document.getElementById('hama-interp').textContent=interp;
+  document.getElementById('hama-score-display').style.display='flex';
+}
+function openDsmYab(){
+  hamaVals={};
+  document.getElementById('hama-score-display').style.display='none';
+  document.getElementById('hama-missing-msg').style.display='none';
+  buildCriteria('dsm-yab-criteria',DSM_YAB);
+  buildScale('hama-items',HAMA_ITEMS,hamaVals);
+  go('dsm-yab');
+}
+
+/* =============== DSM-5 PANİK BOZUKLUK =============== */
+var DSM_PANIK_A=[
+  {l:'1',t:'Çarpıntı, kalp atımlarının duyumsanması veya hızlanma',
+   d:'Tipik olarak ataktan önce sessizdir, atak sırasında belirginleşir. Hasta sıklıkla acil servise başvurur; ilk atakta kardiyak değerlendirme zorunludur.'},
+  {l:'2',t:'Terleme',
+   d:'Soğuk veya sıcak terleme; özellikle alın, avuçlar, koltuk altı.'},
+  {l:'3',t:'Titreme veya sarsılma',
+   d:'İnce tremor; tüm vücut sarsıntısı şeklinde olabilir.'},
+  {l:'4',t:'Nefes darlığı veya boğulma hissi',
+   d:'"Nefes alamıyorum" hissi; hiperventilasyon sıklıkla eşlik eder ve parestezi yaratır.'},
+  {l:'5',t:'Soluğun kesilmesi hissi (choking)',
+   d:'Boğazda yumru, tıkanma hissi. Globus hystericus ile karışabilir.'},
+  {l:'6',t:'Göğüste ağrı veya rahatsızlık',
+   d:'Sıklıkla atipik, batıcı, kısa süreli. Yine de akut koroner sendrom ekartasyonu zorunludur (özellikle ilk atak, kardiyak risk faktörleri).'},
+  {l:'7',t:'Bulantı veya karın ağrısı',
+   d:'Mide kasılması, ishal, kusma olabilir.'},
+  {l:'8',t:'Baş dönmesi, sersemlik, dengesizlik veya bayılacakmış gibi olma',
+   d:'Vertigo ile karıştırılmamalıdır (rotatuar değildir). Vestibüler hastalıkların ekartasyonu gerekir.'},
+  {l:'9',t:'Üşüme veya ateş basması',
+   d:'Hem sıcak basması hem üşüme aynı atakta yer alabilir.'},
+  {l:'10',t:'Uyuşma veya karıncalanma (parestezi)',
+   d:'Hiperventilasyon kaynaklı respiratuar alkaloza bağlı; tipik olarak periferal (parmak uçları, ağız çevresi).'},
+  {l:'11',t:'Derealizasyon veya depersonalizasyon',
+   d:'"Sanki rüyada gibi" / "kendime dışarıdan bakıyormuş gibi" hissi.'},
+  {l:'12',t:'Kontrolünü kaybetme veya çıldırma korkusu',
+   d:'"Bir delilik yapacağım" düşüncesi tipiktir; psikoz ile karıştırılmamalıdır — içgörü korunmuştur.'},
+  {l:'13',t:'Ölüm korkusu',
+   d:'"Öleceğim" hissi ataktaki en sık ve en ağır deneyimlerden biridir; ACS şüphesini canlı tutar.'}
+];
+var DSM_PANIK_OTHER=[
+  {l:'B',t:'En az 1 atak sonrası ≥ 1 ay süren endişe veya davranış değişikliği',
+   d:'Aşağıdakilerden biri: (1) atak veya sonuçları (kontrolü kaybetme, kalp krizi, çıldırma) hakkında sürekli endişe, (2) ataklarla ilişkili belirgin uyumsuz davranış değişikliği (örn. egzersizden kaçınma, yalnız kalmaktan kaçınma).'},
+  {l:'C',t:'Madde / tıbbi duruma bağlanamaz',
+   d:'Maddenin (örn. kokain, kafein, amfetamin) veya başka bir tıbbi durumun (örn. hipertiroidi, feokromositoma, kardiyopulmoner hastalıklar) fizyolojik etkilerine bağlanamaz. Bu nedenle organik dışlama zorunludur.'},
+  {l:'D',t:'Başka bir mental bozuklukla daha iyi açıklanamaz',
+   d:'Örn. sosyal anksiyete (sosyal durumlara yanıt olarak), özgül fobi (fobik objeye yanıt), OKB (obsesyona yanıt), PTSD (travma hatırlatıcısına yanıt), ayrılma anksiyetesinde (bağlanma figürlerinden ayrılığa yanıt) görülen panik atakları daha iyi açıklayabilir.'}
+];
+function openDsmPanik(){
+  buildCriteria('dsm-panik-a',DSM_PANIK_A);
+  buildCriteria('dsm-panik-other',DSM_PANIK_OTHER);
+  go('dsm-panik');
+}
+
+/* =============== DSM-5 UYUM BOZUKLUĞU =============== */
+var DSM_UYUM=[
+  {l:'A',t:'Tanımlanabilir bir stresöre yanıt olarak 3 ay içinde belirti gelişmesi',
+   d:'Stresör belirgin (yaşam olayı: işten çıkarma, ayrılık, taşınma, hastalık tanısı) veya birden çok olabilir. Stresörden sonraki 3 ay içinde duygusal/davranışsal belirtiler ortaya çıkmalıdır.'},
+  {l:'B',t:'Belirtiler / davranışlar klinik anlamlı düzeydedir',
+   d:'Aşağıdakilerden biri olmalı: (1) stresörle orantısız sıkıntı (kültürel ve bağlamsal değerlendirme dahil), (2) sosyal, mesleki veya diğer önemli alanlarda anlamlı bozulma. Sadece normal yas dahil değildir.'},
+  {l:'C',t:'Başka bir mental bozukluk veya önceki bir bozukluğun alevlenmesi değildir',
+   d:'Stres ilişkili belirti başka bir mental bozukluğun kriterlerini karşılıyorsa o tanı konur. Önceki bir mental bozukluğun stresörle alevlenmesi uyum bozukluğu olarak kodlanmaz.'},
+  {l:'D',t:'Normal yas tepkisi değildir',
+   d:'Yakın kayıp sonrası gelişen normal kültürel yas tepkileri uyum bozukluğu sayılmaz. Ancak yas süreci komplike olur ve orantısız işlevsellik bozulması yaratırsa "uzamış yas bozukluğu" düşünülmelidir.'},
+  {l:'E',t:'Stresör veya sonuçları sona erdikten sonra ≤ 6 ay içinde belirtiler kaybolur',
+   d:'Akut form ≤ 6 ay sürer. Stresör veya sonuçları devam ediyorsa (örn. kronik tıbbi hastalık, sürmekte olan eşle problem) kronik form gelişebilir ve belirtiler 6 aydan uzun sürebilir.'}
+];
+var DSM_UYUM_SPEC=[
+  {l:'',t:'Depresif duygudurum ile',
+   d:'Çökkün duygudurum, ağlama, umutsuzluk hakim klinik tablodur.'},
+  {l:'',t:'Anksiyete ile',
+   d:'Sinirlilik, endişe, gerginlik veya çocukta bağlanma figürlerinden ayrılma korkusu hakimdir.'},
+  {l:'',t:'Karma anksiyete ve depresif duygudurum ile',
+   d:'Hem depresyon hem anksiyete birlikte görülür.'},
+  {l:'',t:'Davranım bozukluğu ile',
+   d:'Başkalarının haklarını ihlal eden veya yaşa uygun toplumsal normları/kuralları ihlal eden davranışlar hakimdir.'},
+  {l:'',t:'Karma duygu ve davranım bozukluğu ile',
+   d:'Hem duygusal belirtiler (depresyon/anksiyete) hem davranışsal belirtiler birlikte hakimdir.'},
+  {l:'',t:'Tanımlanmamış',
+   d:'Uyum bozukluğunun spesifik alt tiplerinden hiçbirine uymayan uyumsuz reaksiyonlar (örn. fiziksel yakınmalar, sosyal geri çekilme, iş/akademik engellenme).'}
+];
+function openDsmUyum(){
+  buildCriteria('dsm-uyum-criteria',DSM_UYUM);
+  buildCriteria('dsm-uyum-spec',DSM_UYUM_SPEC);
+  go('dsm-uyum');
+}
+
+/* =============== DSM-5 OKB =============== */
+var DSM_OKB=[
+  {l:'A',t:'Obsesyonların, kompulsiyonların veya her ikisinin varlığı',
+   d:'<strong>Obsesyonlar:</strong> Yineleyici, ısrarlı, istem dışı yaşanan ve müdahaleci/istenmeyen bulunan düşünce, dürtü veya görüntülerdir. Belirgin anksiyete veya sıkıntıya yol açarlar. Kişi bunları başka bir düşünce/eylemle bastırmaya, görmezden gelmeye ya da nötralize etmeye çalışır. <br><br><strong>Kompulsiyonlar:</strong> Obsesyona yanıt olarak veya katı kurallara göre yapılmak zorunda hissedilen yineleyici davranışlar (el yıkama, kontrol etme, düzenleme) veya zihinsel eylemlerdir (dua, sayı sayma, sessizce kelimeleri tekrarlama). Sıkıntıyı önlemeye yöneliktir ama gerçekçi değildir veya açıkça aşırıdır.'},
+  {l:'B',t:'Obsesyon/kompulsiyonlar zaman alıcıdır ve klinik anlamlı sıkıntı/işlevsellikte bozulma yapar',
+   d:'Günde > 1 saat veya sosyal, mesleki ya da diğer önemli alanlarda belirgin bozulma. Bu süre eşiği özellikle hafif OKB\'yi obsesif-kompulsif kişilik özelliklerinden ayırmada önemlidir.'},
+  {l:'C',t:'Madde / tıbbi duruma bağlanamaz',
+   d:'Belirtiler bir maddenin (örn. kokain, amfetamin) veya başka bir tıbbi durumun fizyolojik etkilerine bağlanamaz. PANDAS/PANS gibi enfeksiyon sonrası tablolar ayrıdır.'},
+  {l:'D',t:'Başka bir mental bozuklukla daha iyi açıklanamaz',
+   d:'Örn. YAB\'da aşırı endişe, vücut dismorfik bozukluğunda görünüme odaklı uğraşı, biriktirme bozukluğunda eşya biriktirme, trikotillomanide saç koparma, deri yolma bozukluğunda deri yolma, tik bozukluklarında stereotipik hareketler, yeme bozukluklarında ritualistik beslenme, hastalık anksiyetesi bozukluğunda hastalıkla uğraşı, paraflik bozukluklarda cinsel dürtüler, davranım bozukluğu/diğer dürtü kontrol bozukluklarında saldırgan dürtüler, MDB\'de suçluluk geviş getirmeleri, otizm spektrum bozukluğunda yineleyici davranış kalıpları.'}
+];
+var DSM_OKB_SPEC=[
+  {l:'',t:'İçgörüsü iyi veya orta — inançlarının kesinlikle/muhtemelen doğru olmadığını ya da doğru olabileceğini veya olmayabileceğini kabul eder',
+   d:'Hastaların büyük çoğunluğu bu kategoridedir. Tedavi yanıtı tipik olarak iyidir.'},
+  {l:'',t:'İçgörüsü kötü — inançlarının muhtemelen doğru olduğunu düşünür',
+   d:'Tedavi yanıtı daha sınırlıdır; bilişsel müdahale ve antipsikotik artırma stratejisi gerekebilir.'},
+  {l:'',t:'İçgörü yok / sanrısal inançlar — inançlarının doğru olduğuna kesinlikle inanır',
+   d:'Sanrı düzeyine ulaşan OKB ile psikotik bozukluk ayrımı önemlidir. Yapı obsesif-kompulsif kalır; bu durumda da OKB tanısı verilir, "şizofreni veya başka psikotik bozukluk" eklenmez (yalnızca OKB belirtilerinin sanrılı düzeyde olduğu belirtilir).'},
+  {l:'',t:'Tik ilişkili — şu anda veya geçmişte tik bozukluğu öyküsü vardır',
+   d:'Erken başlangıçlı, daha sık erkek, daha simetri/düzen odaklı obsesyonlar, "tam doğru" hissi peşinde olma; SSRI yanıtı daha sınırlıdır, antipsikotik artırma daha sık gerekir.'}
+];
+
+/* =============== Y-BOCS =============== */
+var YBOCS_ITEMS=[
+  {id:'time_obs',label:'1. Obsesyonlarla geçen zaman',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif (günde < 1 saat veya seyrek girişim)',s:1},
+    {t:'2 — Orta (1–3 saat veya sık girişim)',s:2},
+    {t:'3 — Şiddetli (> 3–8 saat veya çok sık girişim)',s:3},
+    {t:'4 — Çok şiddetli (> 8 saat veya neredeyse sürekli)',s:4}
+  ]},
+  {id:'interfere_obs',label:'2. Obsesyonların yarattığı engellenme',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif (sosyal/mesleki işlevde hafif girişim, performans bozulmaz)',s:1},
+    {t:'2 — Orta (belirgin girişim ama hâlâ idare edebilir)',s:2},
+    {t:'3 — Şiddetli (önemli işlev kaybı)',s:3},{t:'4 — Çok şiddetli (yeti yitimi)',s:4}
+  ]},
+  {id:'distress_obs',label:'3. Obsesyonların yarattığı sıkıntı',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif, çok az rahatsız edici',s:1},
+    {t:'2 — Orta, rahatsız edici ama idare edilebilir',s:2},
+    {t:'3 — Şiddetli, çok rahatsız edici',s:3},{t:'4 — Çok şiddetli, neredeyse sürekli yeti yitimi',s:4}
+  ]},
+  {id:'resist_obs',label:'4. Obsesyonlara karşı direnç',opts:[
+    {t:'0 — Her zaman direnir',s:0},{t:'1 — Çoğu zaman direnir',s:1},
+    {t:'2 — Bir miktar çaba ile direnir',s:2},{t:'3 — Tüm obsesyonlara teslim olur ama gönülsüz',s:3},
+    {t:'4 — Tüm obsesyonlara tamamen ve isteyerek teslim olur',s:4}
+  ]},
+  {id:'control_obs',label:'5. Obsesyonlar üzerinde kontrol derecesi',opts:[
+    {t:'0 — Tam kontrol',s:0},{t:'1 — Çoğu zaman kontrol edebilir',s:1},
+    {t:'2 — Bazen kontrol edebilir',s:2},{t:'3 — Nadiren başarılı, güçlükle bölebilir',s:3},
+    {t:'4 — Kontrol edemez, obsesyonu yalnızca dikkatini kısa süre dağıtarak erteleyebilir',s:4}
+  ]},
+  {id:'time_comp',label:'6. Kompulsiyonlarla geçen zaman',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif (günde < 1 saat veya seyrek)',s:1},
+    {t:'2 — Orta (1–3 saat veya sık)',s:2},{t:'3 — Şiddetli (> 3–8 saat veya çok sık)',s:3},
+    {t:'4 — Çok şiddetli (> 8 saat veya neredeyse sürekli)',s:4}
+  ]},
+  {id:'interfere_comp',label:'7. Kompulsiyonların yarattığı engellenme',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif',s:1},{t:'2 — Orta',s:2},
+    {t:'3 — Şiddetli',s:3},{t:'4 — Çok şiddetli (yeti yitimi)',s:4}
+  ]},
+  {id:'distress_comp',label:'8. Kompulsiyonlardan engellenirse sıkıntı düzeyi',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif anksiyete',s:1},
+    {t:'2 — Orta, idare edilebilir anksiyete',s:2},
+    {t:'3 — Belirgin ve çok rahatsız edici anksiyete',s:3},
+    {t:'4 — Yeti yitimine yol açan anksiyete',s:4}
+  ]},
+  {id:'resist_comp',label:'9. Kompulsiyonlara karşı direnç',opts:[
+    {t:'0 — Her zaman direnir',s:0},{t:'1 — Çoğu zaman direnir',s:1},
+    {t:'2 — Bir miktar çaba ile direnir',s:2},{t:'3 — Tüm kompulsiyonlara teslim olur ama gönülsüz',s:3},
+    {t:'4 — Tüm kompulsiyonlara tamamen ve isteyerek teslim olur',s:4}
+  ]},
+  {id:'control_comp',label:'10. Kompulsiyonlar üzerinde kontrol derecesi',opts:[
+    {t:'0 — Tam kontrol',s:0},{t:'1 — Çoğu zaman geciktirme baskısı altında ama tamamlar',s:1},
+    {t:'2 — Bir miktar gecikme veya kısaltma yapabilir',s:2},
+    {t:'3 — Sadece güçlükle tamamlanmadan bırakabilir',s:3},
+    {t:'4 — Kompulsiyonu istemeden de tamamlamak zorunda kalır',s:4}
+  ]}
+];
+var ybocsVals={};
+function calcYbocs(){
+  if(!scaleAllFilled(YBOCS_ITEMS,ybocsVals)){
+    var miss=YBOCS_ITEMS.length-Object.keys(ybocsVals).length;
+    var fb=document.getElementById('ybocs-missing-msg');
+    fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Tüm maddeleri doldurun.';
+    fb.style.display='block';
+    return;
+  }
+  document.getElementById('ybocs-missing-msg').style.display='none';
+  var total=scaleSum(ybocsVals);
+  var interp='';
+  if(total<=7) interp='Subklinik (0–7)';
+  else if(total<=15) interp='Hafif OKB (8–15)';
+  else if(total<=23) interp='Orta OKB (16–23)';
+  else if(total<=31) interp='Şiddetli OKB (24–31)';
+  else interp='Aşırı şiddetli OKB (32–40)';
+  document.getElementById('ybocs-total').textContent=total;
+  document.getElementById('ybocs-interp').textContent=interp;
+  document.getElementById('ybocs-score-display').style.display='flex';
+}
+function openDsmOkb(){
+  ybocsVals={};
+  document.getElementById('ybocs-score-display').style.display='none';
+  document.getElementById('ybocs-missing-msg').style.display='none';
+  buildCriteria('dsm-okb-criteria',DSM_OKB);
+  buildCriteria('dsm-okb-spec',DSM_OKB_SPEC);
+  buildScale('ybocs-items',YBOCS_ITEMS,ybocsVals);
+  go('dsm-okb');
+}
+
+/* =============== YMRS =============== */
+var YMRS_ITEMS=[
+  {id:'mood',label:'1. Yükselmiş duygudurum',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Sorgulamada hafif veya olası artış',s:1},
+    {t:'2 — Öznel hafif yükseliş, neşeli, uygun ortama göre iyimser, kendine güvenli',s:2},
+    {t:'3 — Belirgin yükselme, espri, gülme, aşırı neşe',s:3},
+    {t:'4 — Öforik, uygunsuz gülme, şarkı söyleme',s:4}
+  ]},
+  {id:'activity',label:'2. Artmış motor enerji-aktivite',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Öznel olarak artmış',s:1},
+    {t:'2 — Canlı jestler, artmış enerji',s:2},
+    {t:'3 — Aşırı enerji, dönem dönem hiperaktivite, huzursuzluk (sakinleştirilebilir)',s:3},
+    {t:'4 — Motor eksitasyon, sürekli hiperaktivite (sakinleştirilemez)',s:4}
+  ]},
+  {id:'sexual',label:'3. Cinsel ilgi',opts:[
+    {t:'0 — Normal, artmamış',s:0},{t:'1 — Hafif artmış',s:1},
+    {t:'2 — Sorulduğunda belirgin artış',s:2},
+    {t:'3 — Spontan cinsel içerikli konuşma, konuyu cinselleştirme',s:3},
+    {t:'4 — Açık cinsel davranışlar (hasta, personel, görüşmeciye karşı)',s:4}
+  ]},
+  {id:'sleep',label:'4. Uyku',opts:[
+    {t:'0 — Azalma yok',s:0},{t:'1 — < 1 saat azalma',s:1},
+    {t:'2 — > 1 saat azalma',s:2},
+    {t:'3 — Uyku ihtiyacında azalma bildirir',s:3},
+    {t:'4 — Uyku ihtiyacını inkâr eder',s:4}
+  ]},
+  {id:'irrit',label:'5. İrritabilite (×2 katsayı; 0–8)',opts:[
+    {t:'0 — Yok',s:0},{t:'2 — Öznel olarak artmış',s:2},
+    {t:'4 — Görüşmede dönem dönem belirgin irritabilite; konuşma sırasında ses tonu yükselir',s:4},
+    {t:'6 — Görüşme boyunca sıklıkla irritabl; kısa, ters cevaplar',s:6},
+    {t:'8 — Düşmanca, işbirliği yapmıyor; görüşme imkânsız',s:8}
+  ]},
+  {id:'speech',label:'6. Konuşma — hız ve miktar (×2 katsayı; 0–8)',opts:[
+    {t:'0 — Artış yok',s:0},
+    {t:'2 — Konuşmacı olduğu izlenimi',s:2},
+    {t:'4 — Aralıklı hızlanma veya artmış miktar; ayrıntılı (verbose)',s:4},
+    {t:'6 — Sürekli baskıyla konuşma; bölmek zor',s:6},
+    {t:'8 — Bölünmesi mümkün olmayan, hızlı, kesintisiz konuşma',s:8}
+  ]},
+  {id:'thought_disorder',label:'7. Dil-düşünce bozukluğu',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Çevresel; hafif dağınık',s:1},
+    {t:'2 — Çabuk dikkat dağılması, hedeften kaybetme; tema değişikliklerini sık görme',s:2},
+    {t:'3 — Fikir uçuşması, teğet düşünce; takip etmek zor; klang çağrışım',s:3},
+    {t:'4 — Tutarsız, iletişim imkânsız',s:4}
+  ]},
+  {id:'thought_content',label:'8. Düşünce içeriği (×2 katsayı; 0–8)',opts:[
+    {t:'0 — Normal',s:0},
+    {t:'2 — Şüpheli planlar, yeni ilgiler',s:2},
+    {t:'4 — Özel proje(ler); aşırı dindarlık',s:4},
+    {t:'6 — Grandiyöz veya paranoid fikirler, "referans" fikirleri',s:6},
+    {t:'8 — Hezeyanlar; halüsinasyonlar',s:8}
+  ]},
+  {id:'aggressive',label:'9. Yıkıcı / saldırgan davranış (×2 katsayı; 0–8)',opts:[
+    {t:'0 — Yok',s:0},{t:'2 — Alaycı, gürültülü, ihtiyatlı',s:2},
+    {t:'4 — Tehditkâr, hakaret eder; ses yükseltir',s:4},
+    {t:'6 — Personele saldırı tehdidi, eşyaları kırma',s:6},
+    {t:'8 — Saldırgan davranış, fiziksel atak; tehlikeli',s:8}
+  ]},
+  {id:'appearance',label:'10. Görünüm',opts:[
+    {t:'0 — Düzenli, uygun giyim',s:0},{t:'1 — Hafif dağınık',s:1},
+    {t:'2 — Dağınık; abartılı giyim',s:2},
+    {t:'3 — Kıyafetlerin önemli bir kısmı eksik / acayip',s:3},
+    {t:'4 — Tam dağınık; süslemeli, garip kıyafet',s:4}
+  ]},
+  {id:'insight',label:'11. İçgörü',opts:[
+    {t:'0 — Mevcut; hasta olduğunu kabul eder, tedavi ihtiyacını kabul eder',s:0},
+    {t:'1 — Hasta olabileceğini kabul eder',s:1},
+    {t:'2 — Davranış değişikliğini kabul eder ama hasta olmayı reddeder',s:2},
+    {t:'3 — Olası davranış değişikliğini kabul eder ama hasta olmayı reddeder',s:3},
+    {t:'4 — Hasta olduğunu tamamen reddeder',s:4}
+  ]}
+];
+var ymrsVals={};
+function calcYmrs(){
+  if(!scaleAllFilled(YMRS_ITEMS,ymrsVals)){
+    var miss=YMRS_ITEMS.length-Object.keys(ymrsVals).length;
+    var fb=document.getElementById('ymrs-missing-msg');
+    fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Tüm maddeleri doldurun.';
+    fb.style.display='block';
+    return;
+  }
+  document.getElementById('ymrs-missing-msg').style.display='none';
+  var total=scaleSum(ymrsVals);
+  var interp='';
+  if(total<=12) interp='Remisyon / minimal belirti (≤ 12)';
+  else if(total<=19) interp='Hafif mani (13–19)';
+  else if(total<=25) interp='Orta mani (20–25)';
+  else if(total<=37) interp='Şiddetli mani (26–37)';
+  else interp='Çok şiddetli mani (≥ 38)';
+  document.getElementById('ymrs-total').textContent=total;
+  document.getElementById('ymrs-interp').textContent=interp;
+  document.getElementById('ymrs-score-display').style.display='flex';
+}
+function openMani(){
+  ymrsVals={};
+  document.getElementById('ymrs-score-display').style.display='none';
+  document.getElementById('ymrs-missing-msg').style.display='none';
+  buildScale('ymrs-items',YMRS_ITEMS,ymrsVals);
+  go('mani');
+}
+
+/* =============== HEZEYAN TÜRLERİ =============== */
+var HEZEYAN_LIST=[
+  {n:'Zarar Görme (Persekütör / Komplo) Hezeyanları',
+   d:'Kişinin izlendiğine, kendisine komplo kurulduğuna veya zarar verileceğine inanması. <em>Örn: "MİT beni dinliyor, evime kameralar yerleştirdiler, beni öldürmek için zehir karıştırıyorlar."</em>'},
+  {n:'Alınma (Referans) Hezeyanları',
+   d:'Çevredeki nötr olayların (televizyon haberi, yoldan geçen iki kişinin konuşması, gazete yazısı vb.) doğrudan kendisiyle ilgili olduğuna inanması. <em>Örn: "TV spikeri benim hakkımda konuşuyor, yoldan geçenler bana mesaj veriyor."</em>'},
+  {n:'Kıskançlık (Othello) Hezeyanları',
+   d:'Eşinin veya partnerinin kendisini aldattığına dair somut kanıt olmaksızın duyulan sarsılmaz inanç. <em>Sıklıkla alkol kullanım bozukluğu, vasküler patoloji veya geç başlangıçlı psikoz zemininde görülür.</em>'},
+  {n:'Suçluluk ve Günahkârlık Hezeyanları',
+   d:'İşlemediği bir suçtan dolayı kendini aşırı suçlama veya affedilemez günahlar işlediğini düşünme. <em>Genellikle psikotik özellikli ağır depresyonda görülür; intihar riski yüksektir.</em>'},
+  {n:'Büyüklük (Grandiyöz) Hezeyanları',
+   d:'Kişinin çok ünlü, zengin, özel güçleri olan veya önemli bir tarihi/dini kişilik olduğuna inanması. <em>Manik epizod, şizofreni veya genel parezi (nörosifiliz) ayırıcı tanılarında düşünülür.</em>'},
+  {n:'Dinsel (Mistik) Hezeyanlar',
+   d:'Dini içerikli, sıra dışı ve kişinin gerçekliğiyle bağdaşmayan aşırı inançlar. <em>Kültürel bağlama göre değerlendirilmelidir; din ile uyumlu inançlar hezeyan sayılmaz.</em>'},
+  {n:'Somatik Hezeyanlar',
+   d:'Vücudunda ağır bir hastalık, organlarında çürüme veya fiziksel bir deformasyon olduğuna dair inanç. <em>Cotard sendromunda "öldüğüne / organlarının olmadığına" inanma; psikotik depresyon ve nörolojik hastalıklarda görülebilir.</em>'},
+  {n:'Kontrol Edilme (Etkilenme) Hezeyanları',
+   d:'Düşüncelerinin, duygularının veya hareketlerinin dış bir güç (cihazlar, ışınlar, insanlar) tarafından yönetildiğini hissetme. <em>Şizofreni için Schneider birinci sıra belirtileri arasındadır.</em>'},
+  {n:'Düşünce Okunması',
+   d:'Başkalarının kendi aklından geçenleri bildiğine dair inanç. <em>Schneider birinci sıra belirtisi.</em>'},
+  {n:'Düşünce Yayınlanması (Yayılması)',
+   d:'Kendi düşüncelerinin sesli bir şekilde dışarıya yayıldığı ve başkaları tarafından duyulduğu hissi. <em>Schneider birinci sıra belirtisi; şizofreni için karakteristiktir.</em>'},
+  {n:'Düşünce Çekilmesi (Sokulması)',
+   d:'Düşüncelerinin zihninden zorla alındığı (çekilme) veya yerine başkalarının düşüncelerinin konulduğuna (sokulma) inanma. <em>Schneider birinci sıra belirtisi.</em>'}
+];
+function openHezeyan(){
+  var c=document.getElementById('hezeyan-list');
+  if(c){
+    c.innerHTML='';
+    HEZEYAN_LIST.forEach(function(h){
+      var d=document.createElement('div');
+      d.className='hez-item';
+      d.innerHTML='<p class="hez-name">'+h.n+'</p><p class="hez-desc">'+h.d+'</p>';
+      c.appendChild(d);
+    });
+  }
+  go('hezeyan');
+}
+
+</script>
+</body>
+</html>
