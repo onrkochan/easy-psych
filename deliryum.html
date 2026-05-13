@@ -602,6 +602,7 @@ function refreshCopyState(){
   if(!btn) return;
   var sosyoEl=document.getElementById('sosyo-input');
   var noteEl=document.getElementById('kons-note');
+  var msgEl=document.getElementById('copy-block-msg');
   var sosyo=sosyoEl?sosyoEl.value.trim():'';
   var ok=!!sosyo && rdmIsFull();
 
@@ -613,9 +614,16 @@ function refreshCopyState(){
   }
 
   if(sosyo && sosyoEl) sosyoEl.classList.remove('input-invalid');
-  if(ok){
-    var msgEl=document.getElementById('copy-block-msg');
-    if(msgEl) msgEl.style.display='none';
+
+  if(msgEl){
+    if(!sosyo){
+      msgEl.innerHTML='<strong>⚠ E. Hasta bilgileri boş.</strong><br>Devam etmek için sosyodemografik bilgileri girin.';
+      msgEl.style.display='block';
+    } else if(ok){
+      msgEl.style.display='none';
+    } else if(msgEl.innerHTML.indexOf('RDM eksik')<0){
+      msgEl.style.display='none';
+    }
   }
 }
 
