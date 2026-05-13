@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSM-5 Major Depresyon</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;color:#1a1a1a;background:#f5f5f3}
+.app{max-width:460px;margin:0 auto;padding:12px}
+@media (min-width:768px){
+  .app{max-width:720px;padding:20px}
+  body{font-size:15px}
+}
+@media (min-width:1100px){
+  .app{max-width:1080px;padding:28px}
+  .screen.active#organik,
+  .screen.active#psikiyatrik{max-width:820px;margin:0 auto}
+}
+.screen{display:none}
+.screen.active{display:block}
+.card{background:#fff;border:0.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:1rem 1.25rem;margin-bottom:12px}
+.page-title{font-size:18px;font-weight:500;margin-bottom:4px}
+.page-sub{font-size:13px;color:#666;margin-bottom:16px}
+.section-label{font-size:12px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.flow-arrow{text-align:center;font-size:22px;color:#888;margin:8px 0}
+.rass-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rass-btn{padding:10px 8px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;text-align:left;font-size:13px;color:#1a1a1a}
+.rass-btn:hover{background:#f0f0ee}
+.rass-btn.selected{border:2px solid #185FA5;background:#E6F1FB;color:#0C447C}
+.rass-score{font-size:18px;font-weight:500;display:block;margin-bottom:2px}
+.rass-label{font-size:11px;color:inherit;opacity:.8}
+.feedback-box{padding:12px;border-radius:8px;margin:12px 0;font-size:14px;line-height:1.5}
+.fb-danger{background:#FCEBEB;color:#A32D2D;border:0.5px solid #F09595}
+.fb-warning{background:#FAEEDA;color:#854F0B;border:0.5px solid #EF9F27}
+.fb-success{background:#EAF3DE;color:#3B6D11;border:0.5px solid #97C459}
+.fb-info{background:#E6F1FB;color:#0C447C;border:0.5px solid #85B7EB}
+.btn-primary{display:block;width:100%;padding:12px;background:#185FA5;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;margin-top:12px;text-align:center}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-secondary{display:block;width:100%;padding:10px;background:#fff;color:#1a1a1a;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;font-size:14px;cursor:pointer;margin-top:8px;text-align:center}
+.btn-back{background:none;border:none;cursor:pointer;font-size:13px;color:#888;padding:0;margin-bottom:14px;display:flex;align-items:center;gap:4px}
+.cam-item{border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:12px;margin-bottom:8px}
+.cam-q{font-size:14px;font-weight:500;margin-bottom:8px}
+.cam-note{font-size:12px;color:#666;margin-top:4px}
+.radio-row{display:flex;gap:8px;margin-top:6px}
+.radio-btn{flex:1;padding:8px 4px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;font-size:13px;text-align:center;color:#1a1a1a}
+.radio-btn.selected-evet{border:2px solid #3B6D11;background:#EAF3DE;color:#3B6D11;font-weight:500}
+.radio-btn.selected-hayir{border:2px solid #A32D2D;background:#FCEBEB;color:#A32D2D;font-weight:500}
+.score-display{background:#f5f5f3;border-radius:8px;padding:12px;margin:12px 0;display:flex;justify-content:space-between;align-items:center}
+.score-num{font-size:28px;font-weight:500}
+.score-interp{font-size:13px;color:#666;text-align:right;max-width:60%}
+.drs-item{border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.drs-q{font-size:13px;font-weight:500;margin-bottom:6px}
+.drs-options{display:flex;flex-direction:column;gap:4px}
+.drs-opt{padding:7px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;font-size:12px;color:#1a1a1a;text-align:left}
+.drs-opt.selected{border:2px solid #185FA5;background:#E6F1FB;color:#0C447C}
+.checklist-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:0.5px solid rgba(0,0,0,0.08)}
+.checklist-item:last-child{border-bottom:none}
+.check-box{width:22px;height:22px;min-width:22px;border:0.5px solid rgba(0,0,0,0.2);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#fff;font-size:14px;color:#185FA5}
+.check-box.checked{background:#185FA5;border-color:#185FA5;color:#fff}
+.check-text{font-size:13px;line-height:1.5;flex:1}
+.check-sub{font-size:11px;color:#888;margin-top:2px}
+.dd-section{margin-bottom:14px;padding-bottom:14px;border-bottom:0.5px solid rgba(0,0,0,0.08)}
+.dd-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.dd-title{font-size:14px;font-weight:500;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.dd-criteria{font-size:12px;color:#555;line-height:1.6}
+.dd-action{font-size:12px;color:#0C447C;background:#E6F1FB;padding:6px 8px;border-radius:6px;margin-top:6px;line-height:1.4}
+.badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:500}
+.badge-blue{background:#E6F1FB;color:#185FA5}
+.badge-amber{background:#FAEEDA;color:#854F0B}
+.badge-red{background:#FCEBEB;color:#A32D2D}
+.badge-green{background:#EAF3DE;color:#3B6D11}
+.badge-purple{background:#EEEDFE;color:#3C3489}
+.progress{display:flex;gap:4px;margin-bottom:16px}
+.progress-dot{height:4px;flex:1;border-radius:2px;background:rgba(0,0,0,0.1)}
+.progress-dot.done{background:#185FA5}
+.progress-dot.active{background:#B5D4F4}
+.lab-row{display:grid;grid-template-columns:120px 1fr 70px;gap:8px;align-items:center;padding:8px 0;border-bottom:0.5px solid rgba(0,0,0,0.06)}
+.lab-row:last-child{border-bottom:none}
+.lab-name{font-size:13px;font-weight:500}
+.lab-input{padding:6px 8px;border:0.5px solid rgba(0,0,0,0.2);border-radius:6px;font-size:13px;width:100%}
+.lab-unit{font-size:11px;color:#888}
+.lab-result{margin-top:4px;font-size:11px;padding:4px 8px;border-radius:4px;display:none}
+.lab-result.shown{display:block}
+.lab-normal{background:#EAF3DE;color:#3B6D11}
+.lab-mild{background:#FAEEDA;color:#854F0B}
+.lab-severe{background:#FCEBEB;color:#A32D2D}
+.red-flag{border:0.5px solid #F09595;border-radius:8px;padding:10px 12px;margin-bottom:8px;background:#FEF8F8}
+.rf-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.rf-title{font-size:13px;font-weight:500;color:#A32D2D}
+.rf-toggle{font-size:18px;color:#A32D2D}
+.rf-body{display:none;margin-top:8px;padding-top:8px;border-top:0.5px solid rgba(163,45,45,0.2)}
+.rf-body.open{display:block}
+.rf-clues{font-size:12px;color:#555;line-height:1.6;margin-bottom:6px}
+.rf-action{font-size:12px;color:#A32D2D;font-weight:500;background:#FCEBEB;padding:6px 8px;border-radius:6px}
+.konsult-item{padding:10px 12px;border-left:3px solid #185FA5;background:#F5F9FE;border-radius:0 8px 8px 0;margin-bottom:8px}
+.konsult-name{font-size:13px;font-weight:500;color:#0C447C;margin-bottom:2px}
+.konsult-when{font-size:12px;color:#555;line-height:1.5}
+.summary-box{background:#fff;border:0.5px solid rgba(0,0,0,0.12);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;line-height:1.5}
+.rdm-group{margin-bottom:14px}
+.rdm-title{font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:6px;text-transform:none}
+.rdm-opts{display:flex;flex-wrap:wrap;gap:6px}
+.rdm-opt{padding:6px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:14px;background:#fff;font-size:12px;color:#1a1a1a;cursor:pointer;transition:all 0.15s;position:relative;font-family:inherit}
+.rdm-opt:hover{background:#f0f0ee}
+.rdm-opt.selected{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.rdm-opt[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:6px 10px;border-radius:6px;font-size:11px;white-space:normal;width:max-content;max-width:240px;z-index:10;line-height:1.4;pointer-events:none;text-align:left}
+.rdm-other-input{padding:6px 10px;border:0.5px dashed rgba(0,0,0,0.3);border-radius:14px;background:#fafaf8;font-size:12px;font-family:inherit;width:140px;outline:none}
+.rdm-other-input:focus{border-color:#1a1a1a;border-style:solid;background:#fff}
+
+.rdm-section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:0}
+.rdm-skip-btn{padding:5px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:14px;background:#fff;font-size:12px;color:#1a1a1a;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.15s}
+.rdm-skip-btn:hover{background:#f0f0ee}
+.rdm-skip-btn.selected-red{background:#A32D2D;color:#fff;border-color:#A32D2D;font-weight:500}
+.rdm-followup{display:none;margin-top:8px;padding:10px;border:0.5px solid rgba(0,0,0,0.12);border-radius:8px;background:#fafaf8}
+.rdm-followup.open{display:block}
+.rdm-followup-label{font-size:12px;font-weight:500;color:#1a1a1a;margin-bottom:6px}
+.rdm-followup-input{width:100%;padding:8px 10px;border:0.5px solid rgba(0,0,0,0.22);border-radius:8px;background:#fff;font-size:12px;font-family:inherit;outline:none}
+.rdm-followup-input:focus{border-color:#1a1a1a}
+.rdm-title.rdm-missing{color:#A32D2D}
+.rdm-opt.missing-opt{border-color:#A32D2D;color:#A32D2D;background:#FEF8F8}
+.rdm-opt.missing-opt:hover{background:#FCEBEB}
+.drs-opt.missing-opt{border-color:#A32D2D;color:#A32D2D;background:#FEF8F8}
+.drs-opt.missing-opt:hover{background:#FCEBEB}
+.drs-item.missing-item .drs-q{color:#A32D2D}
+.input-invalid{border-color:#A32D2D !important;box-shadow:0 0 0 2px rgba(163,45,45,0.15)}
+.btn-secondary.blocked{opacity:.55}
+.alkol-toggle-row{display:flex;gap:8px;flex-wrap:wrap}
+.alkol-toggle{flex:1;min-width:180px;padding:12px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;font-size:13px;color:#1a1a1a;text-align:center;font-family:inherit;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.alkol-toggle:hover{background:#f0f0ee}
+.alkol-toggle.selected-no{border:2px solid #3B6D11;background:#EAF3DE;color:#3B6D11;font-weight:500}
+.alkol-toggle.selected-yes{border:2px solid #A32D2D;background:#FCEBEB;color:#A32D2D;font-weight:500}
+.alkol-toggle.missing{border-color:#A32D2D;color:#A32D2D;background:#FEF8F8}
+.alkol-toggle.missing:hover{background:#FCEBEB}
+
+/* DSM-5 kriter, ölçek ve hezeyan stilleri */
+.dsm-warning{background:#FAEEDA;color:#854F0B;border:0.5px solid #EF9F27;padding:10px 12px;border-radius:8px;font-size:13px;line-height:1.5;margin-bottom:14px}
+.dsm-warning strong{display:block;margin-bottom:3px}
+.dsm-section-title{font-size:13px;font-weight:600;color:#1a1a1a;margin:14px 0 8px;text-transform:none}
+.crit-item{border:0.5px solid rgba(0,0,0,0.12);border-radius:8px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:#fff;transition:all 0.15s}
+.crit-item:hover{background:#fafaf8}
+.crit-item.open{border-color:#185FA5;background:#F5F9FE}
+.crit-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.crit-label{font-size:13px;line-height:1.5;flex:1}
+.crit-toggle{font-size:18px;color:#888;line-height:1;margin-top:-2px}
+.crit-item.open .crit-toggle{color:#185FA5}
+.crit-item .crit-toggle::before{content:'+'}
+.crit-item.open .crit-toggle::before{content:'−'}
+.crit-desc{display:none;margin-top:8px;padding-top:8px;border-top:0.5px solid rgba(0,0,0,0.08);font-size:12px;color:#555;line-height:1.6}
+.crit-item.open .crit-desc{display:block}
+.crit-letter{font-weight:600;color:#185FA5;margin-right:8px;display:inline-block;min-width:32px}
+.organic-list{background:#FCEBEB;border:0.5px solid #F09595;border-radius:8px;padding:10px 12px;margin:10px 0;font-size:12px;line-height:1.7;color:#7A2222}
+.organic-list strong{display:block;margin-bottom:4px;color:#A32D2D}
+.scale-item{border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:10px 12px;margin-bottom:6px}
+.scale-q{font-size:13px;font-weight:500;margin-bottom:6px;line-height:1.4}
+.scale-opts{display:flex;flex-direction:column;gap:4px}
+.scale-opt{padding:7px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;font-size:12px;color:#1a1a1a;text-align:left}
+.scale-opt:hover{background:#f0f0ee}
+.scale-opt.selected{border:2px solid #185FA5;background:#E6F1FB;color:#0C447C}
+.hez-item{padding:10px 12px;border-left:3px solid #6B47C9;background:#FAF8FF;border-radius:0 8px 8px 0;margin-bottom:8px}
+.hez-name{font-size:13px;font-weight:600;color:#3C3489;margin-bottom:3px}
+.hez-desc{font-size:12px;color:#444;line-height:1.55}
+
+
+.crit-item.checked-crit{border-color:#3B6D11;background:#f4fae9}
+.crit-item.checked-crit.open{border-color:#3B6D11;background:#eef6dc}
+.crit-check{width:20px;height:20px;min-width:20px;border:1.5px solid rgba(0,0,0,0.25);border-radius:4px;display:flex;align-items:center;justify-content:center;background:#fff;font-size:13px;color:#fff;transition:all 0.15s;margin-right:8px;margin-top:2px}
+.crit-item.checked-crit .crit-check{background:#3B6D11;border-color:#3B6D11}
+
+</style>
+</head>
+<body>
+<div class="app">
+<div id="dsm-dep" class="screen active">
+  <button class="btn-back" onclick="window.location.href='index.html'"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">DSM-5 Major Depresif Bozukluk</p>
+  <p class="page-sub">Kriterler + Hamilton Depresyon Ölçeği (HAM-D 17)</p>
+
+  <div class="card">
+    <p class="section-label">A. Tanı kriterleri</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Aşağıdaki belirtilerden ≥ 5'i aynı 2 haftalık süre içinde bulunmalı; <strong>en az biri</strong> (1) <em>çökkün duygudurum</em> veya (2) <em>ilgi/zevk kaybı</em> olmalıdır. Detay için kriterlere tıklayın.</p>
+    <div id="dsm-dep-criteria"></div>
+    <div id="dep-crit-feedback" style="display:none"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">B–E. Diğer kriterler</p>
+    <div id="dsm-dep-other"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Hamilton Depresyon Ölçeği (HAM-D 17)</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Klinisyenin değerlendirdiği 17 maddelik ölçek. Maddelerin bir kısmı 0–4, bir kısmı 0–2 puanlanır. Toplam aralık: 0–52.</p>
+    <div id="hamd-items"></div>
+    <div id="hamd-missing-msg" class="feedback-box fb-warning" style="display:none;font-size:13px;margin-top:4px"></div>
+    <div id="hamd-score-display" class="score-display" style="display:none;margin-top:10px">
+      <div><p style="font-size:12px;color:#888;margin-bottom:2px">HAM-D toplam</p><span class="score-num" id="hamd-total">0</span></div>
+      <p class="score-interp" id="hamd-interp"></p>
+    </div>
+    <button id="hamd-calc" class="btn-primary" onclick="calcHamD()">Skoru hesapla →</button>
+  </div>
+
+  <button class="btn-secondary" onclick="window.location.href='index.html'" style="margin-top:8px">Ana ekrana dön</button>
+</div>
+
+<!-- DSM-5 YAYGIN ANKSİYETE BOZUKLUĞU -->
+
+</div>
+<script>
+function buildCriteria(containerId, items){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(it,i){
+    var d=document.createElement('div');
+    d.className='crit-item';
+    d.onclick=(function(el){return function(){el.classList.toggle('open')}})(d);
+    var letter=it.l?'<span class="crit-letter">'+it.l+'.</span>':'';
+    d.innerHTML='<div class="crit-head">'+
+        '<p class="crit-label">'+letter+it.t+'</p>'+
+        '<span class="crit-toggle"></span>'+
+      '</div>'+
+      '<div class="crit-desc">'+it.d+'</div>';
+    c.appendChild(d);
+  });
+}
+
+// Genel: ölçek inşa eden yardımcı
+function buildScale(containerId, items, valsObj){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(item){
+    var d=document.createElement('div');
+    d.className='scale-item';
+    d.setAttribute('data-scale-id',item.id);
+    var q=document.createElement('p');
+    q.className='scale-q';
+    q.textContent=item.label;
+    d.appendChild(q);
+    if(item.hint){
+      var h=document.createElement('p');
+      h.className='cam-note';
+      h.style.marginBottom='6px';
+      h.textContent=item.hint;
+      d.appendChild(h);
+    }
+    var opts=document.createElement('div');
+    opts.className='scale-opts';
+    item.opts.forEach(function(opt){
+      var b=document.createElement('button');
+      b.className='scale-opt';
+      b.textContent=opt.t;
+      b.onclick=(function(id,score,btn,wrap){
+        return function(){
+          wrap.querySelectorAll('.scale-opt').forEach(function(x){x.classList.remove('selected')});
+          btn.classList.add('selected');
+          valsObj[id]=score;
+        };
+      })(item.id,opt.s,b,opts);
+      opts.appendChild(b);
+    });
+    d.appendChild(opts);
+    c.appendChild(d);
+  });
+}
+
+function scaleAllFilled(items, valsObj){
+  return items.every(function(it){return it.id in valsObj});
+}
+
+function scaleSum(valsObj){
+  var t=0;for(var k in valsObj) t+=valsObj[k];return t;
+}
+
+/* =============== DSM-5 MAJOR DEPRESYON =============== */
+
+var DSM_DEP_A=[
+  {id:'pma',tag:'Limbik',t:'PMA',
+   d:'Psikomotor ajitasyon veya retardasyon. Başkalarınca gözlenebilen belirgin hızlanma ya da yavaşlama.'},
+  {id:'mood',tag:'Limbik',t:'Deprese affekt (suratsızlık)',
+   d:'Günün büyük bölümünde, neredeyse her gün hissedilen çökkünlük, boşluk veya umutsuzluk; görüşmede yüz ifadesine ve genel affekte yansıyabilir.'},
+  {id:'anhedonia',tag:'Limbik',t:'Anhedoni',
+   d:'Hemen tüm etkinliklere karşı ilgi veya zevk almada belirgin azalma.'},
+
+  {id:'concentration',tag:'PFC',t:'Odaklanamama',
+   d:'Düşünmeyi sürdürme, dikkatini toplama ve zihinsel çabayı devam ettirmede güçlük.'},
+  {id:'indecisiveness',tag:'PFC',t:'Kararsızlık',
+   d:'Günlük kararları almakta belirgin zorlanma, seçim yapamama veya karar verme sürecinin uzaması.'},
+  {id:'guilt_suicide',tag:'PFC',t:'Suçluluk (intihar düşünceleri)',
+   d:'Değersizlik, aşırı/uygunsuz suçluluk; yineleyen ölüm düşünceleri, intihar düşüncesi, planı veya girişimi eşlik edebilir.'},
+
+  {id:'sleep',tag:'HPA',t:'Uyku',
+   d:'Neredeyse her gün uykusuzluk veya aşırı uyuma.'},
+  {id:'appetite_weight',tag:'HPA',t:'İştah (kilo)',
+   d:'İştah artışı/azalması veya belirgin kilo alımı/kaybı.'},
+  {id:'energy_libido',tag:'HPA',t:'Enerji (libido)',
+   d:'Yorgunluk, enerji kaybı ve eşlik edebilen libido azalması.'}
+];
+
+var DSM_DEP_OTHER=[
+  {l:'B',t:'Klinik anlamlı sıkıntı / işlevsellikte bozulma',
+   d:'Belirtiler sosyal, mesleki veya diğer önemli alanlarda belirgin sıkıntıya ya da işlevsellik bozulmasına neden olur.'},
+  {l:'C',t:'Madde veya başka tıbbi duruma bağlanamaz',
+   d:'Belirtiler bir maddenin fizyolojik etkilerine veya başka bir tıbbi duruma (örn. hipotiroidi) bağlanamaz.'},
+  {l:'D',t:'Şizofreni spektrumu / diğer psikotik bozukluklarla daha iyi açıklanamaz',
+   d:'Şizoaffektif bozukluk, şizofreni, şizofreniform, sanrılı veya diğer tanımlanmış/tanımlanmamış psikotik bozuklukla daha iyi açıklanamaz.'},
+  {l:'E',t:'Hiçbir zaman manik veya hipomanik epizod görülmemiş',
+   d:'Manik veya hipomanik epizod öyküsü bipolar bozukluk tanısı düşündürür. Madde/tıbbi duruma bağlı manik benzeri epizodlar bu kriteri ihlal etmez.'}
+];
+
+/* =============== HAMILTON DEPRESYON ÖLÇEĞİ (HAM-D 17) =============== */
+var HAMD_ITEMS=[
+  {id:'mood',label:'1. Çökkün duygudurum',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Sadece sorulunca belirtir',s:1},{t:'2 — Kendiliğinden sözel olarak belirtir',s:2},
+    {t:'3 — Yüz ifadesi, ses tonu, ağlama eğilimi ile sözel olmayan biçimde de iletir',s:3},
+    {t:'4 — Hemen tamamen bu duyguları yansıtır (sözel + sözel olmayan)',s:4}
+  ]},
+  {id:'guilt',label:'2. Suçluluk duyguları',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Kendini kötüleme, başkalarını hayal kırıklığına uğrattığını hisseder',s:1},
+    {t:'2 — Suçluluk fikri, geçmiş hatalar üzerinde durma',s:2},
+    {t:'3 — Şimdiki hastalığı ceza olarak görme; suçluluk sanrıları',s:3},
+    {t:'4 — Suçlayıcı veya itham edici sesler işitir; tehdit edici görsel halüsinasyonlar',s:4}
+  ]},
+  {id:'suicide',label:'3. İntihar',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Yaşamın değersizliği hissi',s:1},
+    {t:'2 — Ölme isteği veya kendi ölümüyle ilgili düşünceler',s:2},
+    {t:'3 — İntihar düşünceleri veya hareketleri',s:3},
+    {t:'4 — İntihar girişimi (her ciddi girişim 4 puan)',s:4}
+  ]},
+  {id:'ins_early',label:'4. Uykuya dalmada güçlük (erken insomni)',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Ara sıra (yarım saatten fazla uykuya dalamama)',s:1},{t:'2 — Her gece',s:2}
+  ]},
+  {id:'ins_mid',label:'5. Gece ortasında uyanma (orta insomni)',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Huzursuz, dağınık uyku, gece boyu uyanma',s:1},{t:'2 — Tuvalete gitme dışındaki tüm uyanmalar',s:2}
+  ]},
+  {id:'ins_late',label:'6. Erken uyanma (geç insomni)',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Erken uyanır ama tekrar uyur',s:1},{t:'2 — Bir kez uyandıktan sonra tekrar uyuyamama',s:2}
+  ]},
+  {id:'work',label:'7. İş ve aktiviteler',opts:[
+    {t:'0 — Güçlük yok',s:0},{t:'1 — Aktivitelere yetersizlik, yorgunluk düşünceleri',s:1},
+    {t:'2 — Hobilerine, işine ilgi kaybı (doğrudan belirti veya kayıtsızlık)',s:2},
+    {t:'3 — Etkinlik için harcanan zamanda azalma veya verimde düşme',s:3},
+    {t:'4 — Hastalık nedeniyle çalışamama (hastane içinde günlük rutin işleri yapamama da 4)',s:4}
+  ]},
+  {id:'retard',label:'8. Retardasyon (yavaşlama)',opts:[
+    {t:'0 — Normal konuşma ve düşünme',s:0},{t:'1 — Görüşmede hafif yavaşlama',s:1},
+    {t:'2 — Görüşmede belirgin yavaşlama',s:2},{t:'3 — Görüşme güçleşmiştir',s:3},
+    {t:'4 — Tam stupor',s:4}
+  ]},
+  {id:'agit',label:'9. Ajitasyon',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Kıpır kıpır',s:1},{t:'2 — Ellerle, saçla oynama',s:2},
+    {t:'3 — Yerinde duramama, sürekli hareket etme',s:3},
+    {t:'4 — Ellerini ovuşturma, tırnak yeme, saç çekme, dudak ısırma',s:4}
+  ]},
+  {id:'anx_psy',label:'10. Psişik anksiyete',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Öznel gerginlik ve irritabilite',s:1},
+    {t:'2 — Önemsiz şeyler için endişelenme',s:2},{t:'3 — Yüz ifadesi veya konuşmada kaygılı tutum',s:3},
+    {t:'4 — Sorulmadan ifade edilen korkular',s:4}
+  ]},
+  {id:'anx_som',label:'11. Somatik anksiyete',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif',s:1},{t:'2 — Orta',s:2},{t:'3 — Şiddetli',s:3},
+    {t:'4 — Yeti yitimine yol açan (GIS, KVS, solunum, ürogenital, otonom semptomlar)',s:4}
+  ]},
+  {id:'gi',label:'12. Gastrointestinal somatik belirtiler',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — İştah kaybı, ama personel olmadan yer; epigastrik ağırlık',s:1},
+    {t:'2 — Yemek yemekte güçlük, laksatif/GIS ilaç ihtiyacı',s:2}
+  ]},
+  {id:'genel_som',label:'13. Genel somatik belirtiler',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Sırt-baş ağrısı, sırt kaslarında ağrılar; halsizlik, enerji kaybı, yorgunluk',s:1},
+    {t:'2 — Belirgin somatik belirtiler',s:2}
+  ]},
+  {id:'sexual',label:'14. Genital belirtiler',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif (libido kaybı, menstrüel düzensizlik)',s:1},{t:'2 — Belirgin',s:2}
+  ]},
+  {id:'hypochon',label:'15. Hipokondriyazis',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Vücut işlevlerine yönelik aşırı uğraşı',s:1},
+    {t:'2 — Sağlık konusunda aşırı uğraşı',s:2},
+    {t:'3 — Sık şikayetler, yardım çağrıları',s:3},
+    {t:'4 — Hipokondriyazis sanrıları',s:4}
+  ]},
+  {id:'insight',label:'16. İçgörü',opts:[
+    {t:'0 — Hasta olduğunu kabul eder',s:0},
+    {t:'1 — Hasta olduğunu kabul eder ama hastalığı kötü beslenme, iklim, aşırı çalışma, virüse bağlar',s:1},
+    {t:'2 — Hasta olduğunu tamamen reddeder',s:2}
+  ]},
+  {id:'weight',label:'17. Kilo kaybı',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafta başına 0.5 kg\'dan az',s:1},{t:'2 — Hafta başına 0.5 kg\'dan fazla',s:2}
+  ]}
+];
+var hamdVals={};
+function calcHamD(){
+  if(!scaleAllFilled(HAMD_ITEMS,hamdVals)){
+    var miss=HAMD_ITEMS.length-Object.keys(hamdVals).length;
+    var fb=document.getElementById('hamd-missing-msg');
+    fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Tüm maddeleri doldurun.';
+    fb.style.display='block';
+    return;
+  }
+  document.getElementById('hamd-missing-msg').style.display='none';
+  var total=scaleSum(hamdVals);
+  var interp='';
+  if(total<=7) interp='Normal / remisyon (0–7)';
+  else if(total<=13) interp='Hafif depresyon (8–13)';
+  else if(total<=18) interp='Orta depresyon (14–18)';
+  else if(total<=22) interp='Şiddetli depresyon (19–22)';
+  else interp='Çok şiddetli depresyon (≥ 23)';
+  document.getElementById('hamd-total').textContent=total;
+  document.getElementById('hamd-interp').textContent=interp;
+  document.getElementById('hamd-score-display').style.display='flex';
+}
+function openDsmDep(){
+  hamdVals={};
+  document.getElementById('hamd-score-display').style.display='none';
+  document.getElementById('hamd-missing-msg').style.display='none';
+  buildCriteria('dsm-dep-criteria',DSM_DEP_A);
+  buildCriteria('dsm-dep-other',DSM_DEP_OTHER);
+  buildScale('hamd-items',HAMD_ITEMS,hamdVals);
+  go('dsm-dep');
+}
+
+
+
+// ========== Selectable A criteria ==========
+var depCritSel={};
+
+function buildDepCriteriaSelectable(containerId, items){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  depCritSel={};
+
+  items.forEach(function(it){
+    depCritSel[it.id]=false;
+
+    var d=document.createElement('div');
+    d.className='crit-item';
+    d.setAttribute('data-crit',it.id);
+
+    var checkBox=document.createElement('div');
+    checkBox.className='crit-check';
+    checkBox.innerHTML='<i class="ti ti-check" style="font-size:14px"></i>';
+
+    var content=document.createElement('div');
+    content.style.flex='1';
+    var tag=it.tag?'<span class="crit-letter">'+it.tag+'</span>':'';
+    content.innerHTML='<div class="crit-head">'+
+        '<p class="crit-label">'+tag+it.t+'</p>'+
+        '<span class="crit-toggle"></span>'+
+      '</div>'+
+      '<div class="crit-desc">'+it.d+'</div>';
+
+    function toggleDepCriterion(){
+      depCritSel[it.id]=!depCritSel[it.id];
+      d.classList.toggle('checked-crit',depCritSel[it.id]);
+      d.classList.toggle('open');
+      checkDepCriteria();
+    }
+
+    d.onclick=function(){
+      toggleDepCriterion();
+    };
+
+    d.style.display='flex';
+    d.style.alignItems='flex-start';
+    d.style.cursor='pointer';
+    d.appendChild(checkBox);
+    d.appendChild(content);
+    c.appendChild(d);
+  });
+
+  checkDepCriteria();
+}
+
+function checkDepCriteria(){
+  var count=0;
+  var hasMood=depCritSel['mood']||false;
+  var hasAnhedonia=depCritSel['anhedonia']||false;
+  for(var k in depCritSel){ if(depCritSel[k]) count++; }
+
+  var fb=document.getElementById('dep-crit-feedback');
+  if(!fb) return;
+
+  if(count===0){
+    fb.style.display='none';
+    return;
+  }
+
+  fb.style.display='block';
+  var met=(count>=5 && (hasMood||hasAnhedonia));
+
+  if(met){
+    fb.className='feedback-box fb-warning';
+    fb.innerHTML='<strong>A kriteri karşılandı.</strong> '+count+'/9 belirti seçili — ≥ 5 belirti mevcut'+(hasMood&&hasAnhedonia?' (hem deprese affekt hem anhedoni var).':hasMood?' (deprese affekt mevcut).':' (anhedoni mevcut).');
+  } else {
+    var reasons=[];
+    if(count<5) reasons.push(count+'/9 belirti seçili (≥ 5 gerekli)');
+    if(count>=5 && !hasMood && !hasAnhedonia) reasons.push("Deprese affekt veya anhedoniden en az biri gerekli");
+    fb.className='feedback-box fb-info';
+    fb.innerHTML='<strong>Henüz karşılanmadı.</strong> '+reasons.join('; ')+'.';
+  }
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', function(){
+  hamdVals={};
+  buildDepCriteriaSelectable('dsm-dep-criteria',DSM_DEP_A);
+  buildCriteria('dsm-dep-other',DSM_DEP_OTHER);
+  buildScale('hamd-items',HAMD_ITEMS,hamdVals);
+});
+
+</script>
+</body>
+</html>

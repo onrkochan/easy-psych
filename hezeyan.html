@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bilinç Bozukluğu Asistanı</title>
+<title>Hezeyan Türleri — DSM-5</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -165,120 +165,75 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 </head>
 <body>
 <div class="app">
+<div id="hezeyan" class="screen active">
+  <button class="btn-back" onclick="window.location.href='index.html'"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">Hezeyan (Sanrı) Türleri</p>
+  <p class="page-sub">DSM-5 glossary — Psikotik sanrı tipleri ve örnekleri</p>
 
-<div style="padding:8px 0 16px">
-  <p class="page-title">Bilinç Bozukluğu</p>
-  <p class="page-sub">Değerlendirmeye başlamak için bir durum seçin</p>
-</div>
-<a href="deliryum.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Deliryum şüphesi</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">RASS → CAM → DRS-R-98 → Plan</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+  <div class="card">
+    <p style="font-size:12px;color:#666;margin-bottom:12px;line-height:1.55">
+      Hezeyan; kanıt karşısında değişmeyen, kişinin kültürüyle uyumsuz, sarsılmaz yanlış inanıştır. Aşağıda en sık görülen 11 tip listelenmiştir.
+    </p>
+    <div id="hezeyan-list"></div>
   </div>
-</div>
-</a>
-<a href="alkol.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Alkol hastası yatırma checklisti</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">BZD kontrendikasyon → CIWA-Ar</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
 
-<p class="section-label" style="margin-top:20px;margin-bottom:10px">DSM-5 tanı ve ölçekler</p>
-
-<a href="dsm-dep.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #3B6D11;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Major Depresyon</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Hamilton (HAM-D) ölçeği</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
+  <button class="btn-secondary" onclick="window.location.href='index.html'" style="margin-top:8px">Ana ekrana dön</button>
 </div>
-</a>
-
-<a href="dsm-yab.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #6B47C9;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Yaygın Anksiyete Bozukluğu</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon + HAM-A</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="dsm-panik.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #A32D2D;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Panik Bozukluk</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="dsm-uyum.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Uyum Bozukluğu</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + askeri yönetmelik uyarısı</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="dsm-okb.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Obsesif-Kompulsif Bozukluk</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Y-BOCS ölçeği</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="mani.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #B89400;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Mani değerlendirmesi</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">YMRS — Young Mania Rating Scale</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="hezeyan.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #3C3489;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Hezeyan türleri (DSM-5 glossary)</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">11 psikotik sanrı tipi + tanım</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
 
 </div>
+<script>
+var HEZEYAN_LIST=[
+  {n:'Zarar Görme (Persekütör / Komplo) Hezeyanları',
+   d:'Kişinin izlendiğine, kendisine komplo kurulduğuna veya zarar verileceğine inanması. <em>Örn: "MİT beni dinliyor, evime kameralar yerleştirdiler, beni öldürmek için zehir karıştırıyorlar."</em>'},
+  {n:'Alınma (Referans) Hezeyanları',
+   d:'Çevredeki nötr olayların (televizyon haberi, yoldan geçen iki kişinin konuşması, gazete yazısı vb.) doğrudan kendisiyle ilgili olduğuna inanması. <em>Örn: "TV spikeri benim hakkımda konuşuyor, yoldan geçenler bana mesaj veriyor."</em>'},
+  {n:'Kıskançlık (Othello) Hezeyanları',
+   d:'Eşinin veya partnerinin kendisini aldattığına dair somut kanıt olmaksızın duyulan sarsılmaz inanç. <em>Sıklıkla alkol kullanım bozukluğu, vasküler patoloji veya geç başlangıçlı psikoz zemininde görülür.</em>'},
+  {n:'Suçluluk ve Günahkârlık Hezeyanları',
+   d:'İşlemediği bir suçtan dolayı kendini aşırı suçlama veya affedilemez günahlar işlediğini düşünme. <em>Genellikle psikotik özellikli ağır depresyonda görülür; intihar riski yüksektir.</em>'},
+  {n:'Büyüklük (Grandiyöz) Hezeyanları',
+   d:'Kişinin çok ünlü, zengin, özel güçleri olan veya önemli bir tarihi/dini kişilik olduğuna inanması. <em>Manik epizod, şizofreni veya genel parezi (nörosifiliz) ayırıcı tanılarında düşünülür.</em>'},
+  {n:'Dinsel (Mistik) Hezeyanlar',
+   d:'Dini içerikli, sıra dışı ve kişinin gerçekliğiyle bağdaşmayan aşırı inançlar. <em>Kültürel bağlama göre değerlendirilmelidir; din ile uyumlu inançlar hezeyan sayılmaz.</em>'},
+  {n:'Somatik Hezeyanlar',
+   d:'Vücudunda ağır bir hastalık, organlarında çürüme veya fiziksel bir deformasyon olduğuna dair inanç. <em>Cotard sendromunda "öldüğüne / organlarının olmadığına" inanma; psikotik depresyon ve nörolojik hastalıklarda görülebilir.</em>'},
+  {n:'Kontrol Edilme (Etkilenme) Hezeyanları',
+   d:'Düşüncelerinin, duygularının veya hareketlerinin dış bir güç (cihazlar, ışınlar, insanlar) tarafından yönetildiğini hissetme. <em>Şizofreni için Schneider birinci sıra belirtileri arasındadır.</em>'},
+  {n:'Düşünce Okunması',
+   d:'Başkalarının kendi aklından geçenleri bildiğine dair inanç. <em>Schneider birinci sıra belirtisi.</em>'},
+  {n:'Düşünce Yayınlanması (Yayılması)',
+   d:'Kendi düşüncelerinin sesli bir şekilde dışarıya yayıldığı ve başkaları tarafından duyulduğu hissi. <em>Schneider birinci sıra belirtisi; şizofreni için karakteristiktir.</em>'},
+  {n:'Düşünce Çekilmesi (Sokulması)',
+   d:'Düşüncelerinin zihninden zorla alındığı (çekilme) veya yerine başkalarının düşüncelerinin konulduğuna (sokulma) inanma. <em>Schneider birinci sıra belirtisi.</em>'}
+];
+function openHezeyan(){
+  var c=document.getElementById('hezeyan-list');
+  if(c){
+    c.innerHTML='';
+    HEZEYAN_LIST.forEach(function(h){
+      var d=document.createElement('div');
+      d.className='hez-item';
+      d.innerHTML='<p class="hez-name">'+h.n+'</p><p class="hez-desc">'+h.d+'</p>';
+      c.appendChild(d);
+    });
+  }
+  go('hezeyan');
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', function(){
+  var c=document.getElementById('hezeyan-list');
+  if(c){
+    c.innerHTML='';
+    HEZEYAN_LIST.forEach(function(h){
+      var d=document.createElement('div');
+      d.className='hez-item';
+      d.innerHTML='<p class="hez-name">'+h.n+'</p><p class="hez-desc">'+h.d+'</p>';
+      c.appendChild(d);
+    });
+  }
+});
+
+</script>
 </body>
 </html>

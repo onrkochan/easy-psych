@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bilinç Bozukluğu Asistanı</title>
+<title>Alkol Hastası Yatırma Checklisti</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -165,120 +165,190 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 </head>
 <body>
 <div class="app">
+<div id="alkol" class="screen active">
+  <button class="btn-back" onclick="window.location.href='index.html'"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">Alkol hastası yatırma checklisti</p>
+  <p class="page-sub">BZD kontrendikasyon kontrolü → CIWA-Ar</p>
 
-<div style="padding:8px 0 16px">
-  <p class="page-title">Bilinç Bozukluğu</p>
-  <p class="page-sub">Değerlendirmeye başlamak için bir durum seçin</p>
-</div>
-<a href="deliryum.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Deliryum şüphesi</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">RASS → CAM → DRS-R-98 → Plan</p>
+  <div class="card">
+    <p class="section-label">1. Benzodiazepin kontrendikasyonu</p>
+    <div class="alkol-toggle-row">
+      <button class="alkol-toggle" id="bzd-no-btn" onclick="setBzdContra(false)"><span id="bzd-no-tick" style="display:none">✅</span><span>Benzodiazepin kontrendikasyonu yok</span></button>
+      <button class="alkol-toggle" id="bzd-yes-btn" onclick="setBzdContra(true)"><span>Benzodiazepin kontrendikasyonu var</span></button>
     </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-<a href="alkol.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Alkol hastası yatırma checklisti</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">BZD kontrendikasyon → CIWA-Ar</p>
+    <div class="feedback-box fb-info" style="margin-top:10px;font-size:12px;line-height:1.5">
+      <strong>Olası kontrendikasyonlar:</strong> ağır KOAH / CO₂ retansiyonu, ağır KC yetmezliği, miyastenia gravis, tedavi edilmemiş uyku apnesi, dar açılı glokom, akut alkol intoksikasyonu, BZD aşırı duyarlılığı, ağır hipotansiyon
     </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<p class="section-label" style="margin-top:20px;margin-bottom:10px">DSM-5 tanı ve ölçekler</p>
-
-<a href="dsm-dep.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #3B6D11;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Major Depresyon</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Hamilton (HAM-D) ölçeği</p>
+    <div id="bzd-ybu-warn" class="feedback-box fb-danger" style="display:none;margin-top:10px">
+      <strong>⚠ Deliryum tremens riski + BZD kontrendikasyon.</strong><br>YBÜ yatışı gerekir.
     </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
   </div>
-</div>
-</a>
 
-<a href="dsm-yab.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #6B47C9;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Yaygın Anksiyete Bozukluğu</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon + HAM-A</p>
+  <div class="card">
+    <p class="section-label">2. CIWA-Ar değerlendirmesi</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Her madde için bir puan seçin. İlk 9 madde 0–7, son madde 0–4. Toplam max 67.</p>
+    <div id="ciwa-items"></div>
+    <div id="ciwa-missing-msg" class="feedback-box fb-warning" style="display:none;font-size:13px;margin-top:4px"></div>
+    <div id="ciwa-score-display" class="score-display" style="display:none;margin-top:10px">
+      <div><p style="font-size:12px;color:#888;margin-bottom:2px">Toplam puan</p><span class="score-num" id="ciwa-total">0</span></div>
+      <p class="score-interp" id="ciwa-interp"></p>
     </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="dsm-panik.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #A32D2D;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Panik Bozukluk</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon</p>
+    <div id="ciwa-low-warn" class="feedback-box fb-warning" style="display:none;margin-top:10px">
+      <strong>⚠ Benzodiazepin endikasyonu yok?</strong><br>Psikiyatrik yatış endikasyonuna emin misiniz?
     </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+    <button id="ciwa-calc" class="btn-primary" onclick="calcCiwa()">Skoru hesapla →</button>
   </div>
-</div>
-</a>
 
-<a href="dsm-uyum.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Uyum Bozukluğu</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + askeri yönetmelik uyarısı</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
+  <button class="btn-secondary" onclick="window.location.href='index.html'" style="margin-top:8px">Ana ekrana dön</button>
 </div>
-</a>
 
-<a href="dsm-okb.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Obsesif-Kompulsif Bozukluk</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Y-BOCS ölçeği</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="mani.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #B89400;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Mani değerlendirmesi</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">YMRS — Young Mania Rating Scale</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="hezeyan.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #3C3489;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Hezeyan türleri (DSM-5 glossary)</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">11 psikotik sanrı tipi + tanım</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
+<!-- DSM-5 MAJOR DEPRESYON -->
 
 </div>
+<script>
+
+var CIWA_ITEMS=[
+  {id:'nausea',label:'1. Bulantı-kusma',opts:['0 — Yok','1 — Hafif bulantı, kusma yok','2','3','4 — Aralıklı bulantı, kuru öğürme','5','6','7 — Sürekli bulantı, sık kusma']},
+  {id:'tremor',label:'2. Tremor (kollar önde, parmaklar açık)',opts:['0 — Yok','1 — Hissedilir ama görünmez','2','3','4 — Kollar açıkken orta','5','6','7 — Şiddetli, kollar açık olmasa da']},
+  {id:'sweats',label:'3. Paroksismal terleme',opts:['0 — Yok','1 — Avuçlarda hafif nem','2','3','4 — Belirgin alın terlemesi','5','6','7 — Yoğun terleme']},
+  {id:'anxiety',label:'4. Anksiyete',opts:['0 — Yok, rahat','1 — Hafif anksiyöz','2','3','4 — Orta anksiyöz, savunmacı','5','6','7 — Akut panik atak gibi']},
+  {id:'agit',label:'5. Ajitasyon',opts:['0 — Normal aktivite','1 — Hafif artmış aktivite','2','3','4 — Orta huzursuz, kıpır kıpır','5','6','7 — Görüşme süresince sürekli savrulma']},
+  {id:'tactile',label:'6. Taktil bozukluk (kaşıntı, iğnelenme, böcek hissi)',opts:['0 — Yok','1 — Çok hafif','2 — Hafif','3 — Orta','4 — Orta-şiddetli halüsinasyon','5 — Şiddetli','6 — Aşırı şiddetli','7 — Sürekli halüsinasyon']},
+  {id:'aud',label:'7. İşitsel bozukluk',opts:['0 — Yok','1 — Çok hafif keskinlik','2 — Hafif','3 — Orta','4 — Orta-şiddetli halüsinasyon','5 — Şiddetli','6 — Aşırı şiddetli','7 — Sürekli halüsinasyon']},
+  {id:'vis',label:'8. Görsel bozukluk',opts:['0 — Yok','1 — Çok hafif duyarlılık','2 — Hafif','3 — Orta','4 — Orta-şiddetli halüsinasyon','5 — Şiddetli','6 — Aşırı şiddetli','7 — Sürekli halüsinasyon']},
+  {id:'head',label:'9. Baş ağrısı / başta dolgunluk',opts:['0 — Yok','1 — Çok hafif','2 — Hafif','3 — Orta','4 — Orta-şiddetli','5 — Şiddetli','6 — Çok şiddetli','7 — Aşırı şiddetli']},
+  {id:'orient',label:'10. Oryantasyon ve sensoryum',opts:['0 — Tam yönelimli, ardışık toplama yapabilir','1 — Toplama yapamaz veya tarihte emin değil','2 — Tarihte ≤2 gün yanılma','3 — Tarihte >2 gün yanılma','4 — Yer/kişi yönelim bozukluğu']}
+];
+var ciwaVals={};
+var bzdContra=null;
+
+function buildCiwa(){
+  var c=document.getElementById('ciwa-items');
+  if(!c) return;
+  c.innerHTML='';
+  CIWA_ITEMS.forEach(function(item){
+    var d=document.createElement('div');
+    d.className='drs-item';
+    d.setAttribute('data-ciwa-id',item.id);
+    var q=document.createElement('p');
+    q.className='drs-q';
+    q.textContent=item.label;
+    d.appendChild(q);
+    var opts=document.createElement('div');
+    opts.className='drs-options';
+    item.opts.forEach(function(opt,i){
+      var b=document.createElement('button');
+      b.className='drs-opt';
+      b.textContent=opt;
+      b.onclick=(function(id,score,btn,optsWrap,itemEl){
+        return function(){
+          optsWrap.querySelectorAll('.drs-opt').forEach(function(x){x.classList.remove('selected');x.classList.remove('missing-opt')});
+          btn.classList.add('selected');
+          itemEl.classList.remove('missing-item');
+          ciwaVals[id]=score;
+          var fb=document.getElementById('ciwa-missing-msg');
+          if(fb && document.querySelectorAll('#ciwa-items .drs-item.missing-item').length===0) fb.style.display='none';
+          refreshBzdContraUI();
+        };
+      })(item.id,i,b,opts,d);
+      opts.appendChild(b);
+    });
+    d.appendChild(opts);
+    c.appendChild(d);
+  });
+}
+
+function markMissingCiwa(){
+  var items=document.querySelectorAll('#ciwa-items .drs-item');
+  var firstMissing=null;
+  items.forEach(function(d){
+    var id=d.getAttribute('data-ciwa-id');
+    var missing=!(id in ciwaVals);
+    d.classList.toggle('missing-item',missing);
+    d.querySelectorAll('.drs-opt').forEach(function(o){
+      if(missing && !o.classList.contains('selected')) o.classList.add('missing-opt');
+      else o.classList.remove('missing-opt');
+    });
+    if(missing && !firstMissing) firstMissing=d;
+  });
+  return firstMissing;
+}
+
+function ciwaTotal(){var t=0;for(var k in ciwaVals) t+=ciwaVals[k];return t;}
+function ciwaComplete(){return Object.keys(ciwaVals).length===CIWA_ITEMS.length;}
+
+function calcCiwa(){
+  if(bzdContra===null){
+    markMissingBzd();
+    var fb1=document.getElementById('ciwa-missing-msg');
+    if(fb1){fb1.innerHTML='<strong>⚠ Benzodiazepin kontrendikasyonu seçimi yapılmadı.</strong><br>"Yok" veya "Var" seçeneklerinden birini işaretleyin.';fb1.style.display='block';}
+    var noBtnEl=document.getElementById('bzd-no-btn');
+    if(noBtnEl) noBtnEl.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  if(!ciwaComplete()){
+    markMissingCiwa();
+    var miss=CIWA_ITEMS.length-Object.keys(ciwaVals).length;
+    var fb=document.getElementById('ciwa-missing-msg');
+    if(fb){fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Kırmızı işaretli maddeleri doldurun.';fb.style.display='block';}
+    var first=document.querySelector('#ciwa-items .drs-item.missing-item');
+    if(first) first.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  var fbHide=document.getElementById('ciwa-missing-msg');
+  if(fbHide) fbHide.style.display='none';
+  var total=ciwaTotal();
+  var interp='';
+  if(total<10) interp='Hafif/yok abstinans (< 10) — ek BZD endikasyonu yok';
+  else if(total<16) interp='Hafif-orta abstinans (10–15) — sabit doz BZD';
+  else if(total<20) interp='Orta-ağır abstinans (16–19) — sıkı BZD + yakın takip';
+  else interp='Ağır abstinans (≥ 20) — deliryum tremens riski';
+  document.getElementById('ciwa-total').textContent=total;
+  document.getElementById('ciwa-interp').textContent=interp;
+  document.getElementById('ciwa-score-display').style.display='flex';
+  var low=document.getElementById('ciwa-low-warn');
+  if(low) low.style.display=(total<10)?'block':'none';
+  refreshBzdContraUI();
+}
+
+function markMissingBzd(){
+  var noBtn=document.getElementById('bzd-no-btn');
+  var yesBtn=document.getElementById('bzd-yes-btn');
+  if(noBtn) noBtn.classList.add('missing');
+  if(yesBtn) yesBtn.classList.add('missing');
+}
+
+function setBzdContra(hasContra){
+  bzdContra=hasContra;
+  var noBtn=document.getElementById('bzd-no-btn');
+  var yesBtn=document.getElementById('bzd-yes-btn');
+  if(noBtn) noBtn.classList.remove('missing');
+  if(yesBtn) yesBtn.classList.remove('missing');
+  var fb=document.getElementById('ciwa-missing-msg');
+  if(fb && fb.innerHTML.indexOf('kontrendikasyonu seçimi')>=0) fb.style.display='none';
+  refreshBzdContraUI();
+}
+
+function refreshBzdContraUI(){
+  var noBtn=document.getElementById('bzd-no-btn');
+  var yesBtn=document.getElementById('bzd-yes-btn');
+  var tick=document.getElementById('bzd-no-tick');
+  var ybu=document.getElementById('bzd-ybu-warn');
+  if(noBtn){
+    var isNo=(bzdContra===false);
+    noBtn.classList.toggle('selected-no',isNo);
+    if(tick) tick.style.display=isNo?'inline':'none';
+  }
+  if(yesBtn) yesBtn.classList.toggle('selected-yes',bzdContra===true);
+  if(ybu){
+    var dtRisk=ciwaComplete() && ciwaTotal()>=20;
+    ybu.style.display=(bzdContra===true && dtRisk)?'block':'none';
+  }
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', function(){ buildCiwa(); });
+
+</script>
 </body>
 </html>

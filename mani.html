@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bilinç Bozukluğu Asistanı</title>
+<title>Mani Değerlendirmesi — YMRS</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -165,120 +165,209 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 </head>
 <body>
 <div class="app">
+<div id="mani" class="screen active">
+  <button class="btn-back" onclick="window.location.href='index.html'"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">Mani Değerlendirmesi</p>
+  <p class="page-sub">YMRS — Young Mania Rating Scale</p>
 
-<div style="padding:8px 0 16px">
-  <p class="page-title">Bilinç Bozukluğu</p>
-  <p class="page-sub">Değerlendirmeye başlamak için bir durum seçin</p>
-</div>
-<a href="deliryum.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Deliryum şüphesi</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">RASS → CAM → DRS-R-98 → Plan</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+  <div class="card">
+    <p class="section-label">Ölçek hakkında</p>
+    <p style="font-size:13px;color:#444;line-height:1.55">
+      YMRS, manik epizodun şiddetini ölçen 11 maddelik klinisyen değerlendirme ölçeğidir. 7 madde 0–4, 4 madde (irritabilite, konuşma, düşünce içeriği, yıkıcı/saldırgan davranış) 0–8 puanlanır. Son 48 saatlik bilgi ve görüşme gözlemine dayanır. Toplam aralık: 0–60.
+    </p>
   </div>
-</div>
-</a>
-<a href="alkol.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Alkol hastası yatırma checklisti</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">BZD kontrendikasyon → CIWA-Ar</p>
+
+  <div class="card">
+    <p class="section-label">YMRS maddeleri</p>
+    <div id="ymrs-items"></div>
+    <div id="ymrs-missing-msg" class="feedback-box fb-warning" style="display:none;font-size:13px;margin-top:4px"></div>
+    <div id="ymrs-score-display" class="score-display" style="display:none;margin-top:10px">
+      <div><p style="font-size:12px;color:#888;margin-bottom:2px">YMRS toplam</p><span class="score-num" id="ymrs-total">0</span></div>
+      <p class="score-interp" id="ymrs-interp"></p>
     </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+    <button id="ymrs-calc" class="btn-primary" onclick="calcYmrs()">Skoru hesapla →</button>
   </div>
-</div>
-</a>
 
-<p class="section-label" style="margin-top:20px;margin-bottom:10px">DSM-5 tanı ve ölçekler</p>
-
-<a href="dsm-dep.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #3B6D11;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Major Depresyon</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Hamilton (HAM-D) ölçeği</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
+  <button class="btn-secondary" onclick="window.location.href='index.html'" style="margin-top:8px">Ana ekrana dön</button>
 </div>
-</a>
 
-<a href="dsm-yab.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #6B47C9;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Yaygın Anksiyete Bozukluğu</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon + HAM-A</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="dsm-panik.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #A32D2D;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Panik Bozukluk</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="dsm-uyum.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Uyum Bozukluğu</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + askeri yönetmelik uyarısı</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="dsm-okb.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Obsesif-Kompulsif Bozukluk</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Y-BOCS ölçeği</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="mani.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #B89400;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Mani değerlendirmesi</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">YMRS — Young Mania Rating Scale</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="hezeyan.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #3C3489;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Hezeyan türleri (DSM-5 glossary)</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">11 psikotik sanrı tipi + tanım</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
+<!-- HEZEYAN TÜRLERİ -->
 
 </div>
+<script>
+
+function buildCriteria(containerId, items){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(it,i){
+    var d=document.createElement('div');
+    d.className='crit-item';
+    d.onclick=(function(el){return function(){el.classList.toggle('open')}})(d);
+    var letter=it.l?'<span class="crit-letter">'+it.l+'.</span>':'';
+    d.innerHTML='<div class="crit-head">'+
+        '<p class="crit-label">'+letter+it.t+'</p>'+
+        '<span class="crit-toggle"></span>'+
+      '</div>'+
+      '<div class="crit-desc">'+it.d+'</div>';
+    c.appendChild(d);
+  });
+}
+
+function buildScale(containerId, items, valsObj){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(item){
+    var d=document.createElement('div');
+    d.className='scale-item';
+    d.setAttribute('data-scale-id',item.id);
+    var q=document.createElement('p');
+    q.className='scale-q';
+    q.textContent=item.label;
+    d.appendChild(q);
+    if(item.hint){
+      var h=document.createElement('p');
+      h.className='cam-note';
+      h.style.marginBottom='6px';
+      h.textContent=item.hint;
+      d.appendChild(h);
+    }
+    var opts=document.createElement('div');
+    opts.className='scale-opts';
+    item.opts.forEach(function(opt){
+      var b=document.createElement('button');
+      b.className='scale-opt';
+      b.textContent=opt.t;
+      b.onclick=(function(id,score,btn,wrap){
+        return function(){
+          wrap.querySelectorAll('.scale-opt').forEach(function(x){x.classList.remove('selected')});
+          btn.classList.add('selected');
+          valsObj[id]=score;
+        };
+      })(item.id,opt.s,b,opts);
+      opts.appendChild(b);
+    });
+    d.appendChild(opts);
+    c.appendChild(d);
+  });
+}
+
+function scaleAllFilled(items, valsObj){
+  return items.every(function(it){return it.id in valsObj});
+}
+
+function scaleSum(valsObj){
+  var t=0;for(var k in valsObj) t+=valsObj[k];return t;
+}
+
+var YMRS_ITEMS=[
+  {id:'mood',label:'1. Yükselmiş duygudurum',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Sorgulamada hafif veya olası artış',s:1},
+    {t:'2 — Öznel hafif yükseliş, neşeli, uygun ortama göre iyimser, kendine güvenli',s:2},
+    {t:'3 — Belirgin yükselme, espri, gülme, aşırı neşe',s:3},
+    {t:'4 — Öforik, uygunsuz gülme, şarkı söyleme',s:4}
+  ]},
+  {id:'activity',label:'2. Artmış motor enerji-aktivite',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Öznel olarak artmış',s:1},
+    {t:'2 — Canlı jestler, artmış enerji',s:2},
+    {t:'3 — Aşırı enerji, dönem dönem hiperaktivite, huzursuzluk (sakinleştirilebilir)',s:3},
+    {t:'4 — Motor eksitasyon, sürekli hiperaktivite (sakinleştirilemez)',s:4}
+  ]},
+  {id:'sexual',label:'3. Cinsel ilgi',opts:[
+    {t:'0 — Normal, artmamış',s:0},{t:'1 — Hafif artmış',s:1},
+    {t:'2 — Sorulduğunda belirgin artış',s:2},
+    {t:'3 — Spontan cinsel içerikli konuşma, konuyu cinselleştirme',s:3},
+    {t:'4 — Açık cinsel davranışlar (hasta, personel, görüşmeciye karşı)',s:4}
+  ]},
+  {id:'sleep',label:'4. Uyku',opts:[
+    {t:'0 — Azalma yok',s:0},{t:'1 — < 1 saat azalma',s:1},
+    {t:'2 — > 1 saat azalma',s:2},
+    {t:'3 — Uyku ihtiyacında azalma bildirir',s:3},
+    {t:'4 — Uyku ihtiyacını inkâr eder',s:4}
+  ]},
+  {id:'irrit',label:'5. İrritabilite (×2 katsayı; 0–8)',opts:[
+    {t:'0 — Yok',s:0},{t:'2 — Öznel olarak artmış',s:2},
+    {t:'4 — Görüşmede dönem dönem belirgin irritabilite; konuşma sırasında ses tonu yükselir',s:4},
+    {t:'6 — Görüşme boyunca sıklıkla irritabl; kısa, ters cevaplar',s:6},
+    {t:'8 — Düşmanca, işbirliği yapmıyor; görüşme imkânsız',s:8}
+  ]},
+  {id:'speech',label:'6. Konuşma — hız ve miktar (×2 katsayı; 0–8)',opts:[
+    {t:'0 — Artış yok',s:0},
+    {t:'2 — Konuşmacı olduğu izlenimi',s:2},
+    {t:'4 — Aralıklı hızlanma veya artmış miktar; ayrıntılı (verbose)',s:4},
+    {t:'6 — Sürekli baskıyla konuşma; bölmek zor',s:6},
+    {t:'8 — Bölünmesi mümkün olmayan, hızlı, kesintisiz konuşma',s:8}
+  ]},
+  {id:'thought_disorder',label:'7. Dil-düşünce bozukluğu',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Çevresel; hafif dağınık',s:1},
+    {t:'2 — Çabuk dikkat dağılması, hedeften kaybetme; tema değişikliklerini sık görme',s:2},
+    {t:'3 — Fikir uçuşması, teğet düşünce; takip etmek zor; klang çağrışım',s:3},
+    {t:'4 — Tutarsız, iletişim imkânsız',s:4}
+  ]},
+  {id:'thought_content',label:'8. Düşünce içeriği (×2 katsayı; 0–8)',opts:[
+    {t:'0 — Normal',s:0},
+    {t:'2 — Şüpheli planlar, yeni ilgiler',s:2},
+    {t:'4 — Özel proje(ler); aşırı dindarlık',s:4},
+    {t:'6 — Grandiyöz veya paranoid fikirler, "referans" fikirleri',s:6},
+    {t:'8 — Hezeyanlar; halüsinasyonlar',s:8}
+  ]},
+  {id:'aggressive',label:'9. Yıkıcı / saldırgan davranış (×2 katsayı; 0–8)',opts:[
+    {t:'0 — Yok',s:0},{t:'2 — Alaycı, gürültülü, ihtiyatlı',s:2},
+    {t:'4 — Tehditkâr, hakaret eder; ses yükseltir',s:4},
+    {t:'6 — Personele saldırı tehdidi, eşyaları kırma',s:6},
+    {t:'8 — Saldırgan davranış, fiziksel atak; tehlikeli',s:8}
+  ]},
+  {id:'appearance',label:'10. Görünüm',opts:[
+    {t:'0 — Düzenli, uygun giyim',s:0},{t:'1 — Hafif dağınık',s:1},
+    {t:'2 — Dağınık; abartılı giyim',s:2},
+    {t:'3 — Kıyafetlerin önemli bir kısmı eksik / acayip',s:3},
+    {t:'4 — Tam dağınık; süslemeli, garip kıyafet',s:4}
+  ]},
+  {id:'insight',label:'11. İçgörü',opts:[
+    {t:'0 — Mevcut; hasta olduğunu kabul eder, tedavi ihtiyacını kabul eder',s:0},
+    {t:'1 — Hasta olabileceğini kabul eder',s:1},
+    {t:'2 — Davranış değişikliğini kabul eder ama hasta olmayı reddeder',s:2},
+    {t:'3 — Olası davranış değişikliğini kabul eder ama hasta olmayı reddeder',s:3},
+    {t:'4 — Hasta olduğunu tamamen reddeder',s:4}
+  ]}
+];
+var ymrsVals={};
+function calcYmrs(){
+  if(!scaleAllFilled(YMRS_ITEMS,ymrsVals)){
+    var miss=YMRS_ITEMS.length-Object.keys(ymrsVals).length;
+    var fb=document.getElementById('ymrs-missing-msg');
+    fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Tüm maddeleri doldurun.';
+    fb.style.display='block';
+    return;
+  }
+  document.getElementById('ymrs-missing-msg').style.display='none';
+  var total=scaleSum(ymrsVals);
+  var interp='';
+  if(total<=12) interp='Remisyon / minimal belirti (≤ 12)';
+  else if(total<=19) interp='Hafif mani (13–19)';
+  else if(total<=25) interp='Orta mani (20–25)';
+  else if(total<=37) interp='Şiddetli mani (26–37)';
+  else interp='Çok şiddetli mani (≥ 38)';
+  document.getElementById('ymrs-total').textContent=total;
+  document.getElementById('ymrs-interp').textContent=interp;
+  document.getElementById('ymrs-score-display').style.display='flex';
+}
+function openMani(){
+  ymrsVals={};
+  document.getElementById('ymrs-score-display').style.display='none';
+  document.getElementById('ymrs-missing-msg').style.display='none';
+  buildScale('ymrs-items',YMRS_ITEMS,ymrsVals);
+  go('mani');
+}
+
+
+// Init
+document.addEventListener('DOMContentLoaded', function(){
+  ymrsVals={};
+  buildScale('ymrs-items',YMRS_ITEMS,ymrsVals);
+});
+
+</script>
 </body>
 </html>

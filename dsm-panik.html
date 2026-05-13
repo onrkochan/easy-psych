@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bilinç Bozukluğu Asistanı</title>
+<title>DSM-5 Panik Bozukluk</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -165,120 +165,159 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 </head>
 <body>
 <div class="app">
+<div id="dsm-panik" class="screen active">
+  <button class="btn-back" onclick="window.location.href='index.html'"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">DSM-5 Panik Bozukluk</p>
+  <p class="page-sub">Kriterler + organik ekartasyon</p>
 
-<div style="padding:8px 0 16px">
-  <p class="page-title">Bilinç Bozukluğu</p>
-  <p class="page-sub">Değerlendirmeye başlamak için bir durum seçin</p>
-</div>
-<a href="deliryum.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Deliryum şüphesi</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">RASS → CAM → DRS-R-98 → Plan</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+  <div class="card">
+    <p class="section-label">A. Panik atak — 4 belirti gereklidir</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Yineleyici, beklenmedik panik ataklar. Panik atak, dakikalar içinde zirveye ulaşan yoğun korku/rahatsızlık dönemidir; aşağıdaki 13 belirtiden ≥ 4'ünün varlığı şarttır.</p>
+    <div id="dsm-panik-a"></div>
   </div>
-</div>
-</a>
-<a href="alkol.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Alkol hastası yatırma checklisti</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">BZD kontrendikasyon → CIWA-Ar</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+
+  <div class="card">
+    <p class="section-label">B–E. Diğer kriterler</p>
+    <div id="dsm-panik-other"></div>
   </div>
-</div>
-</a>
 
-<p class="section-label" style="margin-top:20px;margin-bottom:10px">DSM-5 tanı ve ölçekler</p>
-
-<a href="dsm-dep.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #3B6D11;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Major Depresyon</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Hamilton (HAM-D) ölçeği</p>
+  <div class="card">
+    <p class="section-label">Ekarte edilmesi gereken organik patolojiler</p>
+    <div class="organic-list">
+      <strong>Kardiyovasküler (acil ekartasyon):</strong> Akut koroner sendrom, aritmi (SVT, paroksismal AF), mitral kapak prolapsusu, pulmoner emboli, perikardit.<br>
+      <strong>Endokrin:</strong> Hipertiroidi, feokromositoma, hipoglisemi, karsinoid sendrom, insülinoma.<br>
+      <strong>Pulmoner:</strong> Astım atağı, KOAH alevlenme, hiperventilasyon, hipoksi.<br>
+      <strong>Nörolojik:</strong> Temporal lob (parsiyel kompleks) epilepsisi, vestibüler bozukluklar, migren ekivalanı, TIA.<br>
+      <strong>Madde / ilaç:</strong> Kafein, nikotin, kokain, amfetamin, MDMA, kannabis; alkol/BZD/opioid yoksunluğu; β-agonist, kortikosteroid, levotiroksin, dekonjestan.<br>
+      <strong>Diğer:</strong> Anemi, hipokalsemi, hipomagnezemi, anaflaksi (erken).
     </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+    <p style="font-size:12px;color:#555;margin-top:10px">
+      <strong>İlk başvuruda zorunlu:</strong> EKG (özellikle ilk atakta), tam kan sayımı, TSH, glukoz, elektrolitler. Şüpheye göre troponin, D-dimer, akciğer grafisi, idrar toksikolojisi, 24 saatlik idrar metanefrin.
+    </p>
   </div>
-</div>
-</a>
 
-<a href="dsm-yab.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #6B47C9;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Yaygın Anksiyete Bozukluğu</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon + HAM-A</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
+  <button class="btn-secondary" onclick="window.location.href='index.html'" style="margin-top:8px">Ana ekrana dön</button>
 </div>
-</a>
 
-<a href="dsm-panik.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #A32D2D;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Panik Bozukluk</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="dsm-uyum.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Uyum Bozukluğu</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + askeri yönetmelik uyarısı</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="dsm-okb.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Obsesif-Kompulsif Bozukluk</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Y-BOCS ölçeği</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="mani.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #B89400;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Mani değerlendirmesi</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">YMRS — Young Mania Rating Scale</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="hezeyan.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #3C3489;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Hezeyan türleri (DSM-5 glossary)</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">11 psikotik sanrı tipi + tanım</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
+<!-- DSM-5 UYUM BOZUKLUĞU -->
 
 </div>
+<script>
+
+function buildCriteria(containerId, items){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(it,i){
+    var d=document.createElement('div');
+    d.className='crit-item';
+    d.onclick=(function(el){return function(){el.classList.toggle('open')}})(d);
+    var letter=it.l?'<span class="crit-letter">'+it.l+'.</span>':'';
+    d.innerHTML='<div class="crit-head">'+
+        '<p class="crit-label">'+letter+it.t+'</p>'+
+        '<span class="crit-toggle"></span>'+
+      '</div>'+
+      '<div class="crit-desc">'+it.d+'</div>';
+    c.appendChild(d);
+  });
+}
+
+function buildScale(containerId, items, valsObj){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(item){
+    var d=document.createElement('div');
+    d.className='scale-item';
+    d.setAttribute('data-scale-id',item.id);
+    var q=document.createElement('p');
+    q.className='scale-q';
+    q.textContent=item.label;
+    d.appendChild(q);
+    if(item.hint){
+      var h=document.createElement('p');
+      h.className='cam-note';
+      h.style.marginBottom='6px';
+      h.textContent=item.hint;
+      d.appendChild(h);
+    }
+    var opts=document.createElement('div');
+    opts.className='scale-opts';
+    item.opts.forEach(function(opt){
+      var b=document.createElement('button');
+      b.className='scale-opt';
+      b.textContent=opt.t;
+      b.onclick=(function(id,score,btn,wrap){
+        return function(){
+          wrap.querySelectorAll('.scale-opt').forEach(function(x){x.classList.remove('selected')});
+          btn.classList.add('selected');
+          valsObj[id]=score;
+        };
+      })(item.id,opt.s,b,opts);
+      opts.appendChild(b);
+    });
+    d.appendChild(opts);
+    c.appendChild(d);
+  });
+}
+
+function scaleAllFilled(items, valsObj){
+  return items.every(function(it){return it.id in valsObj});
+}
+
+function scaleSum(valsObj){
+  var t=0;for(var k in valsObj) t+=valsObj[k];return t;
+}
+
+var DSM_PANIK_A=[
+  {l:'1',t:'Çarpıntı, kalp atımlarının duyumsanması veya hızlanma',
+   d:'Tipik olarak ataktan önce sessizdir, atak sırasında belirginleşir. Hasta sıklıkla acil servise başvurur; ilk atakta kardiyak değerlendirme zorunludur.'},
+  {l:'2',t:'Terleme',
+   d:'Soğuk veya sıcak terleme; özellikle alın, avuçlar, koltuk altı.'},
+  {l:'3',t:'Titreme veya sarsılma',
+   d:'İnce tremor; tüm vücut sarsıntısı şeklinde olabilir.'},
+  {l:'4',t:'Nefes darlığı veya boğulma hissi',
+   d:'"Nefes alamıyorum" hissi; hiperventilasyon sıklıkla eşlik eder ve parestezi yaratır.'},
+  {l:'5',t:'Soluğun kesilmesi hissi (choking)',
+   d:'Boğazda yumru, tıkanma hissi. Globus hystericus ile karışabilir.'},
+  {l:'6',t:'Göğüste ağrı veya rahatsızlık',
+   d:'Sıklıkla atipik, batıcı, kısa süreli. Yine de akut koroner sendrom ekartasyonu zorunludur (özellikle ilk atak, kardiyak risk faktörleri).'},
+  {l:'7',t:'Bulantı veya karın ağrısı',
+   d:'Mide kasılması, ishal, kusma olabilir.'},
+  {l:'8',t:'Baş dönmesi, sersemlik, dengesizlik veya bayılacakmış gibi olma',
+   d:'Vertigo ile karıştırılmamalıdır (rotatuar değildir). Vestibüler hastalıkların ekartasyonu gerekir.'},
+  {l:'9',t:'Üşüme veya ateş basması',
+   d:'Hem sıcak basması hem üşüme aynı atakta yer alabilir.'},
+  {l:'10',t:'Uyuşma veya karıncalanma (parestezi)',
+   d:'Hiperventilasyon kaynaklı respiratuar alkaloza bağlı; tipik olarak periferal (parmak uçları, ağız çevresi).'},
+  {l:'11',t:'Derealizasyon veya depersonalizasyon',
+   d:'"Sanki rüyada gibi" / "kendime dışarıdan bakıyormuş gibi" hissi.'},
+  {l:'12',t:'Kontrolünü kaybetme veya çıldırma korkusu',
+   d:'"Bir delilik yapacağım" düşüncesi tipiktir; psikoz ile karıştırılmamalıdır — içgörü korunmuştur.'},
+  {l:'13',t:'Ölüm korkusu',
+   d:'"Öleceğim" hissi ataktaki en sık ve en ağır deneyimlerden biridir; ACS şüphesini canlı tutar.'}
+];
+var DSM_PANIK_OTHER=[
+  {l:'B',t:'En az 1 atak sonrası ≥ 1 ay süren endişe veya davranış değişikliği',
+   d:'Aşağıdakilerden biri: (1) atak veya sonuçları (kontrolü kaybetme, kalp krizi, çıldırma) hakkında sürekli endişe, (2) ataklarla ilişkili belirgin uyumsuz davranış değişikliği (örn. egzersizden kaçınma, yalnız kalmaktan kaçınma).'},
+  {l:'C',t:'Madde / tıbbi duruma bağlanamaz',
+   d:'Maddenin (örn. kokain, kafein, amfetamin) veya başka bir tıbbi durumun (örn. hipertiroidi, feokromositoma, kardiyopulmoner hastalıklar) fizyolojik etkilerine bağlanamaz. Bu nedenle organik dışlama zorunludur.'},
+  {l:'D',t:'Başka bir mental bozuklukla daha iyi açıklanamaz',
+   d:'Örn. sosyal anksiyete (sosyal durumlara yanıt olarak), özgül fobi (fobik objeye yanıt), OKB (obsesyona yanıt), PTSD (travma hatırlatıcısına yanıt), ayrılma anksiyetesinde (bağlanma figürlerinden ayrılığa yanıt) görülen panik atakları daha iyi açıklayabilir.'}
+];
+function openDsmPanik(){
+  buildCriteria('dsm-panik-a',DSM_PANIK_A);
+  buildCriteria('dsm-panik-other',DSM_PANIK_OTHER);
+  go('dsm-panik');
+}
+
+
+// Init
+document.addEventListener('DOMContentLoaded', function(){
+  buildCriteria('dsm-panik-a',DSM_PANIK_A);
+  buildCriteria('dsm-panik-other',DSM_PANIK_OTHER);
+});
+
+</script>
 </body>
 </html>

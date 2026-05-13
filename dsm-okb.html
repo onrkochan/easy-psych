@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bilinç Bozukluğu Asistanı</title>
+<title>DSM-5 Obsesif-Kompulsif Bozukluk</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -165,120 +165,223 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 </head>
 <body>
 <div class="app">
+<div id="dsm-okb" class="screen active">
+  <button class="btn-back" onclick="window.location.href='index.html'"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">DSM-5 Obsesif-Kompulsif Bozukluk</p>
+  <p class="page-sub">Kriterler + Y-BOCS ölçeği</p>
 
-<div style="padding:8px 0 16px">
-  <p class="page-title">Bilinç Bozukluğu</p>
-  <p class="page-sub">Değerlendirmeye başlamak için bir durum seçin</p>
-</div>
-<a href="deliryum.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Deliryum şüphesi</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">RASS → CAM → DRS-R-98 → Plan</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+  <div class="card">
+    <p class="section-label">A–D. Tanı kriterleri</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Detay için her kritere tıklayın.</p>
+    <div id="dsm-okb-criteria"></div>
   </div>
-</div>
-</a>
-<a href="alkol.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Alkol hastası yatırma checklisti</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">BZD kontrendikasyon → CIWA-Ar</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+
+  <div class="card">
+    <p class="section-label">İçgörü belirleyicileri</p>
+    <div id="dsm-okb-spec"></div>
   </div>
-</div>
-</a>
 
-<p class="section-label" style="margin-top:20px;margin-bottom:10px">DSM-5 tanı ve ölçekler</p>
-
-<a href="dsm-dep.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #3B6D11;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Major Depresyon</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Hamilton (HAM-D) ölçeği</p>
+  <div class="card">
+    <p class="section-label">Y-BOCS — Yale-Brown Obsessive Compulsive Scale</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">10 maddelik klinisyen değerlendirme ölçeği. İlk 5 madde obsesyon, son 5 madde kompulsiyon için. Her madde 0–4. Toplam aralık: 0–40.</p>
+    <div id="ybocs-items"></div>
+    <div id="ybocs-missing-msg" class="feedback-box fb-warning" style="display:none;font-size:13px;margin-top:4px"></div>
+    <div id="ybocs-score-display" class="score-display" style="display:none;margin-top:10px">
+      <div><p style="font-size:12px;color:#888;margin-bottom:2px">Y-BOCS toplam</p><span class="score-num" id="ybocs-total">0</span></div>
+      <p class="score-interp" id="ybocs-interp"></p>
     </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+    <button id="ybocs-calc" class="btn-primary" onclick="calcYbocs()">Skoru hesapla →</button>
   </div>
-</div>
-</a>
 
-<a href="dsm-yab.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #6B47C9;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Yaygın Anksiyete Bozukluğu</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon + HAM-A</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
+  <button class="btn-secondary" onclick="window.location.href='index.html'" style="margin-top:8px">Ana ekrana dön</button>
 </div>
-</a>
 
-<a href="dsm-panik.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #A32D2D;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Panik Bozukluk</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="dsm-uyum.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Uyum Bozukluğu</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + askeri yönetmelik uyarısı</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="dsm-okb.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Obsesif-Kompulsif Bozukluk</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Y-BOCS ölçeği</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="mani.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #B89400;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Mani değerlendirmesi</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">YMRS — Young Mania Rating Scale</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="hezeyan.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #3C3489;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Hezeyan türleri (DSM-5 glossary)</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">11 psikotik sanrı tipi + tanım</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
+<!-- MANİ DEĞERLENDİRMESİ — YMRS -->
 
 </div>
+<script>
+
+function buildCriteria(containerId, items){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(it,i){
+    var d=document.createElement('div');
+    d.className='crit-item';
+    d.onclick=(function(el){return function(){el.classList.toggle('open')}})(d);
+    var letter=it.l?'<span class="crit-letter">'+it.l+'.</span>':'';
+    d.innerHTML='<div class="crit-head">'+
+        '<p class="crit-label">'+letter+it.t+'</p>'+
+        '<span class="crit-toggle"></span>'+
+      '</div>'+
+      '<div class="crit-desc">'+it.d+'</div>';
+    c.appendChild(d);
+  });
+}
+
+function buildScale(containerId, items, valsObj){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(item){
+    var d=document.createElement('div');
+    d.className='scale-item';
+    d.setAttribute('data-scale-id',item.id);
+    var q=document.createElement('p');
+    q.className='scale-q';
+    q.textContent=item.label;
+    d.appendChild(q);
+    if(item.hint){
+      var h=document.createElement('p');
+      h.className='cam-note';
+      h.style.marginBottom='6px';
+      h.textContent=item.hint;
+      d.appendChild(h);
+    }
+    var opts=document.createElement('div');
+    opts.className='scale-opts';
+    item.opts.forEach(function(opt){
+      var b=document.createElement('button');
+      b.className='scale-opt';
+      b.textContent=opt.t;
+      b.onclick=(function(id,score,btn,wrap){
+        return function(){
+          wrap.querySelectorAll('.scale-opt').forEach(function(x){x.classList.remove('selected')});
+          btn.classList.add('selected');
+          valsObj[id]=score;
+        };
+      })(item.id,opt.s,b,opts);
+      opts.appendChild(b);
+    });
+    d.appendChild(opts);
+    c.appendChild(d);
+  });
+}
+
+function scaleAllFilled(items, valsObj){
+  return items.every(function(it){return it.id in valsObj});
+}
+
+function scaleSum(valsObj){
+  var t=0;for(var k in valsObj) t+=valsObj[k];return t;
+}
+
+var DSM_OKB=[
+  {l:'A',t:'Obsesyonların, kompulsiyonların veya her ikisinin varlığı',
+   d:'<strong>Obsesyonlar:</strong> Yineleyici, ısrarlı, istem dışı yaşanan ve müdahaleci/istenmeyen bulunan düşünce, dürtü veya görüntülerdir. Belirgin anksiyete veya sıkıntıya yol açarlar. Kişi bunları başka bir düşünce/eylemle bastırmaya, görmezden gelmeye ya da nötralize etmeye çalışır. <br><br><strong>Kompulsiyonlar:</strong> Obsesyona yanıt olarak veya katı kurallara göre yapılmak zorunda hissedilen yineleyici davranışlar (el yıkama, kontrol etme, düzenleme) veya zihinsel eylemlerdir (dua, sayı sayma, sessizce kelimeleri tekrarlama). Sıkıntıyı önlemeye yöneliktir ama gerçekçi değildir veya açıkça aşırıdır.'},
+  {l:'B',t:'Obsesyon/kompulsiyonlar zaman alıcıdır ve klinik anlamlı sıkıntı/işlevsellikte bozulma yapar',
+   d:'Günde > 1 saat veya sosyal, mesleki ya da diğer önemli alanlarda belirgin bozulma. Bu süre eşiği özellikle hafif OKB\'yi obsesif-kompulsif kişilik özelliklerinden ayırmada önemlidir.'},
+  {l:'C',t:'Madde / tıbbi duruma bağlanamaz',
+   d:'Belirtiler bir maddenin (örn. kokain, amfetamin) veya başka bir tıbbi durumun fizyolojik etkilerine bağlanamaz. PANDAS/PANS gibi enfeksiyon sonrası tablolar ayrıdır.'},
+  {l:'D',t:'Başka bir mental bozuklukla daha iyi açıklanamaz',
+   d:'Örn. YAB\'da aşırı endişe, vücut dismorfik bozukluğunda görünüme odaklı uğraşı, biriktirme bozukluğunda eşya biriktirme, trikotillomanide saç koparma, deri yolma bozukluğunda deri yolma, tik bozukluklarında stereotipik hareketler, yeme bozukluklarında ritualistik beslenme, hastalık anksiyetesi bozukluğunda hastalıkla uğraşı, paraflik bozukluklarda cinsel dürtüler, davranım bozukluğu/diğer dürtü kontrol bozukluklarında saldırgan dürtüler, MDB\'de suçluluk geviş getirmeleri, otizm spektrum bozukluğunda yineleyici davranış kalıpları.'}
+];
+var DSM_OKB_SPEC=[
+  {l:'',t:'İçgörüsü iyi veya orta — inançlarının kesinlikle/muhtemelen doğru olmadığını ya da doğru olabileceğini veya olmayabileceğini kabul eder',
+   d:'Hastaların büyük çoğunluğu bu kategoridedir. Tedavi yanıtı tipik olarak iyidir.'},
+  {l:'',t:'İçgörüsü kötü — inançlarının muhtemelen doğru olduğunu düşünür',
+   d:'Tedavi yanıtı daha sınırlıdır; bilişsel müdahale ve antipsikotik artırma stratejisi gerekebilir.'},
+  {l:'',t:'İçgörü yok / sanrısal inançlar — inançlarının doğru olduğuna kesinlikle inanır',
+   d:'Sanrı düzeyine ulaşan OKB ile psikotik bozukluk ayrımı önemlidir. Yapı obsesif-kompulsif kalır; bu durumda da OKB tanısı verilir, "şizofreni veya başka psikotik bozukluk" eklenmez (yalnızca OKB belirtilerinin sanrılı düzeyde olduğu belirtilir).'},
+  {l:'',t:'Tik ilişkili — şu anda veya geçmişte tik bozukluğu öyküsü vardır',
+   d:'Erken başlangıçlı, daha sık erkek, daha simetri/düzen odaklı obsesyonlar, "tam doğru" hissi peşinde olma; SSRI yanıtı daha sınırlıdır, antipsikotik artırma daha sık gerekir.'}
+];
+
+/* =============== Y-BOCS =============== */
+var YBOCS_ITEMS=[
+  {id:'time_obs',label:'1. Obsesyonlarla geçen zaman',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif (günde < 1 saat veya seyrek girişim)',s:1},
+    {t:'2 — Orta (1–3 saat veya sık girişim)',s:2},
+    {t:'3 — Şiddetli (> 3–8 saat veya çok sık girişim)',s:3},
+    {t:'4 — Çok şiddetli (> 8 saat veya neredeyse sürekli)',s:4}
+  ]},
+  {id:'interfere_obs',label:'2. Obsesyonların yarattığı engellenme',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif (sosyal/mesleki işlevde hafif girişim, performans bozulmaz)',s:1},
+    {t:'2 — Orta (belirgin girişim ama hâlâ idare edebilir)',s:2},
+    {t:'3 — Şiddetli (önemli işlev kaybı)',s:3},{t:'4 — Çok şiddetli (yeti yitimi)',s:4}
+  ]},
+  {id:'distress_obs',label:'3. Obsesyonların yarattığı sıkıntı',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif, çok az rahatsız edici',s:1},
+    {t:'2 — Orta, rahatsız edici ama idare edilebilir',s:2},
+    {t:'3 — Şiddetli, çok rahatsız edici',s:3},{t:'4 — Çok şiddetli, neredeyse sürekli yeti yitimi',s:4}
+  ]},
+  {id:'resist_obs',label:'4. Obsesyonlara karşı direnç',opts:[
+    {t:'0 — Her zaman direnir',s:0},{t:'1 — Çoğu zaman direnir',s:1},
+    {t:'2 — Bir miktar çaba ile direnir',s:2},{t:'3 — Tüm obsesyonlara teslim olur ama gönülsüz',s:3},
+    {t:'4 — Tüm obsesyonlara tamamen ve isteyerek teslim olur',s:4}
+  ]},
+  {id:'control_obs',label:'5. Obsesyonlar üzerinde kontrol derecesi',opts:[
+    {t:'0 — Tam kontrol',s:0},{t:'1 — Çoğu zaman kontrol edebilir',s:1},
+    {t:'2 — Bazen kontrol edebilir',s:2},{t:'3 — Nadiren başarılı, güçlükle bölebilir',s:3},
+    {t:'4 — Kontrol edemez, obsesyonu yalnızca dikkatini kısa süre dağıtarak erteleyebilir',s:4}
+  ]},
+  {id:'time_comp',label:'6. Kompulsiyonlarla geçen zaman',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif (günde < 1 saat veya seyrek)',s:1},
+    {t:'2 — Orta (1–3 saat veya sık)',s:2},{t:'3 — Şiddetli (> 3–8 saat veya çok sık)',s:3},
+    {t:'4 — Çok şiddetli (> 8 saat veya neredeyse sürekli)',s:4}
+  ]},
+  {id:'interfere_comp',label:'7. Kompulsiyonların yarattığı engellenme',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif',s:1},{t:'2 — Orta',s:2},
+    {t:'3 — Şiddetli',s:3},{t:'4 — Çok şiddetli (yeti yitimi)',s:4}
+  ]},
+  {id:'distress_comp',label:'8. Kompulsiyonlardan engellenirse sıkıntı düzeyi',opts:[
+    {t:'0 — Yok',s:0},{t:'1 — Hafif anksiyete',s:1},
+    {t:'2 — Orta, idare edilebilir anksiyete',s:2},
+    {t:'3 — Belirgin ve çok rahatsız edici anksiyete',s:3},
+    {t:'4 — Yeti yitimine yol açan anksiyete',s:4}
+  ]},
+  {id:'resist_comp',label:'9. Kompulsiyonlara karşı direnç',opts:[
+    {t:'0 — Her zaman direnir',s:0},{t:'1 — Çoğu zaman direnir',s:1},
+    {t:'2 — Bir miktar çaba ile direnir',s:2},{t:'3 — Tüm kompulsiyonlara teslim olur ama gönülsüz',s:3},
+    {t:'4 — Tüm kompulsiyonlara tamamen ve isteyerek teslim olur',s:4}
+  ]},
+  {id:'control_comp',label:'10. Kompulsiyonlar üzerinde kontrol derecesi',opts:[
+    {t:'0 — Tam kontrol',s:0},{t:'1 — Çoğu zaman geciktirme baskısı altında ama tamamlar',s:1},
+    {t:'2 — Bir miktar gecikme veya kısaltma yapabilir',s:2},
+    {t:'3 — Sadece güçlükle tamamlanmadan bırakabilir',s:3},
+    {t:'4 — Kompulsiyonu istemeden de tamamlamak zorunda kalır',s:4}
+  ]}
+];
+var ybocsVals={};
+function calcYbocs(){
+  if(!scaleAllFilled(YBOCS_ITEMS,ybocsVals)){
+    var miss=YBOCS_ITEMS.length-Object.keys(ybocsVals).length;
+    var fb=document.getElementById('ybocs-missing-msg');
+    fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Tüm maddeleri doldurun.';
+    fb.style.display='block';
+    return;
+  }
+  document.getElementById('ybocs-missing-msg').style.display='none';
+  var total=scaleSum(ybocsVals);
+  var interp='';
+  if(total<=7) interp='Subklinik (0–7)';
+  else if(total<=15) interp='Hafif OKB (8–15)';
+  else if(total<=23) interp='Orta OKB (16–23)';
+  else if(total<=31) interp='Şiddetli OKB (24–31)';
+  else interp='Aşırı şiddetli OKB (32–40)';
+  document.getElementById('ybocs-total').textContent=total;
+  document.getElementById('ybocs-interp').textContent=interp;
+  document.getElementById('ybocs-score-display').style.display='flex';
+}
+function openDsmOkb(){
+  ybocsVals={};
+  document.getElementById('ybocs-score-display').style.display='none';
+  document.getElementById('ybocs-missing-msg').style.display='none';
+  buildCriteria('dsm-okb-criteria',DSM_OKB);
+  buildCriteria('dsm-okb-spec',DSM_OKB_SPEC);
+  buildScale('ybocs-items',YBOCS_ITEMS,ybocsVals);
+  go('dsm-okb');
+}
+
+
+// Init
+document.addEventListener('DOMContentLoaded', function(){
+  ybocsVals={};
+  buildCriteria('dsm-okb-criteria',DSM_OKB);
+  buildCriteria('dsm-okb-spec',DSM_OKB_SPEC);
+  buildScale('ybocs-items',YBOCS_ITEMS,ybocsVals);
+});
+
+</script>
 </body>
 </html>

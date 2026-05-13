@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bilinç Bozukluğu Asistanı</title>
+<title>DSM-5 Yaygın Anksiyete Bozukluğu</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -165,120 +165,191 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 </head>
 <body>
 <div class="app">
+<div id="dsm-yab" class="screen active">
+  <button class="btn-back" onclick="window.location.href='index.html'"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">DSM-5 Yaygın Anksiyete Bozukluğu (YAB)</p>
+  <p class="page-sub">Kriterler + organik ekartasyon + HAM-A</p>
 
-<div style="padding:8px 0 16px">
-  <p class="page-title">Bilinç Bozukluğu</p>
-  <p class="page-sub">Değerlendirmeye başlamak için bir durum seçin</p>
-</div>
-<a href="deliryum.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Deliryum şüphesi</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">RASS → CAM → DRS-R-98 → Plan</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+  <div class="card">
+    <p class="section-label">A–F. Tanı kriterleri</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">Detay için her kritere tıklayın.</p>
+    <div id="dsm-yab-criteria"></div>
   </div>
-</div>
-</a>
-<a href="alkol.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Alkol hastası yatırma checklisti</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">BZD kontrendikasyon → CIWA-Ar</p>
+
+  <div class="card">
+    <p class="section-label">Ekarte edilmesi gereken organik patolojiler</p>
+    <div class="organic-list">
+      <strong>Endokrin:</strong> Hipertiroidi/tirotoksikoz, feokromositoma, hipoglisemi, Cushing, hiperparatiroidi, karsinoid sendrom.<br>
+      <strong>Kardiyovasküler:</strong> Aritmi (özellikle SVT, AF), mitral kapak prolapsusu, kalp yetmezliği, KAH.<br>
+      <strong>Pulmoner:</strong> Astım, KOAH, pulmoner emboli, hipoksi.<br>
+      <strong>Nörolojik:</strong> Temporal lob epilepsisi, MS, vestibüler bozukluklar, BPPV.<br>
+      <strong>Madde / ilaç:</strong> Kafein, kokain, amfetamin, kannabis intoksikasyonu; alkol/BZD/opioid yoksunluğu; kortikosteroid, β-agonist, levotiroksin, dekonjestan, SSRİ aktivasyon.<br>
+      <strong>Hematolojik / metabolik:</strong> Anemi, elektrolit bozukluğu (özellikle hipokalsemi), vitamin B12 eksikliği.
     </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+    <p style="font-size:12px;color:#555;margin-top:10px">
+      <strong>Önerilen ilk basamak tarama:</strong> TSH, sT4, tam kan sayımı, glukoz, elektrolitler, EKG. Klinik şüpheye göre 24 saatlik idrar metanefrin, idrar toksikolojisi, EKO, akciğer grafisi.
+    </p>
   </div>
-</div>
-</a>
 
-<p class="section-label" style="margin-top:20px;margin-bottom:10px">DSM-5 tanı ve ölçekler</p>
-
-<a href="dsm-dep.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #3B6D11;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Major Depresyon</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Hamilton (HAM-D) ölçeği</p>
+  <div class="card">
+    <p class="section-label">Hamilton Anksiyete Ölçeği (HAM-A)</p>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">14 maddelik klinisyen değerlendirme ölçeği. Her madde 0–4 arası puanlanır. Toplam aralık: 0–56.</p>
+    <div id="hama-items"></div>
+    <div id="hama-missing-msg" class="feedback-box fb-warning" style="display:none;font-size:13px;margin-top:4px"></div>
+    <div id="hama-score-display" class="score-display" style="display:none;margin-top:10px">
+      <div><p style="font-size:12px;color:#888;margin-bottom:2px">HAM-A toplam</p><span class="score-num" id="hama-total">0</span></div>
+      <p class="score-interp" id="hama-interp"></p>
     </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+    <button id="hama-calc" class="btn-primary" onclick="calcHamA()">Skoru hesapla →</button>
   </div>
-</div>
-</a>
 
-<a href="dsm-yab.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #6B47C9;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Yaygın Anksiyete Bozukluğu</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon + HAM-A</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
+  <button class="btn-secondary" onclick="window.location.href='index.html'" style="margin-top:8px">Ana ekrana dön</button>
 </div>
-</a>
 
-<a href="dsm-panik.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #A32D2D;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Panik Bozukluk</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="dsm-uyum.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Uyum Bozukluğu</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + askeri yönetmelik uyarısı</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="dsm-okb.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">DSM-5 Obsesif-Kompulsif Bozukluk</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Y-BOCS ölçeği</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="mani.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #B89400;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Mani değerlendirmesi</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">YMRS — Young Mania Rating Scale</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<a href="hezeyan.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #3C3489;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:15px">Hezeyan türleri (DSM-5 glossary)</p>
-      <p style="font-size:12px;color:#888;margin-top:3px">11 psikotik sanrı tipi + tanım</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
+<!-- DSM-5 PANİK BOZUKLUK -->
 
 </div>
+<script>
+
+function buildCriteria(containerId, items){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(it,i){
+    var d=document.createElement('div');
+    d.className='crit-item';
+    d.onclick=(function(el){return function(){el.classList.toggle('open')}})(d);
+    var letter=it.l?'<span class="crit-letter">'+it.l+'.</span>':'';
+    d.innerHTML='<div class="crit-head">'+
+        '<p class="crit-label">'+letter+it.t+'</p>'+
+        '<span class="crit-toggle"></span>'+
+      '</div>'+
+      '<div class="crit-desc">'+it.d+'</div>';
+    c.appendChild(d);
+  });
+}
+
+function buildScale(containerId, items, valsObj){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(item){
+    var d=document.createElement('div');
+    d.className='scale-item';
+    d.setAttribute('data-scale-id',item.id);
+    var q=document.createElement('p');
+    q.className='scale-q';
+    q.textContent=item.label;
+    d.appendChild(q);
+    if(item.hint){
+      var h=document.createElement('p');
+      h.className='cam-note';
+      h.style.marginBottom='6px';
+      h.textContent=item.hint;
+      d.appendChild(h);
+    }
+    var opts=document.createElement('div');
+    opts.className='scale-opts';
+    item.opts.forEach(function(opt){
+      var b=document.createElement('button');
+      b.className='scale-opt';
+      b.textContent=opt.t;
+      b.onclick=(function(id,score,btn,wrap){
+        return function(){
+          wrap.querySelectorAll('.scale-opt').forEach(function(x){x.classList.remove('selected')});
+          btn.classList.add('selected');
+          valsObj[id]=score;
+        };
+      })(item.id,opt.s,b,opts);
+      opts.appendChild(b);
+    });
+    d.appendChild(opts);
+    c.appendChild(d);
+  });
+}
+
+function scaleAllFilled(items, valsObj){
+  return items.every(function(it){return it.id in valsObj});
+}
+
+function scaleSum(valsObj){
+  var t=0;for(var k in valsObj) t+=valsObj[k];return t;
+}
+
+var DSM_YAB=[
+  {l:'A',t:'En az 6 ay süre ile günlerin çoğunda aşırı kaygı / endişe',
+   d:'Birden çok olay veya etkinliği (örn. iş, okul performansı) içeren kaygı ve aşırı endişe. Süre kriteri YAB için kritiktir; daha kısa süreler "tanımlanmış başka bir anksiyete bozukluğu" olarak kodlanır.'},
+  {l:'B',t:'Endişeyi kontrol etmekte güçlük',
+   d:'Kişi endişesinin orantısız ve kontrolsüz olduğunu farkındadır ama durduramaz. "Endişelenmeyi bırakamıyorum" tipik bir ifadedir.'},
+  {l:'C',t:'≥ 3 fiziksel/bilişsel semptom (çocukta yalnızca 1 yeterli)',
+   d:'Aşağıdaki 6 belirtiden en az 3 (son 6 ay içinde günlerin çoğu): (1) huzursuzluk/sinirlilik, (2) kolay yorulma, (3) konsantrasyon güçlüğü/zihin boşalması, (4) irritabilite, (5) kas gerginliği, (6) uyku bozukluğu. Çocuklarda 1 belirti yeterlidir.'},
+  {l:'D',t:'Klinik anlamlı sıkıntı / işlevsellikte bozulma',
+   d:'Belirtiler sosyal, mesleki veya diğer önemli alanlarda belirgin sıkıntıya ya da işlevsellik bozulmasına neden olur.'},
+  {l:'E',t:'Madde / tıbbi duruma bağlanamaz',
+   d:'Belirtiler bir maddenin (örn. kafein, kokain) veya başka bir tıbbi durumun (örn. hipertiroidi) fizyolojik etkilerine bağlanamaz. Bu yüzden organik ekartasyon zorunludur.'},
+  {l:'F',t:'Başka bir mental bozuklukla daha iyi açıklanamaz',
+   d:'Örn. panik bozukluğunda panik atak öncesi anksiyete, sosyal anksiyetede sosyal değerlendirme korkusu, OKB\'de kontaminasyon obsesyonu, ayrılma anksiyetesinde bağlanma figürlerinden ayrılık, PTSD\'de travma hatırlatıcıları, somatik belirti bozukluğunda hastalığa odaklı kaygı ile daha iyi açıklanmamalıdır.'}
+];
+
+/* =============== HAMILTON ANKSİYETE ÖLÇEĞİ (HAM-A) =============== */
+function hamaOpts(){
+  return [
+    {t:'0 — Yok',s:0},{t:'1 — Hafif',s:1},{t:'2 — Orta',s:2},{t:'3 — Şiddetli',s:3},{t:'4 — Çok şiddetli / yeti yitimine yol açan',s:4}
+  ];
+}
+var HAMA_ITEMS=[
+  {id:'anx_mood',label:'1. Anksiyöz duygudurum',opts:hamaOpts(),hint:'Endişeler, kötü şeyler olacak beklentisi, kaygılı bekleyiş, irritabilite'},
+  {id:'tension',label:'2. Gerginlik',opts:hamaOpts(),hint:'Gerginlik hissi, kolay yorulma, irkilme, ağlama eğilimi, titreme, gevşeyememe'},
+  {id:'fears',label:'3. Korkular',opts:hamaOpts(),hint:'Karanlık, yabancı, yalnız kalma, trafik, kalabalık, hayvan korkusu vb.'},
+  {id:'insomnia',label:'4. İnsomni',opts:hamaOpts(),hint:'Uykuya dalmada güçlük, parçalı uyku, yetersiz uyku, kabuslar, gece terlemesi'},
+  {id:'intellect',label:'5. Entelektüel (bilişsel)',opts:hamaOpts(),hint:'Konsantrasyon güçlüğü, bellek zayıflığı'},
+  {id:'depressed',label:'6. Depresif duygudurum',opts:hamaOpts(),hint:'İlgi kaybı, hobilerden zevk alamama, üzüntü, erken uyanma, diurnal değişim'},
+  {id:'somatic_m',label:'7. Somatik — kas',opts:hamaOpts(),hint:'Ağrılar, sızılar, kasılma, miyoklonik seğirme, diş gıcırdatma, ses titremesi, kas tonusunda artış'},
+  {id:'somatic_s',label:'8. Somatik — duyusal',opts:hamaOpts(),hint:'Kulak çınlaması, görmede bulanıklık, sıcak-soğuk basması, halsizlik hissi, karıncalanma'},
+  {id:'cardio',label:'9. Kardiyovasküler',opts:hamaOpts(),hint:'Çarpıntı, taşikardi, göğüste ağrı/atışlar, damarlarda zonklama, baygınlık hissi, ekstrasistoller'},
+  {id:'respir',label:'10. Solunum',opts:hamaOpts(),hint:'Göğüste sıkışma, boğulma hissi, iç çekme, dispne'},
+  {id:'gi',label:'11. Gastrointestinal',opts:hamaOpts(),hint:'Yutma güçlüğü, mide bulantısı, kusma, abdominal ağrı, gürültü, ishal, kilo kaybı, kabızlık'},
+  {id:'urog',label:'12. Genitoüriner',opts:hamaOpts(),hint:'Sık idrara çıkma, aciliyet, amenore, menoraji, frijidite, erken boşalma, libido kaybı, empotans'},
+  {id:'auton',label:'13. Otonom',opts:hamaOpts(),hint:'Ağız kuruluğu, kızarma, solgunluk, terleme, baş dönmesi, gerilim tipi başağrısı, tüylerin diken diken olması'},
+  {id:'behav',label:'14. Görüşmedeki davranış',opts:hamaOpts(),hint:'Huzursuzluk, kıpırdanma, tremor, kaşları çatma, gergin yüz, iç çekme, hızlı solunum, terleme, göz kapağı seğirmesi'}
+];
+var hamaVals={};
+function calcHamA(){
+  if(!scaleAllFilled(HAMA_ITEMS,hamaVals)){
+    var miss=HAMA_ITEMS.length-Object.keys(hamaVals).length;
+    var fb=document.getElementById('hama-missing-msg');
+    fb.innerHTML='<strong>⚠ '+miss+' madde eksik.</strong><br>Tüm maddeleri doldurun.';
+    fb.style.display='block';
+    return;
+  }
+  document.getElementById('hama-missing-msg').style.display='none';
+  var total=scaleSum(hamaVals);
+  var interp='';
+  if(total<=17) interp='Hafif anksiyete (≤ 17)';
+  else if(total<=24) interp='Hafif-orta anksiyete (18–24)';
+  else if(total<=30) interp='Orta-şiddetli anksiyete (25–30)';
+  else interp='Şiddetli anksiyete (> 30)';
+  document.getElementById('hama-total').textContent=total;
+  document.getElementById('hama-interp').textContent=interp;
+  document.getElementById('hama-score-display').style.display='flex';
+}
+function openDsmYab(){
+  hamaVals={};
+  document.getElementById('hama-score-display').style.display='none';
+  document.getElementById('hama-missing-msg').style.display='none';
+  buildCriteria('dsm-yab-criteria',DSM_YAB);
+  buildScale('hama-items',HAMA_ITEMS,hamaVals);
+  go('dsm-yab');
+}
+
+
+// Init
+document.addEventListener('DOMContentLoaded', function(){
+  hamaVals={};
+  buildCriteria('dsm-yab-criteria',DSM_YAB);
+  buildScale('hama-items',HAMA_ITEMS,hamaVals);
+});
+
+</script>
 </body>
 </html>
