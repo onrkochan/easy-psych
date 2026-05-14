@@ -42,6 +42,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .rdm-opt.missing-opt{border-color:#A32D2D;color:#A32D2D;background:#FEF8F8}
 .rdm-opt.missing-opt:hover{background:#FCEBEB}
 .input-invalid{border-color:#A32D2D !important;box-shadow:0 0 0 2px rgba(163,45,45,0.15)}
+.copy-incomplete{background:#A32D2D !important;color:#fff !important;border-color:#A32D2D !important;font-weight:500}
+.copy-incomplete:hover{background:#8F2525 !important}
+.note-unselectable{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
 </style>
 </head>
 <body>
@@ -81,7 +84,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
     <p class="section-label" style="margin-bottom:0">D. Konsültasyon notu</p>
     <button class="btn-secondary" id="copy-btn" style="margin:0;padding:6px 12px;width:auto;font-size:12px" onclick="copyKonsNote()"><i class="ti ti-copy"></i> Kopyala</button>
   </div>
-  <div id="kons-note" style="background:#f5f5f3;border-radius:8px;padding:12px;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#1a1a1a;font-family:inherit;min-height:60px"></div>
+  <div id="kons-note" class="note-unselectable" style="background:#f5f5f3;border-radius:8px;padding:12px;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#1a1a1a;font-family:inherit;min-height:60px"></div>
   <div id="copy-block-msg" class="feedback-box fb-warning" style="display:none;margin-top:10px;font-size:13px"></div>
 </div>
 
@@ -384,11 +387,20 @@ function updateKonsNote(){
 
 function refreshCopyState(){
   var btn=document.getElementById('copy-btn');
+  var note=document.getElementById('kons-note');
   if(!btn) return;
-  var sosyo=(document.getElementById('sosyo-input')||{}).value||'';
-  var ok=sosyo.trim().length>0 && rdmIsFull();
-  if(ok) btn.style.opacity='1';
-  else btn.style.opacity='0.6';
+
+  if(rdmIsFull()){
+    btn.classList.remove('copy-incomplete');
+    btn.innerHTML='<i class="ti ti-copy"></i> Kopyala';
+    btn.style.opacity='1';
+    if(note) note.classList.remove('note-unselectable');
+  } else {
+    btn.classList.add('copy-incomplete');
+    btn.innerHTML='<i class="ti ti-copy"></i> Eksik muayeneyi kopyala';
+    btn.style.opacity='1';
+    if(note) note.classList.add('note-unselectable');
+  }
 }
 
 function copyKonsNote(){
@@ -410,18 +422,6 @@ function copyKonsNote(){
     return;
   }
 
-  if(!rdmIsFull()){
-    refreshRdmMissingUI();
-    var missingCount=RDM_GROUPS.filter(function(g){return !rdmGroupFilled(g.key)}).length;
-    if(msgEl){
-      msgEl.innerHTML='<strong>⚠ RDM eksik.</strong><br>'+missingCount+' başlık doldurulmadı. Tamamlayın veya C. başlığındaki <em>Gerek yok</em> butonuna basın.';
-      msgEl.style.display='block';
-    }
-    var firstMissing=document.querySelector('.rdm-title.rdm-missing');
-    if(firstMissing) firstMissing.scrollIntoView({behavior:'smooth',block:'center'});
-    return;
-  }
-
   if(msgEl) msgEl.style.display='none';
 
   var txt=document.getElementById('kons-note').textContent;
@@ -430,7 +430,7 @@ function copyKonsNote(){
   if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(txt).then(function(){
       btn.innerHTML='<i class="ti ti-check"></i> Kopyalandı';
-      setTimeout(function(){btn.innerHTML=orig},1500);
+      setTimeout(function(){refreshCopyState()},1500);
     }).catch(function(){fallbackCopy(txt,btn,orig)});
   } else {
     fallbackCopy(txt,btn,orig);
@@ -443,7 +443,7 @@ function fallbackCopy(txt,btn,orig){
   ta.style.position='fixed';ta.style.left='-9999px';
   document.body.appendChild(ta);
   ta.select();
-  try{document.execCommand('copy');btn.innerHTML='<i class="ti ti-check"></i> Kopyalandı';setTimeout(function(){btn.innerHTML=orig},1500)}catch(e){}
+  try{document.execCommand('copy');btn.innerHTML='<i class="ti ti-check"></i> Kopyalandı';setTimeout(function(){refreshCopyState()},1500)}catch(e){}
   document.body.removeChild(ta);
 }
 
