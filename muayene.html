@@ -35,9 +35,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .rdm-other-input{padding:6px 10px;border:0.5px dashed rgba(0,0,0,0.3);border-radius:14px;background:#fafaf8;font-size:12px;font-family:inherit;width:140px;outline:none}
 .rdm-other-input:focus{border-color:#1a1a1a;border-style:solid;background:#fff}
 .rdm-section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:0}
-.rdm-skip-btn{padding:5px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:14px;background:#fff;font-size:12px;color:#1a1a1a;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.15s}
-.rdm-skip-btn:hover{background:#f0f0ee}
-.rdm-skip-btn.selected-red{background:#A32D2D;color:#fff;border-color:#A32D2D;font-weight:500}
 .rdm-title.rdm-missing{color:#A32D2D}
 .rdm-opt.missing-opt{border-color:#A32D2D;color:#A32D2D;background:#FEF8F8}
 .rdm-opt.missing-opt:hover{background:#FCEBEB}
@@ -73,7 +70,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 <div class="card">
   <div class="rdm-section-head">
     <p class="section-label" style="margin-bottom:0">C. Ruhsal durum muayenesi (RDM)</p>
-    <button type="button" class="rdm-skip-btn" id="rdm-skip-btn" onclick="toggleRdmSkip()">Gerek yok</button>
   </div>
   <p style="font-size:12px;color:#666;margin-top:8px;margin-bottom:10px">Seçenekleri tikleyin — kons notuna RDM: olarak eklenir. Her başlığa "diğer:" ile kendiniz seçenek ekleyebilirsiniz. Bir seçeneğin üzerine gelirseniz açıklama görünür.</p>
   <div id="rdm-container"></div>
@@ -188,7 +184,6 @@ var RDM_GROUPS=[
 
 var rdmSel={};
 var rdmCustom={};
-var rdmSkip=false;
 
 function buildRdm(){
   var c=document.getElementById('rdm-container');
@@ -209,11 +204,6 @@ function buildRdm(){
 }
 
 function toggleRdm(key,val,single){
-  if(rdmSkip){
-    rdmSkip=false;
-    var sb=document.getElementById('rdm-skip-btn');
-    if(sb){sb.classList.remove('selected-red');sb.textContent='Gerek yok'}
-  }
   if(!rdmSel[key]) rdmSel[key]=[];
   if(single){
     rdmSel[key]=(rdmSel[key][0]===val)?[]:[val];
@@ -228,32 +218,10 @@ function toggleRdm(key,val,single){
 
 function setRdmCustom(key,val){
   rdmCustom[key]=val;
-  if(val.trim() && rdmSkip){
-    rdmSkip=false;
-    var sb=document.getElementById('rdm-skip-btn');
-    if(sb){sb.classList.remove('selected-red');sb.textContent='Gerek yok'}
-  }
   updateKonsNote();
   refreshRdmMissingUI();
 }
 
-function toggleRdmSkip(){
-  rdmSkip=!rdmSkip;
-  var sb=document.getElementById('rdm-skip-btn');
-  if(rdmSkip){
-    sb.classList.add('selected-red');
-    sb.textContent='RDM atlandı';
-    // Tüm RDM seçimlerini temizle
-    rdmSel={};
-    rdmCustom={};
-    buildRdm();
-  } else {
-    sb.classList.remove('selected-red');
-    sb.textContent='Gerek yok';
-  }
-  refreshRdmMissingUI();
-  updateKonsNote();
-}
 
 function refreshRdmUI(){
   document.querySelectorAll('.rdm-opt').forEach(function(btn){
@@ -277,7 +245,6 @@ function rdmGroupFilled(key){
 }
 
 function rdmIsFull(){
-  if(rdmSkip) return true;
   for(var i=0;i<RDM_GROUPS.length;i++){
     if(!rdmGroupFilled(RDM_GROUPS[i].key)) return false;
   }
@@ -293,7 +260,7 @@ function refreshRdmMissingUI(){
     if(!key) return;
     var filled=rdmGroupFilled(key);
     if(title){
-      if(!filled && !rdmSkip) title.classList.add('rdm-missing');
+      if(!filled) title.classList.add('rdm-missing');
       else title.classList.remove('rdm-missing');
     }
   });
@@ -312,7 +279,6 @@ function formatOrientationItem(label,val){
 }
 
 function buildRdmText(){
-  if(rdmSkip) return '';
   var parts=[];
   var kat=getRdmVals('katilim');
   var tut=getRdmVals('tutum');
@@ -449,9 +415,7 @@ function fallbackCopy(txt,btn,orig){
 
 function resetAll(){
   if(!confirm('Tüm girilen bilgiler silinecek. Devam edilsin mi?')) return;
-  rdmSel={};rdmCustom={};rdmSkip=false;
-  var sb=document.getElementById('rdm-skip-btn');
-  if(sb){sb.classList.remove('selected-red');sb.textContent='Gerek yok'}
+  rdmSel={};rdmCustom={};
   document.getElementById('sosyo-input').value='';
   document.getElementById('oyku-input').value='';
   var msgEl=document.getElementById('copy-block-msg');
