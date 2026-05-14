@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Temel ölçek ve muayeneler</title>
+<title>Bilinç Bozukluğu Asistanı</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -21,9 +21,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .screen{display:none}
 .screen.active{display:block}
 .card{background:#fff;border:0.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:1rem 1.25rem;margin-bottom:12px}
-.page-title{font-size:36px;font-weight:500;margin-bottom:4px}
+.page-title{font-size:18px;font-weight:500;margin-bottom:4px}
 .page-sub{font-size:13px;color:#666;margin-bottom:16px}
-.section-label{font-size:24px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.section-label{font-size:12px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
 .flow-arrow{text-align:center;font-size:22px;color:#888;margin:8px 0}
 .rass-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .rass-btn{padding:10px 8px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;text-align:left;font-size:13px;color:#1a1a1a}
@@ -133,6 +133,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .alkol-toggle.missing{border-color:#A32D2D;color:#A32D2D;background:#FEF8F8}
 .alkol-toggle.missing:hover{background:#FCEBEB}
 
+
+.collapsible-block{margin-top:20px;margin-bottom:10px}
+.collapsible-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border:0.5px solid rgba(0,0,0,0.12);border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;color:#1a1a1a;transition:all 0.18s ease;text-align:left}
+.collapsible-head:hover{background:#fafaf8}
+.collapsible-title{font-size:13px;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:.05em;line-height:1.35}
+.collapsible-icon{font-size:20px;color:#888;line-height:1;transition:transform 0.18s ease}
+.collapsible-content{display:none;margin-top:10px;overflow:hidden}
+.collapsible-block.open .collapsible-head{border-color:#185FA5;background:#F5F9FE;box-shadow:0 4px 14px rgba(24,95,165,0.10);padding:18px 18px}
+.collapsible-block.open .collapsible-title{font-size:15px;color:#0C447C}
+.collapsible-block.open .collapsible-icon{transform:rotate(180deg);color:#185FA5}
+.collapsible-block.open .collapsible-content{display:block;animation:expandIn 0.18s ease-out}
+@keyframes expandIn{from{opacity:0;transform:scale(.985) translateY(-4px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
 /* DSM-5 kriter, ölçek ve hezeyan stilleri */
 .dsm-warning{background:#FAEEDA;color:#854F0B;border:0.5px solid #EF9F27;padding:10px 12px;border-radius:8px;font-size:13px;line-height:1.5;margin-bottom:14px}
 .dsm-warning strong{display:block;margin-bottom:3px}
@@ -161,10 +174,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .hez-name{font-size:13px;font-weight:600;color:#3C3489;margin-bottom:3px}
 .hez-desc{font-size:12px;color:#444;line-height:1.55}
 
-.section-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;background:none;border:none;cursor:pointer;text-align:left;font-family:inherit}
-.section-toggle .toggle-icon{font-size:24px;font-weight:500;line-height:1;color:#888}
-.section-toggle:hover .toggle-icon{color:#1a1a1a}
-
 </style>
 </head>
 <body>
@@ -172,13 +181,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 
 <div style="padding:8px 0 16px">
   <p class="page-title">Bilinç Bozukluğu</p>
+  <p class="page-sub">Değerlendirmeye başlamak için bir durum seçin</p>
 </div>
 <a href="deliryum.html" style="text-decoration:none;color:inherit">
 <div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
   <div style="display:flex;justify-content:space-between;align-items:center">
     <div>
-      <p style="font-weight:500;font-size:12px">Deliryum şüphesi</p>
-      <p style="font-size:9.6px;color:#888;margin-top:3px">RASS → CAM → DRS-R-98 → Plan</p>
+      <p style="font-weight:500;font-size:15px">Deliryum şüphesi</p>
+      <p style="font-size:12px;color:#888;margin-top:3px">RASS → CAM → DRS-R-98 → Plan</p>
     </div>
     <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
   </div>
@@ -188,40 +198,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 <div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
   <div style="display:flex;justify-content:space-between;align-items:center">
     <div>
-      <p style="font-weight:500;font-size:12px">Alkol hastası yatırma checklisti</p>
-      <p style="font-size:9.6px;color:#888;margin-top:3px">BZD kontrendikasyon → CIWA-Ar</p>
+      <p style="font-weight:500;font-size:15px">Alkol hastası yatırma checklisti</p>
+      <p style="font-size:12px;color:#888;margin-top:3px">BZD kontrendikasyon → CIWA-Ar</p>
     </div>
     <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
   </div>
 </div>
 </a>
 
-<p class="section-label" style="margin-top:20px;margin-bottom:10px">Genel muayene</p>
+<div class="collapsible-block" id="dsmBlock">
+  <button class="collapsible-head" type="button" onclick="toggleDsmBlock()" aria-expanded="false" aria-controls="dsmContent">
+    <span class="collapsible-title">DSM kriterleri, tanı değerlendirmeleri, ölçekler ve tanımlar</span>
+    <i class="ti ti-chevron-down collapsible-icon" aria-hidden="true"></i>
+  </button>
+  <div class="collapsible-content" id="dsmContent">
 
-<a href="muayene.html" style="text-decoration:none;color:inherit">
-<div class="card" style="cursor:pointer;border-left:3px solid #3C3489;border-radius:0 12px 12px 0">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <p style="font-weight:500;font-size:12px">Ruhsal durum muayenesi yap</p>
-      <p style="font-size:9.6px;color:#888;margin-top:3px">Hasta bilgisi + öykü + RDM → Konsültasyon notu</p>
-    </div>
-    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
-  </div>
-</div>
-</a>
-
-<button class="section-label section-toggle" style="margin-top:20px;margin-bottom:10px" type="button" onclick="toggleDsmSection()" aria-expanded="false" aria-controls="dsmSection">
-  <span>DSM-5 tanı ve ölçekler</span>
-  <span class="toggle-icon" id="dsmToggleIcon">+</span>
-</button>
-
-<div id="dsmSection" style="display:none">
 <a href="dsm-dep.html" style="text-decoration:none;color:inherit">
 <div class="card" style="cursor:pointer;border-left:3px solid #3B6D11;border-radius:0 12px 12px 0">
   <div style="display:flex;justify-content:space-between;align-items:center">
     <div>
-      <p style="font-weight:500;font-size:12px">DSM-5 Major Depresyon</p>
-      <p style="font-size:9.6px;color:#888;margin-top:3px">Kriterler + Hamilton (HAM-D) ölçeği</p>
+      <p style="font-weight:500;font-size:15px">DSM-5 Major Depresyon</p>
+      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Hamilton (HAM-D) ölçeği</p>
     </div>
     <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
   </div>
@@ -232,8 +229,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 <div class="card" style="cursor:pointer;border-left:3px solid #6B47C9;border-radius:0 12px 12px 0">
   <div style="display:flex;justify-content:space-between;align-items:center">
     <div>
-      <p style="font-weight:500;font-size:12px">DSM-5 Yaygın Anksiyete Bozukluğu</p>
-      <p style="font-size:9.6px;color:#888;margin-top:3px">Kriterler + organik ekartasyon + HAM-A</p>
+      <p style="font-weight:500;font-size:15px">DSM-5 Yaygın Anksiyete Bozukluğu</p>
+      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon + HAM-A</p>
     </div>
     <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
   </div>
@@ -244,8 +241,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 <div class="card" style="cursor:pointer;border-left:3px solid #A32D2D;border-radius:0 12px 12px 0">
   <div style="display:flex;justify-content:space-between;align-items:center">
     <div>
-      <p style="font-weight:500;font-size:12px">DSM-5 Panik Bozukluk</p>
-      <p style="font-size:9.6px;color:#888;margin-top:3px">Kriterler + organik ekartasyon</p>
+      <p style="font-weight:500;font-size:15px">DSM-5 Panik Bozukluk</p>
+      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + organik ekartasyon</p>
     </div>
     <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
   </div>
@@ -256,8 +253,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 <div class="card" style="cursor:pointer;border-left:3px solid #854F0B;border-radius:0 12px 12px 0">
   <div style="display:flex;justify-content:space-between;align-items:center">
     <div>
-      <p style="font-weight:500;font-size:12px">DSM-5 Uyum Bozukluğu</p>
-      <p style="font-size:9.6px;color:#888;margin-top:3px">Kriterler + askeri yönetmelik uyarısı</p>
+      <p style="font-weight:500;font-size:15px">DSM-5 Uyum Bozukluğu</p>
+      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + askeri yönetmelik uyarısı</p>
     </div>
     <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
   </div>
@@ -268,8 +265,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 <div class="card" style="cursor:pointer;border-left:3px solid #185FA5;border-radius:0 12px 12px 0">
   <div style="display:flex;justify-content:space-between;align-items:center">
     <div>
-      <p style="font-weight:500;font-size:12px">DSM-5 Obsesif-Kompulsif Bozukluk</p>
-      <p style="font-size:9.6px;color:#888;margin-top:3px">Kriterler + Y-BOCS ölçeği</p>
+      <p style="font-weight:500;font-size:15px">DSM-5 Obsesif-Kompulsif Bozukluk</p>
+      <p style="font-size:12px;color:#888;margin-top:3px">Kriterler + Y-BOCS ölçeği</p>
     </div>
     <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
   </div>
@@ -280,8 +277,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 <div class="card" style="cursor:pointer;border-left:3px solid #B89400;border-radius:0 12px 12px 0">
   <div style="display:flex;justify-content:space-between;align-items:center">
     <div>
-      <p style="font-weight:500;font-size:12px">Mani değerlendirmesi</p>
-      <p style="font-size:9.6px;color:#888;margin-top:3px">YMRS — Young Mania Rating Scale</p>
+      <p style="font-weight:500;font-size:15px">Mani değerlendirmesi</p>
+      <p style="font-size:12px;color:#888;margin-top:3px">YMRS — Young Mania Rating Scale</p>
     </div>
     <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
   </div>
@@ -292,8 +289,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 <div class="card" style="cursor:pointer;border-left:3px solid #A32D2D;border-radius:0 12px 12px 0">
   <div style="display:flex;justify-content:space-between;align-items:center">
     <div>
-      <p style="font-weight:500;font-size:12px">Şizofreni / psikoz değerlendirmesi</p>
-      <p style="font-size:9.6px;color:#888;margin-top:3px">PANSS — Pozitif ve Negatif Sendrom Ölçeği (30 madde)</p>
+      <p style="font-weight:500;font-size:15px">Şizofreni / psikoz değerlendirmesi</p>
+      <p style="font-size:12px;color:#888;margin-top:3px">PANSS — Pozitif ve Negatif Sendrom Ölçeği (30 madde)</p>
     </div>
     <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
   </div>
@@ -304,26 +301,43 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 <div class="card" style="cursor:pointer;border-left:3px solid #3C3489;border-radius:0 12px 12px 0">
   <div style="display:flex;justify-content:space-between;align-items:center">
     <div>
-      <p style="font-weight:500;font-size:12px">Hezeyan türleri (DSM-5 glossary)</p>
-      <p style="font-size:9.6px;color:#888;margin-top:3px">11 psikotik sanrı tipi + tanım</p>
+      <p style="font-weight:500;font-size:15px">Hezeyan türleri (DSM-5 glossary)</p>
+      <p style="font-size:12px;color:#888;margin-top:3px">11 psikotik sanrı tipi + tanım</p>
     </div>
     <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
   </div>
 </div>
 </a>
+
+
+  </div>
 </div>
 
+<p class="section-label" style="margin-top:20px;margin-bottom:10px">Genel muayene</p>
+
+<a href="muayene.html" style="text-decoration:none;color:inherit">
+<div class="card" style="cursor:pointer;border-left:3px solid #3C3489;border-radius:0 12px 12px 0">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <p style="font-weight:500;font-size:15px">Ruhsal durum muayenesi yap</p>
+      <p style="font-size:12px;color:#888;margin-top:3px">Hasta bilgisi + öykü + RDM → Konsültasyon notu</p>
+    </div>
+    <i class="ti ti-arrow-right" style="font-size:20px;color:#888"></i>
+  </div>
 </div>
+</a>
+
+</div>
+
 <script>
-function toggleDsmSection(){
-  const section = document.getElementById('dsmSection');
-  const icon = document.getElementById('dsmToggleIcon');
-  const button = document.querySelector('.section-toggle');
-  const isOpen = section.style.display === 'block';
-  section.style.display = isOpen ? 'none' : 'block';
-  icon.textContent = isOpen ? '+' : '−';
-  button.setAttribute('aria-expanded', String(!isOpen));
+function toggleDsmBlock(){
+  const block = document.getElementById('dsmBlock');
+  const btn = block ? block.querySelector('.collapsible-head') : null;
+  if(!block || !btn) return;
+  const isOpen = block.classList.toggle('open');
+  btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 }
 </script>
+
 </body>
 </html>
