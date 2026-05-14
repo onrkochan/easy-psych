@@ -131,6 +131,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
   -ms-user-select:none;
   user-select:none;
 }
+.copy-incomplete{
+  background:#A32D2D !important;
+  color:#fff !important;
+  border-color:#A32D2D !important;
+  font-weight:500;
+}
+.copy-incomplete:hover{background:#8F2525 !important}
 
 .alkol-toggle-row{display:flex;gap:8px;flex-wrap:wrap}
 .alkol-toggle{flex:1;min-width:180px;padding:12px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;font-size:13px;color:#1a1a1a;text-align:center;font-family:inherit;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:6px}
@@ -325,7 +332,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
       <p class="section-label" style="margin-bottom:0">I. Konsültasyon notu</p>
       <button class="btn-secondary" id="copy-btn" style="margin:0;padding:6px 12px;width:auto;font-size:12px" onclick="copyKonsNote()"><i class="ti ti-copy"></i> Kopyala</button>
     </div>
-    <div id="kons-note" style="background:#f5f5f3;border-radius:8px;padding:12px;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#1a1a1a;font-family:inherit"></div>
+    <div id="kons-note" class="kons-note-copy-locked" style="background:#f5f5f3;border-radius:8px;padding:12px;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#1a1a1a;font-family:inherit"></div>
     <div id="copy-block-msg" class="feedback-box fb-warning" style="display:none;margin-top:10px;font-size:13px"></div>
   </div>
 
@@ -604,13 +611,27 @@ function refreshCopyState(){
   var noteEl=document.getElementById('kons-note');
   var msgEl=document.getElementById('copy-block-msg');
   var sosyo=sosyoEl?sosyoEl.value.trim():'';
-  var ok=!!sosyo && rdmIsFull();
 
-  btn.classList.toggle('blocked',!ok);
+  if(rdmIsFull()){
+    btn.classList.remove('copy-incomplete');
+    btn.classList.remove('blocked');
+    btn.innerHTML='<i class="ti ti-copy"></i> Kopyala';
+    btn.style.opacity='1';
 
-  if(noteEl){
-    noteEl.classList.toggle('kons-note-copy-locked',!ok);
-    noteEl.onselectstart = ok ? null : function(){ return false; };
+    if(noteEl){
+      noteEl.classList.remove('kons-note-copy-locked');
+      noteEl.onselectstart=null;
+    }
+  } else {
+    btn.classList.add('copy-incomplete');
+    btn.classList.remove('blocked');
+    btn.innerHTML='<i class="ti ti-copy"></i> Eksik muayeneyi kopyala';
+    btn.style.opacity='1';
+
+    if(noteEl){
+      noteEl.classList.add('kons-note-copy-locked');
+      noteEl.onselectstart=function(){ return false; };
+    }
   }
 
   if(sosyo && sosyoEl) sosyoEl.classList.remove('input-invalid');
@@ -619,8 +640,6 @@ function refreshCopyState(){
     if(!sosyo){
       msgEl.innerHTML='<strong>⚠ E. Hasta bilgileri boş.</strong><br>Devam etmek için sosyodemografik bilgileri girin.';
       msgEl.style.display='block';
-    } else if(ok){
-      msgEl.style.display='none';
     } else if(msgEl.innerHTML.indexOf('RDM eksik')<0){
       msgEl.style.display='none';
     }
@@ -773,18 +792,6 @@ function copyKonsNote(){
     return;
   }
 
-  if(!rdmIsFull()){
-    refreshRdmMissingUI();
-    var missingCount=RDM_GROUPS.filter(function(g){return getRdmVals(g.key).length===0}).length;
-    if(msgEl){
-      msgEl.innerHTML='<strong>⚠ RDM eksik.</strong><br>'+missingCount+' başlık doldurulmadı. Tamamlayın veya G. başlığındaki <em>Gerek yok</em> butonuna basın.';
-      msgEl.style.display='block';
-    }
-    var firstMissing=document.querySelector('.rdm-title.rdm-missing');
-    if(firstMissing) firstMissing.scrollIntoView({behavior:'smooth',block:'center'});
-    return;
-  }
-
   if(msgEl) msgEl.style.display='none';
 
   var txt=document.getElementById('kons-note').textContent;
@@ -793,7 +800,7 @@ function copyKonsNote(){
   if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(txt).then(function(){
       btn.innerHTML='<i class="ti ti-check"></i> Kopyalandı';
-      setTimeout(function(){btn.innerHTML=orig},1500);
+      setTimeout(function(){refreshCopyState()},1500);
     }).catch(function(){fallbackCopy(txt,btn,orig)});
   } else {
     fallbackCopy(txt,btn,orig);
@@ -818,7 +825,7 @@ function fallbackCopy(txt,btn,orig){
   try{document.execCommand('copy');btn.innerHTML='<i class="ti ti-check"></i> Kopyalandı';}
   catch(e){btn.innerHTML='Kopyalanamadı';}
   document.body.removeChild(ta);
-  setTimeout(function(){btn.innerHTML=orig},1500);
+  setTimeout(function(){refreshCopyState()},1500);
 }
 
 var CIWA_ITEMS=[
