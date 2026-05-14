@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PANSS — Pozitif ve Negatif Sendrom Ölçeği</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;color:#1a1a1a;background:#f5f5f3}
+.app{max-width:460px;margin:0 auto;padding:12px}
+@media (min-width:768px){
+  .app{max-width:720px;padding:20px}
+  body{font-size:15px}
+}
+@media (min-width:1100px){
+  .app{max-width:1080px;padding:28px}
+}
+.screen{display:none}
+.screen.active{display:block}
+.card{background:#fff;border:0.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:1rem 1.25rem;margin-bottom:12px}
+.page-title{font-size:18px;font-weight:500;margin-bottom:4px}
+.page-sub{font-size:13px;color:#666;margin-bottom:16px}
+.section-label{font-size:12px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.feedback-box{padding:12px;border-radius:8px;margin:12px 0;font-size:14px;line-height:1.5}
+.fb-warning{background:#FAEEDA;color:#854F0B;border:0.5px solid #EF9F27}
+.fb-info{background:#E6F1FB;color:#0C447C;border:0.5px solid #85B7EB}
+.btn-primary{display:block;width:100%;padding:12px;background:#185FA5;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;margin-top:12px;text-align:center}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-secondary{display:block;width:100%;padding:10px;background:#fff;color:#1a1a1a;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;font-size:14px;cursor:pointer;margin-top:8px;text-align:center}
+.btn-back{background:none;border:none;cursor:pointer;font-size:13px;color:#888;padding:0;margin-bottom:14px;display:flex;align-items:center;gap:4px}
+.cam-note{font-size:12px;color:#666;margin-top:4px}
+.score-display{background:#f5f5f3;border-radius:8px;padding:12px;margin:12px 0}
+.score-num{font-size:28px;font-weight:500}
+.score-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,0.08)}
+.score-row:last-child{border-bottom:none}
+.score-row-label{font-size:13px;color:#444}
+.score-row-val{font-size:15px;font-weight:600;color:#185FA5}
+.score-row.total .score-row-label{font-size:14px;font-weight:600}
+.score-row.total .score-row-val{font-size:18px}
+.scale-item{border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;padding:10px 12px;margin-bottom:6px}
+.scale-q{font-size:13px;font-weight:500;margin-bottom:6px;line-height:1.4}
+.scale-opts{display:flex;flex-direction:column;gap:4px}
+.scale-opt{padding:7px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;font-size:12px;color:#1a1a1a;text-align:left;line-height:1.45}
+.scale-opt:hover{background:#f0f0ee}
+.scale-opt.selected{border:2px solid #185FA5;background:#E6F1FB;color:#0C447C}
+.scale-opt b{font-weight:600;margin-right:4px}
+.subscale-hdr{font-size:13px;font-weight:600;margin:14px 0 8px;padding-bottom:4px;border-bottom:0.5px solid rgba(0,0,0,0.1)}
+.subscale-hdr.pos{color:#A32D2D}
+.subscale-hdr.neg{color:#3C3489}
+.subscale-hdr.gen{color:#854F0B}
+.subscale-hdr:first-child{margin-top:0}
+</style>
+</head>
+<body>
+<div class="app">
+<div id="panss" class="screen active">
+  <button class="btn-back" onclick="window.location.href='index.html'"><i class="ti ti-arrow-left"></i> Geri</button>
+  <p class="page-title">PANSS</p>
+  <p class="page-sub">Pozitif ve Negatif Sendrom Ölçeği (Kay, Fiszbein, Opler 1987)</p>
+
+  <div class="card">
+    <p class="section-label">Ölçek hakkında</p>
+    <p style="font-size:13px;color:#444;line-height:1.55">
+      30 madde, her madde 1–7 puanlanır. Son 1 haftalık bilgi, klinisyen gözlemi ve aile/personel bilgisine dayanır. <b>Pozitif</b> 7 madde (7–49), <b>Negatif</b> 7 madde (7–49), <b>Genel psikopatoloji</b> 16 madde (16–112). Toplam aralık: <b>30–210</b>.
+      Puanlama: 1 Yok · 2 Minimal · 3 Hafif · 4 Orta · 5 Orta-şiddetli · 6 Şiddetli · 7 Aşırı.
+    </p>
+  </div>
+
+  <div class="card">
+    <p class="subscale-hdr pos">Pozitif Ölçek (P1–P7)</p>
+    <div id="panss-pos"></div>
+
+    <p class="subscale-hdr neg">Negatif Ölçek (N1–N7)</p>
+    <div id="panss-neg"></div>
+
+    <p class="subscale-hdr gen">Genel Psikopatoloji (G1–G16)</p>
+    <div id="panss-gen"></div>
+
+    <div id="panss-missing-msg" class="feedback-box fb-warning" style="display:none;font-size:13px;margin-top:4px"></div>
+
+    <div id="panss-score-display" class="score-display" style="display:none;margin-top:10px">
+      <div class="score-row"><span class="score-row-label">Pozitif (P)</span><span class="score-row-val" id="panss-pos-total">0</span></div>
+      <div class="score-row"><span class="score-row-label">Negatif (N)</span><span class="score-row-val" id="panss-neg-total">0</span></div>
+      <div class="score-row"><span class="score-row-label">Genel psikopatoloji (G)</span><span class="score-row-val" id="panss-gen-total">0</span></div>
+      <div class="score-row total"><span class="score-row-label">TOPLAM</span><span class="score-row-val" id="panss-total">0</span></div>
+    </div>
+
+    <button id="panss-calc" class="btn-primary" onclick="calcPanss()">Skoru hesapla →</button>
+  </div>
+
+  <button class="btn-secondary" onclick="window.location.href='index.html'" style="margin-top:8px">Ana ekrana dön</button>
+</div>
+</div>
+
+<script>
+function buildScale(containerId, items, valsObj){
+  var c=document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  items.forEach(function(item){
+    var d=document.createElement('div');
+    d.className='scale-item';
+    d.setAttribute('data-scale-id',item.id);
+    var q=document.createElement('p');
+    q.className='scale-q';
+    q.textContent=item.label;
+    d.appendChild(q);
+    if(item.hint){
+      var h=document.createElement('p');
+      h.className='cam-note';
+      h.style.marginBottom='6px';
+      h.textContent=item.hint;
+      d.appendChild(h);
+    }
+    var opts=document.createElement('div');
+    opts.className='scale-opts';
+    item.opts.forEach(function(opt){
+      var b=document.createElement('button');
+      b.className='scale-opt';
+      b.innerHTML='<b>'+opt.s+'</b> '+opt.t;
+      b.onclick=(function(id,score,btn,wrap){
+        return function(){
+          wrap.querySelectorAll('.scale-opt').forEach(function(x){x.classList.remove('selected')});
+          btn.classList.add('selected');
+          valsObj[id]=score;
+        };
+      })(item.id,opt.s,b,opts);
+      opts.appendChild(b);
+    });
+    d.appendChild(opts);
+    c.appendChild(d);
+  });
+}
+
+// PANSS maddeleri — tam orijinal davranışsal anchor'lar (Kay, Fiszbein, Opler 1987; Türkçe geçerlilik: Kostakoğlu ve ark. 1999)
+
+var PANSS_POS=[
+  {id:'P1',label:'P1. Sanrılar',hint:'Gerçeklikle uyumsuz, kanıta dirençli inançlar.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Patolojinin sorgulanır olduğu sınırda; normal varyasyon sınırlarında olabilir.'},
+    {s:3,t:'Hafif — Bir veya iki belirsiz, kristalleşmemiş ve sebatkar olmayan sanrı. Sanrılar düşünce, sosyal ilişki veya davranışı etkilemez.'},
+    {s:4,t:'Orta — Sanrısal düşünce örüntüsü mevcut ama sebatkar değil, sistemli değil. Düşünme, sosyal ilişki veya davranış zaman zaman etkilenebilir.'},
+    {s:5,t:'Orta-Şiddetli — Sayıca çok veya iyi formüle edilmiş ama sebatkar olmayan sanrılar. Hastanın düşünmesini, sosyal ilişkilerini, davranışını ciddi düzeyde etkiler.'},
+    {s:6,t:'Şiddetli — Sayıca çok, iyi formüle edilmiş, sebatkar sanrılar; bunlara meydan okumaya direnir. Sanrıların düşünme, sosyal ilişki, davranış üzerinde belirgin etkisi vardır.'},
+    {s:7,t:'Aşırı — Hastayı tamamen kaplayan sanrılar; iyi sistematize, sayıca çok, sebatkar. Önemli kişilerarası ve sosyal bozulmaya, uygunsuz ve sorumsuz davranışa, hatta tehlikeli/yıkıcı davranışa yol açar.'}
+  ]},
+  {id:'P2',label:'P2. Kavramsal düzensizlik',hint:'Düşünce sürecinin dağınıklığı; mantıksal akış bozukluğu.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında olabilir.'},
+    {s:3,t:'Hafif — Düşünce dolambaçlı, teğetsel veya parolojikçedir. Soyut konuşmada bir miktar güçlük olabilir ama düşünce büyük ölçüde hedefe yönelik kalır.'},
+    {s:4,t:'Orta — Konuşma odaklanmakta güçlük çeker ve düşünce süreci stres altında veya soyut konularda belirgin biçimde bozulur.'},
+    {s:5,t:'Orta-Şiddetli — Düşünce süreci genellikle düzensiz; konuşma açıkça teğetsel, daireseldir; vurgu kayması, mantıksal olmayan tepkiler veya zayıf bağlantılar görülür.'},
+    {s:6,t:'Şiddetli — Düşünce ciddi şekilde dağınık; sıklıkla mantıksız ve tutarsız; konuşma çoğu zaman kişisel çağrışımlarla, kelime salatası ve neolojizmlerle kesintiye uğrar.'},
+    {s:7,t:'Aşırı — Düşünce çözünmüştür; iletişim tutarsızdır; kelime salatası ve mutizm derecesindedir.'}
+  ]},
+  {id:'P3',label:'P3. Halüsinatuar davranış',hint:'Görsel, işitsel, dokunsal, koku veya tat algı bozuklukları.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Bir veya iki açıkça oluşmuş ama nadiren ortaya çıkan halüsinasyon veya bir miktar belirsiz anormal algısal deneyim; düşünmeyi ve davranışı önemli ölçüde bozmaz.'},
+    {s:4,t:'Orta — Halüsinasyonlar sıklıkla görülür ama sürekli değil. Düşünme ve davranış sadece az ölçüde etkilenir.'},
+    {s:5,t:'Orta-Şiddetli — Halüsinasyonlar sık görülür; birden fazla duyu modalitesini içerebilir; hastanın düşünmesini bozma ve/veya davranışını yönlendirme eğilimindedir. Hasta bunları gerçek algı olarak yorumlayabilir ve buna duygusal/sözel tepkiler verebilir.'},
+    {s:6,t:'Şiddetli — Halüsinasyonlar mevcut; neredeyse sürekli; düşünme ve davranışta büyük bozulmaya yol açar. Hasta halüsinasyonları gerçek algı olarak ele alır; işlevsellik halüsinasyonlara sık verilen duygusal ve sözel tepkilerle bozulur.'},
+    {s:7,t:'Aşırı — Hasta neredeyse tamamen halüsinasyonlarla meşguldür; bu halüsinasyonlar düşünme ve davranışına hâkim olur. Halüsinasyonlara katı bir sanrısal yorum getirilir; davranış ve duygulanım yoluyla tepki verilir; emir niteliğindeki halüsinasyonlara uyma görülebilir.'}
+  ]},
+  {id:'P4',label:'P4. Eksitasyon',hint:'Hipoaktivite, hızlanmış motor davranış, artmış uyarılabilirlik, taşkınlık.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Görüşme sırasında hafifçe aşırı uyarılmış, uyanık veya çok motive olmuş izlenimi verir ama açıkça eksite değildir; sebat etmez. Hafif basınçlı konuşma görülebilir.'},
+    {s:4,t:'Orta — Açıkça ajitedir veya kolay uyarılır; üzgün, aşırı uyanık veya hafif öforik. Süresi sınırlı olabilir ama görüşme sırasında belirgindir.'},
+    {s:5,t:'Orta-Şiddetli — Görüşme süresinin önemli bir bölümünde belirgin ajitasyon veya emosyonel canlılık gözlenir; konsantrasyon ve dikkat zorlanır ama bir miktar kontrol altında tutulur. Hasta hızlı, baskılı ve duygusal yüklü konuşma sergileyebilir.'},
+    {s:6,t:'Şiddetli — Belirgin ajitasyon; konsantrasyon ve dikkati ciddi düzeyde bozar; uyku ve yeme örüntüsünü etkiler. Kişilerarası ilişkiler bozulur. Hasta sebatkar bir hipomanik davranış sergileyebilir; öfkeli olabilir; tehlikeli/yıkıcı eylemleri içerebilir.'},
+    {s:7,t:'Aşırı — Belirgin eksitasyon görüşme sırasında ciddi şekilde sınırlayıcıdır. Yeme ve uyku işlevleri pratik olarak yoktur. Saldırgan, manik ve impulsif davranışlar görülebilir. Kişilerarası ilişkiler yokluk derecesindedir. Eksitasyon dezoryantasyon ve hafıza kaybına yol açabilir.'}
+  ]},
+  {id:'P5',label:'P5. Büyüklük (Grandiyozite)',hint:'Abartılmış öz-değer ve gerçekçi olmayan üstünlük, yetenek, servet, kimlik inançları.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Bir miktar genişleyiş veya övünme belirgindir ama açık grandiyöz sanrılar yoktur.'},
+    {s:4,t:'Orta — Açıkça ve kararsız biçimde gerçekçi olmayan üstünlük hissi yansır; bazı yetenek sanrıları mevcut olabilir ama hareketler üzerinde etkili değildir.'},
+    {s:5,t:'Orta-Şiddetli — Hasta açık üstünlük ifade eder; yeteneği, varlığı, bilgisi, ünü, gücü, ahlaki saflığı vb. konusunda diğerlerini horgörür; bunlar düşünmeyi etkileyen sanrısal özellik kazanır ancak davranışını henüz yönlendirmez.'},
+    {s:6,t:'Şiddetli — Olağandışı yetenekleri, etkisi, kimliği vb. olduğu yönündeki çoklu sanrılar açıkça ifade edilir; bunlar düşünmeyi etkiler ve davranış üzerinde de belirgin etkisi vardır.'},
+    {s:7,t:'Aşırı — Düşünce, etkileşim ve davranış çoklu grandiyöz sanrılar tarafından kontrol edilir; tanrısal/şeytansal kimlik, peygamberlik veya görkemli misyonlar gibi çarpıcı temalar; davranış uygun olmayan ve potansiyel olarak tehlikeli olabilir.'}
+  ]},
+  {id:'P6',label:'P6. Şüphecilik / Perseküsyon',hint:'Gerçeklikten kopuk, irrasyonel kuşkular; korunma, izlenme, takip edilme inançları.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Tetikte; bazılarına güvensiz; rahatsız edici düşmanca duyguların farkındadır ama davranışı henüz etkilemez.'},
+    {s:4,t:'Orta — Açık güvensizlik; sinirlilik, düşmanca konuşmaya yansır; bir veya birkaç referans veya perseküsyon fikri mevcut olabilir ancak davranışı bozmaz.'},
+    {s:5,t:'Orta-Şiddetli — Belirgin güvensizlik; çoklu perseküsyon sanrılarına yol açar; kişilerarası ilişkileri etkiler.'},
+    {s:6,t:'Şiddetli — Yaygın, iyi sistematize perseküsyon sanrıları; düşünmeyi, kişilerarası ilişkileri ve davranışı (savunmaya veya hostiliteye yönelik) ciddi şekilde bozar.'},
+    {s:7,t:'Aşırı — Yaygın, sayıca çok, iyi sistematize perseküsyon sanrılarına bağlı kişilerarası ilişkilerin tamamen bozulması; tüm önemli sosyal ve davranışsal faaliyetlerde belirgin etkisiyle; potansiyel olarak intihar, cinayet veya başkalarına yönelik şiddet eylemlerine yol açabilir.'}
+  ]},
+  {id:'P7',label:'P7. Düşmanlık (Hostilite)',hint:'Sözel ve fiziksel olarak ifade edilen öfke, husumet, kavgacılık.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Görüşmeci ve diğerlerine karşı sözel olarak dolaylı bir öfke ve kızgınlık iletişimi (içerleme, savunmacılık).'},
+    {s:4,t:'Orta — Belirgin düşmanca tutum; sık irritabilite; açıkça ifade edilen öfke veya küçümseme.'},
+    {s:5,t:'Orta-Şiddetli — Hasta oldukça irritabldır; ara sıra hakaret, tehdit veya sözel taciz görülebilir.'},
+    {s:6,t:'Şiddetli — İşbirliği yapmaz; sözel ve fiziksel olarak taciz edici, hatta tehditkâr eylemler hastayı diğerleriyle, görüşmeyi yönetmekle uğraşan personelle ve gerekli prosedürlerle ciddi şekilde uyumsuz hale getirir.'},
+    {s:7,t:'Aşırı — Belirgin öfke; hastayla iletişim son derece güç veya imkânsızdır; saldırgan davranış ve fiziksel taciz olasıdır ve diğerleri için tehlike oluşturabilir.'}
+  ]}
+];
+
+var PANSS_NEG=[
+  {id:'N1',label:'N1. Künt duygulanım',hint:'Duygusal ifadenin azalması; yüz ifadesinde, jest, prozodi, modülasyonda fakirleşme.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Yüz ifadesi ve jestlerde değişikliklerin biraz baskılı görünmesi; duygusal söylem zaman zaman duygusal yüklü içeriklerle uyumsuz.'},
+    {s:4,t:'Orta — Yüz ifadesinde azalma ve jestlerde fakirleşme nedeniyle hastanın dış görünümü sönüktür.'},
+    {s:5,t:'Orta-Şiddetli — Duygulanım genellikle "düz" görünür; içeriğin duygusal yükü ne olursa olsun sadece arada bir duygusal değişimler gösterir.'},
+    {s:6,t:'Şiddetli — Belirgin düzlük ve duygusal kıtlık çoğu zaman vardır. Aşırı stres veya tahrik karşısında ya da hiçbir koşulda duygusal değişiklik olmayabilir.'},
+    {s:7,t:'Aşırı — Yüz ifadesinde, sesin niteliğinde, jestlerde değişiklik gözlenmez; hasta sürekli boş, donuk bir ifadeye sahiptir; ses gücü ve modülasyonu monoton ve değişmezdir.'}
+  ]},
+  {id:'N2',label:'N2. Duygusal çekilme',hint:'Yaşam olaylarına ilgi, katılım, duygusal bağlanmada eksiklik.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Hasta yaşam olaylarına ilgi göstermede esneklik eksikliği gösterir, ancak hafiflemiş düzeyde.'},
+    {s:4,t:'Orta — Hasta genellikle çevresinden ve yaşam olaylarından duygusal olarak uzaktır.'},
+    {s:5,t:'Orta-Şiddetli — Hasta açıkça çevresinden ve insanlardan duygusal olarak ayrılmıştır; sıkıştırıldığında bile, yalnızca asgari duygulanımla katılır. Hasta yapay ve mekanik görünür.'},
+    {s:6,t:'Şiddetli — Duygusal çekilme belirgindir; hastanın işlevselliğini ciddi şekilde bozar. Hasta bir robot gibi davranabilir, etrafına ilgi göstermez veya kişisel ve emosyonel bağlantıdan etkin kaçınma sergileyebilir.'},
+    {s:7,t:'Aşırı — Hasta neredeyse tamamen çekilmiş; iletişimsiz; kişisel ihtiyaçlarına bakmayı ihmal eder; bu nedenle de neredeyse sürekli denetim ve bakım gerektirir.'}
+  ]},
+  {id:'N3',label:'N3. Yetersiz ilişki kurma (rapport)',hint:'Görüşmeciyle empati, kişilerarası açıklık, ilgi ve katılım eksikliği.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Görüşmecinin sorgulanması karşısında hastanın yapay bir biçimde ilişkide bulunmasıyla, kişilerarası kısıtlılık gözlemlenir. Göz teması az olabilir veya kısa süreli olabilir.'},
+    {s:4,t:'Orta — Hasta görüşmeciye karşı tipik olarak mesafelidir (sosyal olarak değil belki ama duygusal olarak). Hasta bir başka yere bakarak veya görüşmeci için ilgi kaybı belirtileri göstererek soruları cevaplandırmaktan kaçınabilir. Kendisini açma sınırlıdır.'},
+    {s:5,t:'Orta-Şiddetli — Hasta görüşme süresince ilgisizdir; göz teması az ve uzakta görünür; soruları aşırı kısa veya hostil yanıtlayabilir; görüşmecinin sorularına direnç sergileyebilir.'},
+    {s:6,t:'Şiddetli — Hasta görüşmeciye karşı son derece kayıtsız ve uzaktır. Rapport neredeyse imkânsızdır; hasta sıklıkla görüşmeden uzaklaşır ya da kapanmaya gider.'},
+    {s:7,t:'Aşırı — Rapport tamamen yoktur. Hasta görüşmeciye karşı tamamen ilgisiz görünür; sıklıkla aktif olarak konuşmadan, göz temasından kaçınır ve fiziksel olarak çekilebilir.'}
+  ]},
+  {id:'N4',label:'N4. Pasif / apatik sosyal çekilme',hint:'İlgi, inisiyatif ve sosyal aktivitelere katılımda azalma.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Hasta zaman zaman sosyal aktivitelere ilgi gösterir ama inisiyatif almaz; başkalarının yönlendirmesini bekler.'},
+    {s:4,t:'Orta — Hasta pasif olarak çoğu sosyal aktiviteyle ilgilenir ama tek başınadır; çoğu zaman yalnız faaliyetlerle uğraşır.'},
+    {s:5,t:'Orta-Şiddetli — Hasta sosyal aktivitelere sadece zaman zaman pasif olarak katılır; bunlara ilgi göstermez. Yalnız zaman geçirir.'},
+    {s:6,t:'Şiddetli — Hasta sosyal aktivitelere ilgisi olmayan veya bunlara katılmayan biri olarak görünür; çoğu zaman tek başınadır.'},
+    {s:7,t:'Aşırı — Hasta tamamen geri çekilir; sosyal aktivitelere kayıtsız ve katılmamaktadır; kişisel ihtiyaçlarını ihmal eder; uyandırılması güç olabilir.'}
+  ]},
+  {id:'N5',label:'N5. Soyut düşünmede güçlük',hint:'Soyutlama, kategorizasyon, ötesini görme; benzerlikler ve atasözleri yorumlamada güçlük.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — En soyut veya uzak çağrışımlı görevlerde (atasözleri yorumlama gibi) somut düşünme eğilimi vardır.'},
+    {s:4,t:'Orta — Hasta sıkça somutluk gösterir; basit veya iyi öğrenilmiş soyutlamalar dışında benzerlikleri yorumlamada, atasözlerini yorumlamada zorlanır.'},
+    {s:5,t:'Orta-Şiddetli — Hasta öncelikle somut tarzda işler; karmaşık benzerlikler ve atasözlerinin yorumlanmasında çok zorlanır.'},
+    {s:6,t:'Şiddetli — Hasta benzerlikleri, farklılıkları ve atasözlerinin sembolik anlamlarını yorumlayamaz veya başkalarınki ile gerçekten benzemeyen tepkiler verir; çıkış noktası somut tarzı işler.'},
+    {s:7,t:'Aşırı — Hasta sadece somut tarzda; soyutlama ile ilgili görevlerde tamamen başarısız olur; uzaktan veya yakın benzerlikleri, atasözleri veya basit kategorileri yorumlayamaz.'}
+  ]},
+  {id:'N6',label:'N6. Konuşma spontanlığı ve akıcılığında eksiklik',hint:'Konuşmanın azalması, kısa cevaplar, spontane konuşma yokluğu.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Görüşme zaman zaman hastanın spontan konuşma yapmadığı, sözel cevaplara dair belirsiz veya kısa olduğu bölümler içerir.'},
+    {s:4,t:'Orta — Hasta sözel olarak yanıt vermede inisiyatif yoksunluğu gösterir; cevaplar kısa ve düşük bilgi içeriklidir; söylem yetersiz veya sınırlı düşünce akışı ile karakterizedir.'},
+    {s:5,t:'Orta-Şiddetli — Hasta konuşma akıcılığında belirgin azalma sergiler; cevaplar büyük ölçüde 1-2 cümleden oluşur; bilgi vermez; görüşmeci sürekli yönlendirme ve cesaretlendirme yapmak zorundadır.'},
+    {s:6,t:'Şiddetli — Hastanın yanıtları tek heceli veya çok kısadır; uzun düşünce dizileri yoktur; aktif yönlendirme ve uyarımla bile çok az bilgi alınır.'},
+    {s:7,t:'Aşırı — Konuşma akıcılığı neredeyse tamamen yoktur; hasta sözel uyarıma tepki vermez veya sadece bir veya iki söz / mırıltı ile yanıt verir; mutiyizm derecesindedir.'}
+  ]},
+  {id:'N7',label:'N7. Stereotipik düşünce',hint:'Düşünce esnekliğinin azalması; sınırlı, tekrarlayıcı veya kısır içerikli düşünce.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Hasta zaman zaman katı; tekrarlayıcı veya kısır içerikli olabilir.'},
+    {s:4,t:'Orta — Düşünme bazı tekrarlayıcı ve katı bir nitelik gösterir; hasta belirli temalara takılı kalır.'},
+    {s:5,t:'Orta-Şiddetli — Hasta sınırlı sayıda tekrarlayan tema veya konuşma tarzına sahiptir; bu, görüşmenin ana akışını engeller.'},
+    {s:6,t:'Şiddetli — Düşünmesinde geçişin yokluğunu yansıtan kontrol edilemez bir tekrar vardır; spontane olarak bir konudan diğerine geçemez; hasta düşüncesini yönlendirmede yardım gerektirir.'},
+    {s:7,t:'Aşırı — Düşünme, davranış ve konuşma, sürekli olarak aynı temaların tekrarına hâkimdir; sosyal işlevsellik ciddi şekilde bozulur; karşılıklı iletişim için zayıf bir temel oluşturur.'}
+  ]}
+];
+
+var PANSS_GEN=[
+  {id:'G1',label:'G1. Somatik ilgilenme',hint:'Fiziksel sağlığa odaklanma; somatik şikayetler.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Sağlık ya da somatik konularla belirgin meşguliyet; ara sıra ısrarlı sorular sorma; aile veya tıbbi personel için endişelenmek.'},
+    {s:4,t:'Orta — Birkaç somatik fonksiyon hakkında veya hastalık hakkında belirgin endişe görüşmenin sıklığını işgal eder, ama görüşmeci ile hasta arasında işbirliğini bozmaz.'},
+    {s:5,t:'Orta-Şiddetli — Hasta sağlık ve bedensel konuları sık ve neredeyse görüşmenin her noktasında belirtir; düşünme alanını önemli ölçüde etkiler.'},
+    {s:6,t:'Şiddetli — Somatik şikayetler veya inançlar sanrısal niteliktedir; hastanın işlevselliğini bozar ve aile ile iletişimi etkiler.'},
+    {s:7,t:'Aşırı — Bedensel hastalıklara veya bozulmalara dair sayıca çok, sıklıkla bizar yapılı sanrılar bulunur; veya çarpıcı bir somatik sanrı (örn. bedensel deformite, çürüme) hastanın enerjisini, düşüncesini, davranışını domine eder.'}
+  ]},
+  {id:'G2',label:'G2. Anksiyete',hint:'Endişe, gerginlik, korku, sinirlilik gibi sübjektif deneyim.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Hasta hafif huzursuzluk, aşırı endişe veya öznel gerginlik ifade eder; ancak otonomik bulgular veya rahatsız edici davranışsal etkiler yoktur.'},
+    {s:4,t:'Orta — Hasta belirgin anksiyete belirtileri tanımlar; bu, ya hafif fiziksel sonuçlara (hafif tremor, aşırı yorgunluk gibi) yol açar ya da gözle görülür endişe veya korkuyu ortaya koyar.'},
+    {s:5,t:'Orta-Şiddetli — Hasta ciddi anksiyete problemleri tanımlar; bu, hayatın bazı yönlerinde önemli fiziksel ve davranışsal sonuçlara sahiptir; sürekli korku, sinirlilik veya gerginlik.'},
+    {s:6,t:'Şiddetli — Hasta günlük yaşamı belirgin biçimde bozan, neredeyse her gün ortaya çıkan ataklarla anksiyete gösterir; fiziksel ve davranışsal belirtiler belirgindir.'},
+    {s:7,t:'Aşırı — Hayat panik korkularıyla, kontrol edilemez derecede anksiyeteyle bozulmuştur. Anksiyete kısa sürede tüm dikkati gerektiren panik atakları ile veya sürekli yüksek düzey ile karakterizedir; sosyal işlevsellik tamamen bozulmuştur.'}
+  ]},
+  {id:'G3',label:'G3. Suçluluk duyguları',hint:'Geçmiş ya da hayal edilen kötü davranışlar nedeniyle pişmanlık, kendini suçlama.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Sorgulamada belirgin biçimde mütevazi suçluluk duyguları veya zayıf öz değerlendirme ortaya konur; bu, açıkça ne kadarsa anlamlı bir hastalık değildir.'},
+    {s:4,t:'Orta — Hasta belirgin suçluluk veya öz suçlamadan, bilinen düşmanca duygulara veya hayal edilen kötü eylemlere bağlı olduğunu ifade eder, ama hâlâ söze geldiğinde rahatsız edilebilir.'},
+    {s:5,t:'Orta-Şiddetli — Hastanın güçlü suçluluk duyguları kendini suçlama ve kendisini değersizleştirme deneyimine yansır.'},
+    {s:6,t:'Şiddetli — Belirgin suçluluk duyguları sanrısal yorumlamalar boyutuna sahiptir veya intihar eğilimi gibi umutsuzluğun ortaya çıkmasına yol açar.'},
+    {s:7,t:'Aşırı — Olgun yetişkinde suçluluk sanrıları yaygındır veya hastayı kendini cezalandırma davranışına götürür; hatta intihar girişimleri ile sonuçlanabilir.'}
+  ]},
+  {id:'G4',label:'G4. Gerginlik',hint:'Aşırı somatik gerginlik (motor huzursuzluk, terleme, titreme vb.) bulgusu.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Hasta yüksek gerilim veya endişe işaretleri gösterir; ara sıra kas çekimleri, terleme.'},
+    {s:4,t:'Orta — Belirgin gerginlik bulguları; tipik olarak titreme, belirgin terleme ve maner yer alır.'},
+    {s:5,t:'Orta-Şiddetli — Belirgin gerilim hastanın motor davranışlarını bozar (sözel iletişim, jestlerle); fiziksel olarak ayrı tutulamaz.'},
+    {s:6,t:'Şiddetli — Belirgin gerginlik ile kişilerarası ilişki, fiziksel sağlık ciddi şekilde bozulur; hasta sürekli huzursuz, gergin, titreme gösterir.'},
+    {s:7,t:'Aşırı — Belirgin gerilim sonucu işlevsellik tamamen bozulur. Hasta sürekli huzursuz, ileri derecede gergin ve titrek halde olur; uyku ve diğer hayati fonksiyonlar bozulur.'}
+  ]},
+  {id:'G5',label:'G5. Manyerizm ve postürlenme',hint:'Doğal olmayan hareketler veya tutumlar.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Hareketleri hafif beceriksiz, gergin, veya yapay olabilir.'},
+    {s:4,t:'Orta — Manyere veya garip görünüşlü hareketler veya birkaç dakika sürdürülebilen acayip tutum (mannerisms).'},
+    {s:5,t:'Orta-Şiddetli — Hasta seyrek olmayan ritüalistik veya bükümlü acayip tutumlar veya hareketler sergiler.'},
+    {s:6,t:'Şiddetli — Hasta sıklıkla acayip postür veya hareketler sergiler; uzun süre garip postürler korur.'},
+    {s:7,t:'Aşırı — Hastanın işlevselliği ciddi anlamda manyerizm veya postürlenme tarafından bozulur; bu hareketler veya tutumlar neredeyse devamlıdır.'}
+  ]},
+  {id:'G6',label:'G6. Depresyon',hint:'Üzüntü, melankoli, çaresizlik, umutsuzluk, kendini suçlama, intihar duyguları.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Hasta depresyon, üzüntü, çaresizlik duygularını ifade eder; ancak günlük yaşam aktivitelerini ve sosyal iletişimi rahatlatmaz.'},
+    {s:4,t:'Orta — Belirgin depresyon, üzüntü duyguları ifade edilir; bu, periyodik olarak ağlama; günlük işlev ve sosyal iletişimde bazı bozulmalar vardır.'},
+    {s:5,t:'Orta-Şiddetli — Belirgin depresif duygu mevcut, periyodik ağlamalar eşlik eder; hasta sıklıkla derin umutsuzluk içindedir; hastanın iş ve sosyal iletişimini önemli derecede bozar; iştah ve uyku bozuklukları görülür.'},
+    {s:6,t:'Şiddetli — Belirgin depresyon; ağlamalar; günlük yaşamdaki işlevsellik kayda değer biçimde bozulmuştur; intihar düşünceleri olabilir.'},
+    {s:7,t:'Aşırı — Belirgin depresif duygu hayatın tüm yönlerini ciddi şekilde bozar; hasta neredeyse her gün ağlar; intihar girişimleri olası; somatik bozukluklar (uyku, iştah, libido, motor) belirgindir.'}
+  ]},
+  {id:'G7',label:'G7. Motor retardasyon',hint:'Hareket ve konuşmada yavaşlama, azalmış tepkisellik.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Konuşma ve hareketlerde hafif derece bir azalma; spontan iletişim hafifçe azalmıştır.'},
+    {s:4,t:'Orta — Hareketler tipik olarak yavaş ve konuşmada azalma sergilenir; spontanlık eksikliği gözlemlenir.'},
+    {s:5,t:'Orta-Şiddetli — Belirgin motor retardasyon hastanın görüşme katılımını önemli derecede engeller; günlük yaşam aktivitelerinde belirgin yavaşlama.'},
+    {s:6,t:'Şiddetli — Belirgin motor retardasyon hareketleri ciddi derecede sınırlandırır; uzun süre sessiz oturulur; sözel iletişim aşırı kısıtlıdır.'},
+    {s:7,t:'Aşırı — Hasta neredeyse tamamen hareketsiz; uyarılmadan yanıt vermez; akinetik veya katotonik olabilir.'}
+  ]},
+  {id:'G8',label:'G8. İşbirliği yapmama',hint:'Görüşmeci, personel ve aileye karşı uyumsuzluk, reddedicilik.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Otoriteyle, personelle, aileyle hafif kızgınlık, sabırsızlık, alaycılık.'},
+    {s:4,t:'Orta — Görüşmeye katılmama, isteksizlik, alaycılık, açıkça ifade edilen düşmanlık veya işbirliği eksikliği gözlemlenir; ancak sosyal işlevsellikte ciddi bir engel oluşturmaz.'},
+    {s:5,t:'Orta-Şiddetli — Hasta görüşmenin gereksinimlerine sıklıkla aykırı davranır; günlük rutinleri reddedebilir; sosyal işlevsellikte belirgin sorunlara yol açar.'},
+    {s:6,t:'Şiddetli — Hasta yüksek derecede işbirliği yapmaz, reddedici ve hostil; sosyal işlevselliği ciddi şekilde sınırlandırır; tıbbi tedavinin yürütülmesini güçleştirir.'},
+    {s:7,t:'Aşırı — Aktif rezistans hastanın hemen tüm sosyal işlevselliğini bozar; hasta görüşmeye, tedaviye, hatta temel kişisel işlevlere katılmayı reddedebilir.'}
+  ]},
+  {id:'G9',label:'G9. Olağandışı düşünce içeriği',hint:'Tuhaf, fantastik veya bizar fikirler.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Düşünce içeriği bir miktar acayip veya alışılmadık; veya tanıdık fikirler garip bir bağlamda kullanılır.'},
+    {s:4,t:'Orta — Fikirler genellikle çarpık ve zaman zaman oldukça acayip görünür.'},
+    {s:5,t:'Orta-Şiddetli — Hasta birçok acayip ve fantastik düşünce ifade eder (örn., yedek hayatlara sahip olma, dünya dışı işkenceler); veya açıkça absürt olanlar (örn., dünya dışı olaylara, doğaüstü kuvvetlere sahip olmaya inanma).'},
+    {s:6,t:'Şiddetli — Hasta sayısız mantıksız veya absürt düşünce ifade eder veya bunlardan sıklıkla bahseder; bu düşünceler dağınık niteliktedir.'},
+    {s:7,t:'Aşırı — Düşünceler saçma, mantıksız ve son derece bizar konular ile doludur.'}
+  ]},
+  {id:'G10',label:'G10. Oryantasyon bozukluğu',hint:'Kişi, yer, zaman, durum farkındalığında bozulma.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Genel oryantasyon yeterli; ancak yer ve zaman değerlendirmesinde bazı küçük hatalar olabilir.'},
+    {s:4,t:'Orta — Kişi, yer veya zaman ile ilgili bir veya iki temel oryantasyon hatası gözlenir; ancak hasta günlük rutinlerini yapabilir.'},
+    {s:5,t:'Orta-Şiddetli — Belirgin oryantasyon bozukluğu; kişi, yer, zaman, durum farkındalığını içerebilir.'},
+    {s:6,t:'Şiddetli — Birden fazla alanda belirgin oryantasyon bozukluğu (örn., bilinmeyen kişiler, yer adı, mevsim); günlük aktivitelerinde kayda değer bozulma.'},
+    {s:7,t:'Aşırı — Hasta tamamen oryantesizdir; kendi adını, yaşını, kim olduğunu, yerleştiği yeri, nerede bulunduğunu bilmez; günlük yaşam aktiviteleri tamamen bozulmuştur.'}
+  ]},
+  {id:'G11',label:'G11. Dikkat eksikliği',hint:'Konsantrasyon, çelinebilirlik, sürdürülen dikkat.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Hafif düzeyde konsantre olamama veya çelinebilirlik; ancak görüşme çoğunlukla yararlı yanıtlar üretir.'},
+    {s:4,t:'Orta — Konsantrasyon ve sürdürülen dikkatte belirgin bozulma; gözle görülür çelinebilirlik; soruları cevaplamada zorlanma.'},
+    {s:5,t:'Orta-Şiddetli — Belirgin dikkat sorunu görüşmeyi büyük ölçüde bozar; düşünme akışında sık kesintiler; dikkat sürekli çelinir.'},
+    {s:6,t:'Şiddetli — Hasta dikkati toplamada ciddi güçlük yaşar; sürekli çelinebilirlik; özellikle tekrarlanan veya yönlendirilmiş sorulara yanıt verirken hata yapar.'},
+    {s:7,t:'Aşırı — Belirgin dikkat eksikliği hastanın görüşmeyi sürdürmesini, takip etmesini, en basit görevleri yapmasını engeller.'}
+  ]},
+  {id:'G12',label:'G12. Yargılama ve içgörü eksikliği',hint:'Hastalık ve durumu ile ilgili farkındalık eksikliği.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Yargılama hafifçe bozulmuş veya bir miktar içgörü eksikliği vardır; ancak hastalığını ve tedaviyi sorgulamaz.'},
+    {s:4,t:'Orta — Belirgin yargılama bozukluğu veya içgörü eksikliği; hasta hastalığının doğasını veya derecesini anlamada güçlük çeker; tedaviye karşı belirsiz kararlar verir.'},
+    {s:5,t:'Orta-Şiddetli — Hasta belirgin yargılama hatasını sergiler veya hastalığa karşı ciddi içgörü eksikliği gösterir; tedaviye karşı uzaklaşır; hastalığını minimize eder.'},
+    {s:6,t:'Şiddetli — Yargılama ciddi düzeyde bozulmuştur; hasta hastalığını tanımamayı ve tedaviye direnmeyi sürdürür; hastane veya tedavi gereksinimini reddeder.'},
+    {s:7,t:'Aşırı — Hastalığa dair içgörü tamamen yoktur; hasta tüm olası kanıtları reddeder; günlük yaşamda mantıksız kararlar ve eylemler sergiler; hastalığını absürd nedenlere atfeder.'}
+  ]},
+  {id:'G13',label:'G13. İrade bozukluğu',hint:'Karar verme, başlatma, sürdürme ve düşünceleri / davranışları kontrol etme yeteneğinde bozukluk.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Karar vermede belirgin kararsızlık; konuşma sırasında akışı sürdürmede güçlük; düşünceler veya hareketler sıkça duraksar.'},
+    {s:4,t:'Orta — Bağımlı tarzda davranma; düşünme ve konuşmada belirgin akış engeli; karar verme yetisinde belirgin azalma.'},
+    {s:5,t:'Orta-Şiddetli — Belirgin irade bozukluğu; basit kararlar verirken bile ileri derecede güçlük; günlük yaşam aktivitelerini başlatmak zor.'},
+    {s:6,t:'Şiddetli — Düşünce, davranış ve eylem başlatma ve sürdürmede ciddi yetersizlik; hasta sürekli teşvik gerektirir.'},
+    {s:7,t:'Aşırı — Hasta neredeyse tamamen iradesiz; spontan eylem ve konuşma yoktur; tüm günlük aktiviteler için sürekli yönlendirme gerekir.'}
+  ]},
+  {id:'G14',label:'G14. Dürtü kontrolü eksikliği',hint:'İçsel dürtülere yanıt vermede düzenleme ve kontrol bozukluğu.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Hasta stres veya hayal kırıklığı altında belirgin sabırsızlık veya öfke gösterme eğilimindedir; ancak ciddi davranışsal sorunlara nadiren yol açar.'},
+    {s:4,t:'Orta — Hasta provokasyon altında öfke veya sözel hakaret ile patlayabilir; arada bir hafif fiziksel saldırganlık, eşya kırma veya öfke nöbeti gösterebilir.'},
+    {s:5,t:'Orta-Şiddetli — Hasta tekrarlayan dürtüsel epizodlar gösterir; sözel hakaret, eşyalara zarar verme veya fiziksel taşkınlıklar; bunlar göreceli olarak hafif önemde tetikleyicilere yanıt olarak ortaya çıkabilir.'},
+    {s:6,t:'Şiddetli — Hasta sık ve dürtüsel olarak saldırgan, tehditkâr, talepkar ve yıkıcıdır; sonuçları ciddi şekilde göz ardı eder; çevre tarafından zorlu durumlara yol açar.'},
+    {s:7,t:'Aşırı — Hasta tehlikeli saldırılarda bulunur; eşyalarda yıkıcılık; kasıtsız cinsel davranışlar; emir niteliğindeki halüsinasyonlara dürtüsel olarak yanıt verir; davranışlar günlük olarak kısıtlama veya izolasyon gerektirir.'}
+  ]},
+  {id:'G15',label:'G15. Preokkupasyon (Aşırı meşguliyet)',hint:'İçe çekilme, iç dünyaya, içsel deneyimlere veya egosantrik düşüncelere takılı kalma.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Aşırı kendi içine dalmak hastayı belirli zamanlarda dış olaylarla ilgisiz veya farkındalığı azalmış kılar.'},
+    {s:4,t:'Orta — Hasta bazen kendisiyle ilgili düşünce ve duygulara dalmıştır; yön bulma, eylemde bulunma, görüşmecinin sorularına yanıt verme bu nedenle aksar.'},
+    {s:5,t:'Orta-Şiddetli — Hasta sıklıkla otistik deneyimlere dalmış görünür; bu, sosyal ve iletişim işlevlerini ciddi şekilde engeller.'},
+    {s:6,t:'Şiddetli — Hasta belirgin biçimde otistik deneyimlere dalmıştır; bu, hastanın kişilerarası iletişim ve gündelik yaşamına ciddi düzeyde yansır; hastayla iletişim kurmak için sürekli dış uyarım gereklidir.'},
+    {s:7,t:'Aşırı — Otistik deneyimlere total dalış hasta için tüm dış uyaranlara karşı pratik olarak duyarsızlığa yol açar; tüm dikkat içsel deneyimlerine yöneliktir; hastayla iletişim olamaz.'}
+  ]},
+  {id:'G16',label:'G16. Aktif sosyal çekingenlik',hint:'Korku, güvensizlik veya düşmanlık nedeniyle sosyal etkileşimden aktif kaçınma.',opts:[
+    {s:1,t:'Yok — Tanım geçerli değil.'},
+    {s:2,t:'Minimal — Sorgulanır patoloji; normal varyasyon sınırında.'},
+    {s:3,t:'Hafif — Hasta sosyal etkileşimde belirsiz rahatsızlık duyar; ancak günlük sosyal işlevsellik belirgin biçimde etkilenmez.'},
+    {s:4,t:'Orta — Hasta belirgin biçimde sosyal etkileşimden çekinir veya kaçınır; ancak personel ve aile tarafından motive edildiğinde katılabilir.'},
+    {s:5,t:'Orta-Şiddetli — Hasta korku, düşmanlık veya güvensizlik nedeniyle ısrarla sosyal etkileşimden kaçınır; günlük yaşamda belirgin sosyal işlevsellik bozulmaları ile sonuçlanır.'},
+    {s:6,t:'Şiddetli — Hasta sosyal aktivitelerden aktif olarak kaçınır; isolasyon, korku ve düşmanlık önemli derecede; sosyal işlevsellik ciddi biçimde bozulmuştur.'},
+    {s:7,t:'Aşırı — Hasta tüm sosyal aktivitelerden aktif olarak kaçınır; tamamen izole; tüm günlük sosyal işlevsellik durmuştur; yoğun korku, düşmanlık, paranoid kaçınma görülür.'}
+  ]}
+];
+
+var panssVals={};
+
+function calcPanss(){
+  var allItems=PANSS_POS.concat(PANSS_NEG).concat(PANSS_GEN);
+  var missing=allItems.filter(function(it){return !(it.id in panssVals)});
+  var fb=document.getElementById('panss-missing-msg');
+  if(missing.length>0){
+    fb.innerHTML='<strong>⚠ '+missing.length+' madde eksik.</strong><br>Eksik: '+missing.map(function(m){return m.id}).join(', ');
+    fb.style.display='block';
+    // İlk eksik maddeye scroll
+    var firstMissing=document.querySelector('[data-scale-id="'+missing[0].id+'"]');
+    if(firstMissing) firstMissing.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  fb.style.display='none';
+  function sumSection(items){var t=0;items.forEach(function(it){t+=panssVals[it.id]||0});return t}
+  var p=sumSection(PANSS_POS);
+  var n=sumSection(PANSS_NEG);
+  var g=sumSection(PANSS_GEN);
+  var total=p+n+g;
+  document.getElementById('panss-pos-total').textContent=p+' / 49';
+  document.getElementById('panss-neg-total').textContent=n+' / 49';
+  document.getElementById('panss-gen-total').textContent=g+' / 112';
+  document.getElementById('panss-total').textContent=total+' / 210';
+  document.getElementById('panss-score-display').style.display='block';
+  document.getElementById('panss-score-display').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', function(){
+  panssVals={};
+  buildScale('panss-pos',PANSS_POS,panssVals);
+  buildScale('panss-neg',PANSS_NEG,panssVals);
+  buildScale('panss-gen',PANSS_GEN,panssVals);
+});
+</script>
+</body>
+</html>
