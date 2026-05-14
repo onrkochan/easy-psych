@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruhsal Durum Muayenesi</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;color:#1a1a1a;background:#f5f5f3}
+.app{max-width:460px;margin:0 auto;padding:12px}
+@media (min-width:768px){
+  .app{max-width:720px;padding:20px}
+  body{font-size:15px}
+}
+@media (min-width:1100px){
+  .app{max-width:820px;padding:28px}
+}
+.card{background:#fff;border:0.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:1rem 1.25rem;margin-bottom:12px}
+.page-title{font-size:18px;font-weight:500;margin-bottom:4px}
+.page-sub{font-size:13px;color:#666;margin-bottom:16px}
+.section-label{font-size:12px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.btn-secondary{display:block;width:100%;padding:10px;background:#fff;color:#1a1a1a;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;font-size:14px;cursor:pointer;margin-top:8px;text-align:center}
+.btn-back{background:none;border:none;cursor:pointer;font-size:13px;color:#888;padding:0;margin-bottom:14px;display:flex;align-items:center;gap:4px}
+.feedback-box{padding:12px;border-radius:8px;margin:12px 0;font-size:14px;line-height:1.5}
+.fb-warning{background:#FAEEDA;color:#854F0B;border:0.5px solid #EF9F27}
+
+.rdm-group{margin-bottom:14px}
+.rdm-title{font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:6px;text-transform:none}
+.rdm-opts{display:flex;flex-wrap:wrap;gap:6px}
+.rdm-opt{padding:6px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:14px;background:#fff;font-size:12px;color:#1a1a1a;cursor:pointer;transition:all 0.15s;position:relative;font-family:inherit}
+.rdm-opt:hover{background:#f0f0ee}
+.rdm-opt.selected{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.rdm-opt[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:6px 10px;border-radius:6px;font-size:11px;white-space:normal;width:max-content;max-width:240px;z-index:10;line-height:1.4;pointer-events:none;text-align:left}
+.rdm-other-input{padding:6px 10px;border:0.5px dashed rgba(0,0,0,0.3);border-radius:14px;background:#fafaf8;font-size:12px;font-family:inherit;width:140px;outline:none}
+.rdm-other-input:focus{border-color:#1a1a1a;border-style:solid;background:#fff}
+.rdm-section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:0}
+.rdm-skip-btn{padding:5px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:14px;background:#fff;font-size:12px;color:#1a1a1a;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.15s}
+.rdm-skip-btn:hover{background:#f0f0ee}
+.rdm-skip-btn.selected-red{background:#A32D2D;color:#fff;border-color:#A32D2D;font-weight:500}
+.rdm-title.rdm-missing{color:#A32D2D}
+.rdm-opt.missing-opt{border-color:#A32D2D;color:#A32D2D;background:#FEF8F8}
+.rdm-opt.missing-opt:hover{background:#FCEBEB}
+.input-invalid{border-color:#A32D2D !important;box-shadow:0 0 0 2px rgba(163,45,45,0.15)}
+</style>
+</head>
+<body>
+<div class="app">
+
+<button class="btn-back" onclick="window.location.href='index.html'"><i class="ti ti-arrow-left"></i> Ana ekran</button>
+
+<div style="padding:0 0 16px">
+  <p class="page-title">Ruhsal durum muayenesi</p>
+  <p class="page-sub">Hasta bilgileri + öykü + RDM → kopyalanabilir konsültasyon notu</p>
+</div>
+
+<div class="card">
+  <p class="section-label">A. Hasta bilgileri</p>
+  <p style="font-size:12px;color:#666;margin-bottom:4px">Konsültasyon notuna eklenecek sosyodemografik bilgi ve şikayet.</p>
+  <p style="font-size:11px;color:#999;margin-bottom:8px;font-style:italic;line-height:1.5">Örnek: 60y evli 2ç IOM emekli marangoz eşiyle Göynük'te yaşıyor şikayeti: ...</p>
+  <textarea id="sosyo-input" style="width:100%;min-height:90px;padding:10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;line-height:1.5" oninput="updateKonsNote()"></textarea>
+</div>
+
+<div class="card">
+  <p class="section-label">B. Öyküsü</p>
+  <p style="font-size:12px;color:#666;margin-bottom:4px">Psikiyatriye danışılma şikayetinin öyküsünü buraya yazın.</p>
+  <textarea id="oyku-input" style="width:100%;min-height:110px;padding:10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;line-height:1.5" oninput="updateKonsNote()"></textarea>
+</div>
+
+<div class="card">
+  <div class="rdm-section-head">
+    <p class="section-label" style="margin-bottom:0">C. Ruhsal durum muayenesi (RDM)</p>
+    <button type="button" class="rdm-skip-btn" id="rdm-skip-btn" onclick="toggleRdmSkip()">Gerek yok</button>
+  </div>
+  <p style="font-size:12px;color:#666;margin-top:8px;margin-bottom:10px">Seçenekleri tikleyin — kons notuna RDM: olarak eklenir. Her başlığa "diğer:" ile kendiniz seçenek ekleyebilirsiniz. Bir seçeneğin üzerine gelirseniz açıklama görünür.</p>
+  <div id="rdm-container"></div>
+</div>
+
+<div class="card" style="border-left:3px solid #3C3489;border-radius:0 12px 12px 0">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <p class="section-label" style="margin-bottom:0">D. Konsültasyon notu</p>
+    <button class="btn-secondary" id="copy-btn" style="margin:0;padding:6px 12px;width:auto;font-size:12px" onclick="copyKonsNote()"><i class="ti ti-copy"></i> Kopyala</button>
+  </div>
+  <div id="kons-note" style="background:#f5f5f3;border-radius:8px;padding:12px;font-size:13px;line-height:1.6;white-space:pre-wrap;color:#1a1a1a;font-family:inherit;min-height:60px"></div>
+  <div id="copy-block-msg" class="feedback-box fb-warning" style="display:none;margin-top:10px;font-size:13px"></div>
+</div>
+
+<button class="btn-secondary" onclick="resetAll()" style="margin-top:8px">Yeni muayene</button>
+<button class="btn-secondary" onclick="window.location.href='index.html'" style="margin-top:8px">Ana ekrana dön</button>
+
+</div>
+
+<script>
+var RDM_GROUPS=[
+  {key:'katilim',label:'Görüşmeye katılımı',single:true,opts:[
+    {v:'istekli'},{v:'isteksiz'},{v:'umursamaz'},{v:'negativist',tip:'Yapılması istenenin tersini yapma / direnme'}
+  ]},
+  {key:'tutum',label:'Tutumu',single:true,opts:[
+    {v:'işbirliğine giren tutumda'},
+    {v:'saldırgan tutumda',tip:'Sözel veya fiziksel agresyon'},
+    {v:'savunmacı tutumda',tip:'Sorulara karşı kapalı, suçlamayı reddeder gibi'},
+    {v:'alaycı tutumda'},
+    {v:'kuşkucu tutumda',tip:'Görüşmeci/personele yönelik şüpheci tavır'},
+    {v:'çocuksu tutumda',tip:'Yaşına uymayan, regrese davranış'},
+    {v:'apatik tutumda',tip:'İlgisiz, tepkisiz'}
+  ]},
+  {key:'psikomotor',label:'Psikomotor aktivite',single:true,opts:[
+    {v:'olağan'},{v:'artmış'},{v:'azalmış'}
+  ]},
+  {key:'or_yer',label:'Oryantasyon — yer',single:true,opts:[{v:'+'},{v:'-'}]},
+  {key:'or_zaman',label:'Oryantasyon — zaman',single:true,opts:[{v:'+'},{v:'-'}]},
+  {key:'or_kisi',label:'Oryantasyon — kişi',single:true,opts:[{v:'+'},{v:'-'}]},
+  {key:'dikkat_odak',label:'Dikkati odaklama',single:true,opts:[
+    {v:'normal'},{v:'azalmış'}
+  ]},
+  {key:'dikkat_kaydir',label:'Dikkati kaydırma',single:true,opts:[
+    {v:'normal'},{v:'güçlükle'}
+  ]},
+  {key:'duygudurum',label:'Duygudurum',single:false,opts:[
+    {v:'disforik',tip:'Hoşnutsuz, huzursuz, bunaltılı'},
+    {v:'ötimik',tip:'Normal duygudurum'},
+    {v:'taşkın (ekspansif)'},
+    {v:'irritabl',tip:'Çabuk öfkelenen'},
+    {v:'oynak',tip:'Duygudurum dalgalanmaları'},
+    {v:'yükselmiş duygudurum'},
+    {v:'öfori'},
+    {v:'ektazi',tip:'Vecd hali'},
+    {v:'depresyon'},
+    {v:'keder'}
+  ]},
+  {key:'duygulanim',label:'Duygulanım',single:false,opts:[
+    {v:'küntleşmiş',tip:'İfade gücü ileri derecede azalmış'},
+    {v:'kısıtlı'},
+    {v:'düz',tip:'Hiç ifade yok'},
+    {v:'oynak'},
+    {v:'anksiyete'},
+    {v:'korku'},
+    {v:'ajitasyon'},
+    {v:'gerginlik'},
+    {v:'panik'},
+    {v:'apati'},
+    {v:'utanç'},
+    {v:'suçluluk'}
+  ]},
+  {key:'kon_hiz',label:'Konuşma hızı',single:true,opts:[
+    {v:'olağan'},{v:'artmış'},{v:'azalmış'},{v:'değerlendirilemedi'}
+  ]},
+  {key:'kon_mik',label:'Konuşma miktarı',single:false,opts:[
+    {v:'olağan'},{v:'artmış'},{v:'azalmış'},{v:'değerlendirilemedi'},
+    {v:'logore',tip:'Aşırı, durdurulamayan konuşma'},
+    {v:'kekeme'},
+    {v:'duraksayarak'},
+    {v:'aşırı yüksek sesli'},
+    {v:'aşırı alçak sesli'}
+  ]},
+  {key:'dus_surec',label:'Düşünce süreci',single:false,opts:[
+    {v:'sekonder'},
+    {v:'somutlaşmış',tip:'Soyut düşünce kaybı'},
+    {v:'ilişkisiz yanıt'},
+    {v:'fikir uçuşması',tip:'Çağrışımlar hızla değişir'},
+    {v:'klang çağrışım',tip:'Sözcüklerin ses benzerliğine göre çağrışım'}
+  ]},
+  {key:'dus_icer',label:'Düşünce içeriği',single:false,opts:[
+    {v:'hezeyan'},
+    {v:'hipokondriyazis',tip:'Hastalık kapma kaygısı'},
+    {v:'obsesyon'},
+    {v:'kompulsiyon'},
+    {v:'fobi'},
+    {v:'yaşam stresörleri'},
+    {v:'hastalıkla ilgili'}
+  ]},
+  {key:'algi',label:'Algı — Varsanı',single:true,opts:[
+    {v:'gözlendi'},{v:'gözlenmedi'}
+  ]},
+  {key:'muhakeme',label:'Muhakeme',single:true,opts:[
+    {v:'yerinde'},
+    {v:'kısmen korunmuş'},
+    {v:'bozulmuş'},
+    {v:'sosyal muhakeme yerinde'}
+  ]},
+  {key:'suihom',label:'Suisid-homisid düşüncesi',single:true,opts:[
+    {v:'yok'},{v:'var'}
+  ]}
+];
+
+var rdmSel={};
+var rdmCustom={};
+var rdmSkip=false;
+
+function buildRdm(){
+  var c=document.getElementById('rdm-container');
+  if(!c) return;
+  c.innerHTML='';
+  RDM_GROUPS.forEach(function(g){
+    var html='<div class="rdm-group"><div class="rdm-title">'+g.label+(g.single?'':' <span style="color:#888;font-weight:400">(çoklu)</span>')+'</div><div class="rdm-opts">';
+    g.opts.forEach(function(o){
+      var tipAttr=o.tip?' data-tip="'+o.tip.replace(/"/g,'&quot;')+'"':'';
+      html+='<button type="button" class="rdm-opt" data-group="'+g.key+'" data-val="'+o.v.replace(/"/g,'&quot;')+'"'+tipAttr+' onclick="toggleRdm(\''+g.key+'\',\''+o.v.replace(/'/g,"\\'")+'\','+g.single+')">'+o.v+'</button>';
+    });
+    var customVal=rdmCustom[g.key]||'';
+    html+='<input type="text" class="rdm-other-input" placeholder="diğer:" value="'+customVal.replace(/"/g,'&quot;')+'" oninput="setRdmCustom(\''+g.key+'\',this.value)">';
+    html+='</div></div>';
+    c.innerHTML+=html;
+  });
+  refreshRdmUI();
+}
+
+function toggleRdm(key,val,single){
+  if(rdmSkip){
+    rdmSkip=false;
+    var sb=document.getElementById('rdm-skip-btn');
+    if(sb){sb.classList.remove('selected-red');sb.textContent='Gerek yok'}
+  }
+  if(!rdmSel[key]) rdmSel[key]=[];
+  if(single){
+    rdmSel[key]=(rdmSel[key][0]===val)?[]:[val];
+  } else {
+    var i=rdmSel[key].indexOf(val);
+    if(i>=0) rdmSel[key].splice(i,1);
+    else rdmSel[key].push(val);
+  }
+  refreshRdmUI();
+  updateKonsNote();
+}
+
+function setRdmCustom(key,val){
+  rdmCustom[key]=val;
+  if(val.trim() && rdmSkip){
+    rdmSkip=false;
+    var sb=document.getElementById('rdm-skip-btn');
+    if(sb){sb.classList.remove('selected-red');sb.textContent='Gerek yok'}
+  }
+  updateKonsNote();
+  refreshRdmMissingUI();
+}
+
+function toggleRdmSkip(){
+  rdmSkip=!rdmSkip;
+  var sb=document.getElementById('rdm-skip-btn');
+  if(rdmSkip){
+    sb.classList.add('selected-red');
+    sb.textContent='RDM atlandı';
+    // Tüm RDM seçimlerini temizle
+    rdmSel={};
+    rdmCustom={};
+    buildRdm();
+  } else {
+    sb.classList.remove('selected-red');
+    sb.textContent='Gerek yok';
+  }
+  refreshRdmMissingUI();
+  updateKonsNote();
+}
+
+function refreshRdmUI(){
+  document.querySelectorAll('.rdm-opt').forEach(function(btn){
+    var g=btn.getAttribute('data-group');
+    var v=btn.getAttribute('data-val');
+    if(rdmSel[g] && rdmSel[g].indexOf(v)>=0) btn.classList.add('selected');
+    else btn.classList.remove('selected');
+  });
+  refreshRdmMissingUI();
+}
+
+function getRdmVals(key){
+  var vals=(rdmSel[key]||[]).slice();
+  var custom=(rdmCustom[key]||'').trim();
+  if(custom) vals.push(custom);
+  return vals;
+}
+
+function rdmGroupFilled(key){
+  return getRdmVals(key).length>0;
+}
+
+function rdmIsFull(){
+  if(rdmSkip) return true;
+  for(var i=0;i<RDM_GROUPS.length;i++){
+    if(!rdmGroupFilled(RDM_GROUPS[i].key)) return false;
+  }
+  return true;
+}
+
+function refreshRdmMissingUI(){
+  document.querySelectorAll('#rdm-container .rdm-group').forEach(function(group){
+    var title=group.querySelector('.rdm-title');
+    var key=null;
+    var anyOpt=group.querySelector('.rdm-opt');
+    if(anyOpt) key=anyOpt.getAttribute('data-group');
+    if(!key) return;
+    var filled=rdmGroupFilled(key);
+    if(title){
+      if(!filled && !rdmSkip) title.classList.add('rdm-missing');
+      else title.classList.remove('rdm-missing');
+    }
+  });
+}
+
+function joinRdmVals(vals){
+  if(!vals.length) return '';
+  if(vals.length===1) return vals[0];
+  return vals.slice(0,-1).join(', ')+' ve '+vals[vals.length-1];
+}
+
+function formatOrientationItem(label,val){
+  if(val==='+') return label+' (+)';
+  if(val==='-') return label+' (-)';
+  return label+' ('+val+')';
+}
+
+function buildRdmText(){
+  if(rdmSkip) return '';
+  var parts=[];
+  var kat=getRdmVals('katilim');
+  var tut=getRdmVals('tutum');
+  var psiko=getRdmVals('psikomotor');
+  var oy=getRdmVals('or_yer');
+  var oz=getRdmVals('or_zaman');
+  var ok=getRdmVals('or_kisi');
+  var odak=getRdmVals('dikkat_odak');
+  var kaydir=getRdmVals('dikkat_kaydir');
+  var dd=getRdmVals('duygudurum');
+  var da=getRdmVals('duygulanim');
+  var kh=getRdmVals('kon_hiz');
+  var km=getRdmVals('kon_mik');
+  var ds=getRdmVals('dus_surec');
+  var di=getRdmVals('dus_icer');
+  var algi=getRdmVals('algi');
+  var muh=getRdmVals('muhakeme');
+  var sui=getRdmVals('suihom');
+
+  if(kat.length && tut.length) parts.push('Görüşmeye katılımı '+joinRdmVals(kat)+', '+joinRdmVals(tut)+'.');
+  else if(kat.length) parts.push('Görüşmeye katılımı '+joinRdmVals(kat)+'.');
+  else if(tut.length) parts.push('Tutumu '+joinRdmVals(tut)+'.');
+
+  if(psiko.length) parts.push('Psikomotor aktivite '+joinRdmVals(psiko)+'.');
+
+  var orParts=[];
+  if(oy.length) orParts.push(formatOrientationItem('yer',oy[0]));
+  if(oz.length) orParts.push(formatOrientationItem('zaman',oz[0]));
+  if(ok.length) orParts.push(formatOrientationItem('kişi',ok[0]));
+  if(orParts.length) parts.push('Oryantasyon: '+orParts.join(' ')+'.');
+
+  if(odak.length && kaydir.length) parts.push('Dikkati odaklama '+joinRdmVals(odak)+', kaydırma '+joinRdmVals(kaydir)+'.');
+  else if(odak.length) parts.push('Dikkati odaklama '+joinRdmVals(odak)+'.');
+  else if(kaydir.length) parts.push('Dikkati kaydırma '+joinRdmVals(kaydir)+'.');
+
+  if(dd.length && da.length) parts.push('Duygudurum '+joinRdmVals(dd)+', duygulanım '+joinRdmVals(da)+'.');
+  else if(dd.length) parts.push('Duygudurum '+joinRdmVals(dd)+'.');
+  else if(da.length) parts.push('Duygulanım '+joinRdmVals(da)+'.');
+
+  if(kh.length && km.length) parts.push('Konuşma hızı '+joinRdmVals(kh)+', miktarı: '+joinRdmVals(km)+'.');
+  else if(kh.length) parts.push('Konuşma hızı '+joinRdmVals(kh)+'.');
+  else if(km.length) parts.push('Konuşma miktarı: '+joinRdmVals(km)+'.');
+
+  if(ds.length && di.length) parts.push('Düşünce süreci '+joinRdmVals(ds)+', içeriği '+joinRdmVals(di)+'.');
+  else if(ds.length) parts.push('Düşünce süreci '+joinRdmVals(ds)+'.');
+  else if(di.length) parts.push('Düşünce içeriği '+joinRdmVals(di)+'.');
+
+  if(algi.length) parts.push('Varsanı '+joinRdmVals(algi)+'.');
+  if(muh.length) parts.push('Muhakeme '+joinRdmVals(muh)+'.');
+  if(sui.length) parts.push('Suisid-homisid düşüncesi '+joinRdmVals(sui)+'.');
+
+  return parts.length?('RDM: '+parts.join(' ')):'';
+}
+
+function updateKonsNote(){
+  var note=document.getElementById('kons-note');
+  if(!note) return;
+  var sosyo=(document.getElementById('sosyo-input')||{}).value||'';
+  var oyku=(document.getElementById('oyku-input')||{}).value||'';
+  sosyo=sosyo.trim();
+  oyku=oyku.trim();
+  var rdmTxt=buildRdmText();
+  var out='';
+  if(sosyo) out+=sosyo+'\n\n';
+  if(oyku) out+='Öyküsü: '+oyku+'\n\n';
+  else if(sosyo) out+='Psikiyatrik hastalık öyküsü yok.\n\n';
+  if(rdmTxt) out+=rdmTxt;
+  note.textContent=out.trim();
+  // copy butonu durumu
+  refreshCopyState();
+}
+
+function refreshCopyState(){
+  var btn=document.getElementById('copy-btn');
+  if(!btn) return;
+  var sosyo=(document.getElementById('sosyo-input')||{}).value||'';
+  var ok=sosyo.trim().length>0 && rdmIsFull();
+  if(ok) btn.style.opacity='1';
+  else btn.style.opacity='0.6';
+}
+
+function copyKonsNote(){
+  var sosyoEl=document.getElementById('sosyo-input');
+  var sosyo=sosyoEl?sosyoEl.value.trim():'';
+  var msgEl=document.getElementById('copy-block-msg');
+
+  if(!sosyo){
+    if(msgEl){
+      msgEl.innerHTML='<strong>⚠ A. Hasta bilgileri boş.</strong><br>Devam etmek için sosyodemografik bilgileri girin.';
+      msgEl.style.display='block';
+    }
+    if(sosyoEl){
+      sosyoEl.classList.add('input-invalid');
+      sosyoEl.scrollIntoView({behavior:'smooth',block:'center'});
+      sosyoEl.focus();
+      setTimeout(function(){sosyoEl.classList.remove('input-invalid')},2500);
+    }
+    return;
+  }
+
+  if(!rdmIsFull()){
+    refreshRdmMissingUI();
+    var missingCount=RDM_GROUPS.filter(function(g){return !rdmGroupFilled(g.key)}).length;
+    if(msgEl){
+      msgEl.innerHTML='<strong>⚠ RDM eksik.</strong><br>'+missingCount+' başlık doldurulmadı. Tamamlayın veya C. başlığındaki <em>Gerek yok</em> butonuna basın.';
+      msgEl.style.display='block';
+    }
+    var firstMissing=document.querySelector('.rdm-title.rdm-missing');
+    if(firstMissing) firstMissing.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+
+  if(msgEl) msgEl.style.display='none';
+
+  var txt=document.getElementById('kons-note').textContent;
+  var btn=document.getElementById('copy-btn');
+  var orig=btn.innerHTML;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){
+      btn.innerHTML='<i class="ti ti-check"></i> Kopyalandı';
+      setTimeout(function(){btn.innerHTML=orig},1500);
+    }).catch(function(){fallbackCopy(txt,btn,orig)});
+  } else {
+    fallbackCopy(txt,btn,orig);
+  }
+}
+
+function fallbackCopy(txt,btn,orig){
+  var ta=document.createElement('textarea');
+  ta.value=txt;
+  ta.style.position='fixed';ta.style.left='-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try{document.execCommand('copy');btn.innerHTML='<i class="ti ti-check"></i> Kopyalandı';setTimeout(function(){btn.innerHTML=orig},1500)}catch(e){}
+  document.body.removeChild(ta);
+}
+
+function resetAll(){
+  if(!confirm('Tüm girilen bilgiler silinecek. Devam edilsin mi?')) return;
+  rdmSel={};rdmCustom={};rdmSkip=false;
+  var sb=document.getElementById('rdm-skip-btn');
+  if(sb){sb.classList.remove('selected-red');sb.textContent='Gerek yok'}
+  document.getElementById('sosyo-input').value='';
+  document.getElementById('oyku-input').value='';
+  var msgEl=document.getElementById('copy-block-msg');
+  if(msgEl) msgEl.style.display='none';
+  buildRdm();
+  updateKonsNote();
+}
+
+// init
+buildRdm();
+updateKonsNote();
+</script>
+</body>
+</html>
