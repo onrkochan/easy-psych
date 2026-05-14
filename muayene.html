@@ -303,9 +303,9 @@ function joinRdmVals(vals){
 }
 
 function formatOrientationItem(label,val){
-  if(val==='+') return label+' (+)';
-  if(val==='-') return label+' (-)';
-  return label+' ('+val+')';
+  if(val==='+') return label+'+';
+  if(val==='-') return label+'-';
+  return label+val;
 }
 
 function buildRdmText(){
@@ -339,7 +339,7 @@ function buildRdmText(){
   if(oy.length) orParts.push(formatOrientationItem('yer',oy[0]));
   if(oz.length) orParts.push(formatOrientationItem('zaman',oz[0]));
   if(ok.length) orParts.push(formatOrientationItem('kişi',ok[0]));
-  if(orParts.length) parts.push('Oryantasyon: '+orParts.join(' ')+'.');
+  if(orParts.length) parts.push('Oryantasyon: '+orParts.join(' '));
 
   if(odak.length && kaydir.length) parts.push('Dikkati odaklama '+joinRdmVals(odak)+', kaydırma '+joinRdmVals(kaydir)+'.');
   else if(odak.length) parts.push('Dikkati odaklama '+joinRdmVals(odak)+'.');
