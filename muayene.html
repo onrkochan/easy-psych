@@ -84,7 +84,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
   <div id="copy-block-msg" class="feedback-box fb-warning" style="display:none;margin-top:10px;font-size:13px"></div>
 </div>
 
-<button class="btn-secondary" onclick="resetAll()" style="margin-top:8px">Yeni muayene</button>
 <button class="btn-secondary" onclick="window.location.href='index.html'" style="margin-top:8px">Ana ekrana dön</button>
 
 </div>
@@ -413,16 +412,6 @@ function fallbackCopy(txt,btn,orig){
   document.body.removeChild(ta);
 }
 
-function resetAll(){
-  if(!confirm('Tüm girilen bilgiler silinecek. Devam edilsin mi?')) return;
-  rdmSel={};rdmCustom={};
-  document.getElementById('sosyo-input').value='';
-  document.getElementById('oyku-input').value='';
-  var msgEl=document.getElementById('copy-block-msg');
-  if(msgEl) msgEl.style.display='none';
-  buildRdm();
-  updateKonsNote();
-}
 
 // init
 buildRdm();
