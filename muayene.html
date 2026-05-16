@@ -119,10 +119,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 
 <script>
 var RDM_GROUPS=[
+  {key:'bilinc',label:'Bilinç durumu',single:false,opts:[
+    {v:'açık',tip:'Uyanık, çevresinin farkında, uyaranlara uygun yanıt verir'},
+    {v:'bulanık',tip:'Dikkat ve farkındalık dalgalı, deliryum tablolarında görülür'},
+    {v:'somnolans',tip:'Uykuya eğilim belirgin; sözel/hafif fiziksel uyaranla uyanır, uyaran kesilince uyuklar'},
+    {v:'stupor',tip:'Spontan uyanık değil; şiddetli uyaranlarla kısa süreli sınırlı yanıt alınabilir'},
+    {v:'koma',tip:'Sözel ya da ağrılı uyaranlara anlamlı yanıt alınamaz'},
+    {v:'seyri dalgalanma gösteriyor',tip:'Bilinç düzeyi gün içinde değişkenlik gösteriyor'}
+  ]},
+  {key:'or_yer',label:'Oryantasyon — yer',single:true,opts:[{v:'+'},{v:'-'}]},
+  {key:'or_zaman',label:'Oryantasyon — zaman',single:true,opts:[{v:'+'},{v:'-'}]},
+  {key:'or_kisi',label:'Oryantasyon — kişi',single:true,opts:[{v:'+'},{v:'-'}]},
+  {key:'goz_temasi',label:'Göz teması',single:true,opts:[
+    {v:'göz teması kuruyor'},
+    {v:'göz teması azalmış'},
+    {v:'göz temasından kaçınıyor'},
+    {v:'göz teması kurmuyor'}
+  ]},
+  {key:'goz_bakis',label:'Bakış niteliği',single:true,opts:[
+    {v:'bakışlar delici'},
+    {v:'bakışlar donuk'},
+    {v:'bakışlar kuşkulu'},
+    {v:'gözler açık bakış fikse',tip:'Bakış bir noktaya sabitlenmiş, katatonik tablolarda görülür'}
+  ]},
   {key:'katilim',label:'Görüşmeye katılımı',single:true,opts:[
     {v:'istekli'},{v:'isteksiz'},{v:'umursamaz'},{v:'negativist',tip:'Yapılması istenenin tersini yapma / direnme'}
   ]},
-  {key:'tutum',label:'Tutumu',single:true,opts:[
+  {key:'tutum',label:'Tutumu',single:true,optional:true,opts:[
     {v:'işbirliğine giren tutumda'},
     {v:'saldırgan tutumda',tip:'Sözel veya fiziksel agresyon'},
     {v:'savunmacı tutumda',tip:'Sorulara karşı kapalı, suçlamayı reddeder gibi'},
@@ -134,13 +157,10 @@ var RDM_GROUPS=[
   {key:'psikomotor',label:'Psikomotor aktivite',single:true,opts:[
     {v:'olağan'},{v:'artmış'},{v:'azalmış'}
   ]},
-  {key:'or_yer',label:'Oryantasyon — yer',single:true,opts:[{v:'+'},{v:'-'}]},
-  {key:'or_zaman',label:'Oryantasyon — zaman',single:true,opts:[{v:'+'},{v:'-'}]},
-  {key:'or_kisi',label:'Oryantasyon — kişi',single:true,opts:[{v:'+'},{v:'-'}]},
-  {key:'dikkat_odak',label:'Dikkati odaklama',single:true,opts:[
+  {key:'dikkat_odak',label:'Dikkati odaklama',single:true,optional:true,opts:[
     {v:'normal'},{v:'azalmış'}
   ]},
-  {key:'dikkat_kaydir',label:'Dikkati kaydırma',single:true,opts:[
+  {key:'dikkat_kaydir',label:'Dikkati kaydırma',single:true,optional:true,opts:[
     {v:'normal'},{v:'güçlükle'}
   ]},
   {key:'duygudurum',label:'Duygudurum',single:false,opts:[
@@ -169,8 +189,8 @@ var RDM_GROUPS=[
     {v:'utanç'},
     {v:'suçluluk'}
   ]},
-  {key:'kon_hiz',label:'Konuşma hızı',single:true,opts:[
-    {v:'olağan'},{v:'artmış'},{v:'azalmış'},{v:'değerlendirilemedi'}
+  {key:'kon_hiz',label:'Konuşma hızı',single:true,note:'Eğer trakeostomi ya da organik sebeple değerlendirilemediyse açıklama olarak belirtiniz',opts:[
+    {v:'olağan'},{v:'artmış'},{v:'azalmış'}
   ]},
   {key:'kon_mik',label:'Konuşma miktarı',single:false,opts:[
     {v:'olağan'},{v:'artmış'},{v:'azalmış'},{v:'değerlendirilemedi'},
@@ -180,14 +200,14 @@ var RDM_GROUPS=[
     {v:'aşırı yüksek sesli'},
     {v:'aşırı alçak sesli'}
   ]},
-  {key:'dus_surec',label:'Düşünce süreci',single:false,opts:[
+  {key:'dus_surec',label:'Düşünce süreci',single:false,optional:true,opts:[
     {v:'sekonder'},
     {v:'somutlaşmış',tip:'Soyut düşünce kaybı'},
     {v:'ilişkisiz yanıt'},
     {v:'fikir uçuşması',tip:'Çağrışımlar hızla değişir'},
     {v:'klang çağrışım',tip:'Sözcüklerin ses benzerliğine göre çağrışım'}
   ]},
-  {key:'dus_icer',label:'Düşünce içeriği',single:false,opts:[
+  {key:'dus_icer',label:'Düşünce içeriği',single:false,optional:true,opts:[
     {v:'hezeyan'},
     {v:'hipokondriyazis',tip:'Hastalık kapma kaygısı'},
     {v:'obsesyon'},
@@ -218,13 +238,16 @@ function buildRdm(){
   if(!c) return;
   c.innerHTML='';
   RDM_GROUPS.forEach(function(g){
-    var html='<div class="rdm-group"><div class="rdm-title">'+g.label+(g.single?'':' <span style="color:#888;font-weight:400">(çoklu)</span>')+'</div><div class="rdm-opts">';
+    var optNote=g.optional?' <span style="color:#999;font-weight:400;font-size:11px">(gerek yok ise işaretlenmeyebilir)</span>':'';
+    var multiNote=g.single?'':' <span style="color:#888;font-weight:400">(çoklu)</span>';
+    var noteHtml=g.note?'<div style="font-size:11px;color:#888;font-style:italic;margin-top:2px">'+g.note+'</div>':'';
+    var html='<div class="rdm-group"><div class="rdm-title">'+g.label+multiNote+optNote+'</div>'+noteHtml+'<div class="rdm-opts">';
     g.opts.forEach(function(o){
       var tipAttr=o.tip?' data-tip="'+o.tip.replace(/"/g,'&quot;')+'"':'';
       html+='<button type="button" class="rdm-opt" data-group="'+g.key+'" data-val="'+o.v.replace(/"/g,'&quot;')+'"'+tipAttr+' onclick="toggleRdm(\''+g.key+'\',\''+o.v.replace(/'/g,"\\'")+'\','+g.single+')">'+o.v+'</button>';
     });
     var customVal=rdmCustom[g.key]||'';
-    html+='<input type="text" class="rdm-other-input" placeholder="diğer:" value="'+customVal.replace(/"/g,'&quot;')+'" oninput="setRdmCustom(\''+g.key+'\',this.value)">';
+    html+='<input type="text" class="rdm-other-input" placeholder="diğer:" value="'+customVal.replace(/"/g,'&quot;')+'" oninput="setRdmCustom(\''+g.key+'\',this.value);this.style.background=this.value.trim()?\'#ffe0b2\':\'#fafaf8\'"'+(customVal.trim()?' style="background:#ffe0b2"':'')+'>';
     html+='</div></div>';
     c.innerHTML+=html;
   });
@@ -267,12 +290,23 @@ function getRdmVals(key){
   return vals;
 }
 
+function isOnlyCustom(key){
+  var btns=(rdmSel[key]||[]);
+  var custom=(rdmCustom[key]||'').trim();
+  return btns.length===0 && custom.length>0;
+}
+
+function getCustomText(key){
+  return (rdmCustom[key]||'').trim();
+}
+
 function rdmGroupFilled(key){
   return getRdmVals(key).length>0;
 }
 
 function rdmIsFull(){
   for(var i=0;i<RDM_GROUPS.length;i++){
+    if(RDM_GROUPS[i].optional) continue;
     if(!rdmGroupFilled(RDM_GROUPS[i].key)) return false;
   }
   return true;
@@ -285,9 +319,10 @@ function refreshRdmMissingUI(){
     var anyOpt=group.querySelector('.rdm-opt');
     if(anyOpt) key=anyOpt.getAttribute('data-group');
     if(!key) return;
+    var isOptional=RDM_GROUPS.some(function(g){return g.key===key && g.optional;});
     var filled=rdmGroupFilled(key);
     if(title){
-      if(!filled) title.classList.add('rdm-missing');
+      if(!filled && !isOptional) title.classList.add('rdm-missing');
       else title.classList.remove('rdm-missing');
     }
   });
@@ -307,12 +342,14 @@ function formatOrientationItem(label,val){
 
 function buildRdmText(){
   var parts=[];
-  var kat=getRdmVals('katilim');
-  var tut=getRdmVals('tutum');
-  var psiko=getRdmVals('psikomotor');
+  var bilinc=getRdmVals('bilinc');
   var oy=getRdmVals('or_yer');
   var oz=getRdmVals('or_zaman');
   var ok=getRdmVals('or_kisi');
+  var goz=getRdmVals('goz_temasi').concat(getRdmVals('goz_bakis'));
+  var kat=getRdmVals('katilim');
+  var tut=getRdmVals('tutum');
+  var psiko=getRdmVals('psikomotor');
   var odak=getRdmVals('dikkat_odak');
   var kaydir=getRdmVals('dikkat_kaydir');
   var dd=getRdmVals('duygudurum');
@@ -325,37 +362,104 @@ function buildRdmText(){
   var muh=getRdmVals('muhakeme');
   var sui=getRdmVals('suihom');
 
-  if(kat.length && tut.length) parts.push('Görüşmeye katılımı '+joinRdmVals(kat)+', '+joinRdmVals(tut)+'.');
-  else if(kat.length) parts.push('Görüşmeye katılımı '+joinRdmVals(kat)+'.');
-  else if(tut.length) parts.push('Tutumu '+joinRdmVals(tut)+'.');
+  // Bilinç, oryantasyon, göz teması, katılım — tek akıcı cümle
+  var headParts=[];
+  if(bilinc.length){
+    if(isOnlyCustom('bilinc')) headParts.push(getCustomText('bilinc'));
+    else headParts.push('Bilinci '+joinRdmVals(bilinc));
+  }
+  // Oryantasyon — herhangi birinde diğer yazılmışsa tümünü raw ver
+  var orAllCustom=isOnlyCustom('or_yer')||isOnlyCustom('or_zaman')||isOnlyCustom('or_kisi');
+  if(orAllCustom){
+    var orCustomParts=[];
+    if(getCustomText('or_yer')) orCustomParts.push(getCustomText('or_yer'));
+    if(getCustomText('or_zaman')) orCustomParts.push(getCustomText('or_zaman'));
+    if(getCustomText('or_kisi')) orCustomParts.push(getCustomText('or_kisi'));
+    if(orCustomParts.length) headParts.push(orCustomParts.join(' '));
+  } else {
+    var orParts=[];
+    if(oy.length) orParts.push(formatOrientationItem('yer',oy[0]));
+    if(oz.length) orParts.push(formatOrientationItem('zaman',oz[0]));
+    if(ok.length) orParts.push(formatOrientationItem('kişi',ok[0]));
+    if(orParts.length) headParts.push('oryantasyonu '+orParts.join(' '));
+  }
+  // Göz teması
+  var gozNoButtons=(rdmSel['goz_temasi']||[]).length===0&&(rdmSel['goz_bakis']||[]).length===0;
+  if(goz.length){
+    if(gozNoButtons) headParts.push([getCustomText('goz_temasi'),getCustomText('goz_bakis')].filter(Boolean).join(' '));
+    else headParts.push(joinRdmVals(goz));
+  }
+  if(kat.length){
+    if(isOnlyCustom('katilim')) headParts.push(getCustomText('katilim'));
+    else headParts.push('görüşmeye katılımı '+joinRdmVals(kat));
+  }
+  if(headParts.length){
+    var sentence=headParts[0];
+    for(var i=1;i<headParts.length;i++){
+      // Sadece bilinçten sonra virgül, geri kalanı boşlukla birleştir
+      if(i===1 && bilinc.length) sentence+=', '+headParts[i];
+      else sentence+=' '+headParts[i];
+    }
+    parts.push(sentence+'.');
+  }
 
-  if(psiko.length) parts.push('Psikomotor aktivite '+joinRdmVals(psiko)+'.');
+  if(tut.length){
+    if(isOnlyCustom('tutum')) parts.push(getCustomText('tutum'));
+    else{var tv=joinRdmVals(tut);parts.push(tv.charAt(0).toUpperCase()+tv.slice(1)+'.');}
+  }
+  if(psiko.length){
+    if(isOnlyCustom('psikomotor')) parts.push(getCustomText('psikomotor'));
+    else parts.push('Psikomotor aktivite '+joinRdmVals(psiko)+'.');
+  }
 
-  var orParts=[];
-  if(oy.length) orParts.push(formatOrientationItem('yer',oy[0]));
-  if(oz.length) orParts.push(formatOrientationItem('zaman',oz[0]));
-  if(ok.length) orParts.push(formatOrientationItem('kişi',ok[0]));
-  if(orParts.length) parts.push('Oryantasyon: '+orParts.join(' '));
+  if(odak.length || kaydir.length){
+    if(isOnlyCustom('dikkat_odak')&&isOnlyCustom('dikkat_kaydir')){parts.push(getCustomText('dikkat_odak'));parts.push(getCustomText('dikkat_kaydir'));}
+    else if(isOnlyCustom('dikkat_odak')&&!kaydir.length) parts.push(getCustomText('dikkat_odak'));
+    else if(isOnlyCustom('dikkat_kaydir')&&!odak.length) parts.push(getCustomText('dikkat_kaydir'));
+    else if(odak.length && kaydir.length) parts.push('Dikkati odaklama '+joinRdmVals(odak)+', kaydırma '+joinRdmVals(kaydir)+'.');
+    else if(odak.length) parts.push('Dikkati odaklama '+joinRdmVals(odak)+'.');
+    else if(kaydir.length) parts.push('Dikkati kaydırma '+joinRdmVals(kaydir)+'.');
+  }
 
-  if(odak.length && kaydir.length) parts.push('Dikkati odaklama '+joinRdmVals(odak)+', kaydırma '+joinRdmVals(kaydir)+'.');
-  else if(odak.length) parts.push('Dikkati odaklama '+joinRdmVals(odak)+'.');
-  else if(kaydir.length) parts.push('Dikkati kaydırma '+joinRdmVals(kaydir)+'.');
+  if(dd.length || da.length){
+    if(isOnlyCustom('duygudurum')&&isOnlyCustom('duygulanim')){parts.push(getCustomText('duygudurum'));parts.push(getCustomText('duygulanim'));}
+    else if(isOnlyCustom('duygudurum')&&!da.length) parts.push(getCustomText('duygudurum'));
+    else if(isOnlyCustom('duygulanim')&&!dd.length) parts.push(getCustomText('duygulanim'));
+    else if(dd.length && da.length) parts.push('Duygudurum '+joinRdmVals(dd)+', duygulanım '+joinRdmVals(da)+'.');
+    else if(dd.length) parts.push('Duygudurum '+joinRdmVals(dd)+'.');
+    else if(da.length) parts.push('Duygulanım '+joinRdmVals(da)+'.');
+  }
 
-  if(dd.length && da.length) parts.push('Duygudurum '+joinRdmVals(dd)+', duygulanım '+joinRdmVals(da)+'.');
-  else if(dd.length) parts.push('Duygudurum '+joinRdmVals(dd)+'.');
-  else if(da.length) parts.push('Duygulanım '+joinRdmVals(da)+'.');
+  if(kh.length || km.length){
+    if(isOnlyCustom('kon_hiz')&&isOnlyCustom('kon_mik')){parts.push(getCustomText('kon_hiz'));parts.push(getCustomText('kon_mik'));}
+    else if(isOnlyCustom('kon_hiz')&&!km.length) parts.push(getCustomText('kon_hiz'));
+    else if(isOnlyCustom('kon_mik')&&!kh.length) parts.push(getCustomText('kon_mik'));
+    else if(kh.length && km.length) parts.push('Konuşma hızı '+joinRdmVals(kh)+', miktarı: '+joinRdmVals(km)+'.');
+    else if(kh.length) parts.push('Konuşma hızı '+joinRdmVals(kh)+'.');
+    else if(km.length) parts.push('Konuşma miktarı: '+joinRdmVals(km)+'.');
+  }
 
-  if(kh.length && km.length) parts.push('Konuşma hızı '+joinRdmVals(kh)+', miktarı: '+joinRdmVals(km)+'.');
-  else if(kh.length) parts.push('Konuşma hızı '+joinRdmVals(kh)+'.');
-  else if(km.length) parts.push('Konuşma miktarı: '+joinRdmVals(km)+'.');
+  if(ds.length || di.length){
+    if(isOnlyCustom('dus_surec')&&isOnlyCustom('dus_icer')){parts.push(getCustomText('dus_surec'));parts.push(getCustomText('dus_icer'));}
+    else if(isOnlyCustom('dus_surec')&&!di.length) parts.push(getCustomText('dus_surec'));
+    else if(isOnlyCustom('dus_icer')&&!ds.length) parts.push(getCustomText('dus_icer'));
+    else if(ds.length && di.length) parts.push('Düşünce süreci '+joinRdmVals(ds)+', içeriği '+joinRdmVals(di)+'.');
+    else if(ds.length) parts.push('Düşünce süreci '+joinRdmVals(ds)+'.');
+    else if(di.length) parts.push('Düşünce içeriği '+joinRdmVals(di)+'.');
+  }
 
-  if(ds.length && di.length) parts.push('Düşünce süreci '+joinRdmVals(ds)+', içeriği '+joinRdmVals(di)+'.');
-  else if(ds.length) parts.push('Düşünce süreci '+joinRdmVals(ds)+'.');
-  else if(di.length) parts.push('Düşünce içeriği '+joinRdmVals(di)+'.');
-
-  if(algi.length) parts.push('Varsanı '+joinRdmVals(algi)+'.');
-  if(muh.length) parts.push('Muhakeme '+joinRdmVals(muh)+'.');
-  if(sui.length) parts.push('Suisid-homisid düşüncesi '+joinRdmVals(sui)+'.');
+  if(algi.length){
+    if(isOnlyCustom('algi')) parts.push(getCustomText('algi'));
+    else parts.push('Varsanı '+joinRdmVals(algi)+'.');
+  }
+  if(muh.length){
+    if(isOnlyCustom('muhakeme')) parts.push(getCustomText('muhakeme'));
+    else parts.push('Muhakeme '+joinRdmVals(muh)+'.');
+  }
+  if(sui.length){
+    if(isOnlyCustom('suihom')) parts.push(getCustomText('suihom'));
+    else parts.push('Suisid-homisid düşüncesi '+joinRdmVals(sui)+'.');
+  }
 
   return parts.length?('RDM: '+parts.join(' ')):'';
 }
