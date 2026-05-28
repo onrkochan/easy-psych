@@ -225,6 +225,10 @@ var RDM_GROUPS=[
     {v:'bozulmuş'},
     {v:'sosyal muhakeme yerinde'}
   ]},
+  {key:'gercek_deg',label:'Gerçeği değerlendirme',single:true,optional:true,noCustom:true,opts:[
+    {v:'yerinde'},
+    {v:'bozulmuş'}
+  ]},
   {key:'suihom',label:'Suisid-homisid düşüncesi',single:true,opts:[
     {v:'yok'},{v:'var'}
   ]}
@@ -247,7 +251,9 @@ function buildRdm(){
       html+='<button type="button" class="rdm-opt" data-group="'+g.key+'" data-val="'+o.v.replace(/"/g,'&quot;')+'"'+tipAttr+' onclick="toggleRdm(\''+g.key+'\',\''+o.v.replace(/'/g,"\\'")+'\','+g.single+')">'+o.v+'</button>';
     });
     var customVal=rdmCustom[g.key]||'';
-    html+='<input type="text" class="rdm-other-input" placeholder="diğer:" value="'+customVal.replace(/"/g,'&quot;')+'" oninput="setRdmCustom(\''+g.key+'\',this.value);this.style.background=this.value.trim()?\'#ffe0b2\':\'#fafaf8\'"'+(customVal.trim()?' style="background:#ffe0b2"':'')+'>';
+    if(!g.noCustom){
+      html+='<input type="text" class="rdm-other-input" placeholder="diğer:" value="'+customVal.replace(/"/g,'&quot;')+'" oninput="setRdmCustom(\''+g.key+'\',this.value);this.style.background=this.value.trim()?\'#ffe0b2\':\'#fafaf8\'"'+(customVal.trim()?' style="background:#ffe0b2"':'')+'>';
+    }
     html+='</div></div>';
     c.innerHTML+=html;
   });
@@ -359,6 +365,7 @@ function buildRdmText(){
   var ds=getRdmVals('dus_surec');
   var di=getRdmVals('dus_icer');
   var algi=getRdmVals('algi');
+  var gd=getRdmVals('gercek_deg');
   var muh=getRdmVals('muhakeme');
   var sui=getRdmVals('suihom');
 
@@ -452,10 +459,22 @@ function buildRdmText(){
     if(isOnlyCustom('algi')) parts.push(getCustomText('algi'));
     else parts.push('Varsanı '+joinRdmVals(algi)+'.');
   }
-  if(muh.length){
-    if(isOnlyCustom('muhakeme')) parts.push(getCustomText('muhakeme'));
-    else parts.push('Muhakeme '+joinRdmVals(muh)+'.');
+
+  // Muhakeme + gerçeği değerlendirme — birlikte raporlanır
+  if(muh.length || gd.length){
+    if(isOnlyCustom('muhakeme')&&isOnlyCustom('gercek_deg')){parts.push(getCustomText('muhakeme'));parts.push(getCustomText('gercek_deg'));}
+    else if(isOnlyCustom('muhakeme')&&!gd.length) parts.push(getCustomText('muhakeme'));
+    else if(isOnlyCustom('gercek_deg')&&!muh.length) parts.push(getCustomText('gercek_deg'));
+    else if(muh.length && gd.length){
+      var muhStr=joinRdmVals(muh);
+      var gdStr=joinRdmVals(gd);
+      if(muhStr==='yerinde' && gdStr==='yerinde') parts.push('Muhakeme ve gerçeği değerlendirme yerinde.');
+      else parts.push('Muhakeme '+muhStr+', gerçeği değerlendirme '+gdStr+'.');
+    }
+    else if(muh.length) parts.push('Muhakeme '+joinRdmVals(muh)+'.');
+    else if(gd.length) parts.push('Gerçeği değerlendirme '+joinRdmVals(gd)+'.');
   }
+
   if(sui.length){
     if(isOnlyCustom('suihom')) parts.push(getCustomText('suihom'));
     else parts.push('Suisid-homisid düşüncesi '+joinRdmVals(sui)+'.');
