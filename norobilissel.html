@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSM-5 · Deliryum ve Nörobilişsel Bozukluklar — Tanı Ölçütü Listesi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F1E8;
+    --paper2:#EFEBDF;
+    --card:#FCFBF6;
+    --ink:#1E211A;
+    --ink2:#3C4135;
+    --muted:#71756A;
+    --line:#E0DACB;
+    --line2:#D2CBB8;
+
+    --met:#0E6E5E;       --met-bg:#E2EFEA;
+    --notmet:#AC4631;    --notmet-bg:#F3E3DD;
+    --inc:#947314;       --inc-bg:#F3EBD3;
+
+    --g-del:#6E5BA6;     --g-del-bg:#ECE7F4;
+    --g-core:#1F7A6B;    --g-core-bg:#E2EFEB;
+    --g-eti:#A8772A;     --g-eti-bg:#F1E8D4;
+
+    --shadow:0 1px 2px rgba(40,35,15,.04), 0 8px 24px -12px rgba(40,35,15,.18);
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--paper);
+    color:var(--ink);
+    font-family:"IBM Plex Sans",sans-serif;
+    font-size:15px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 12% -5%, rgba(110,91,166,.06), transparent 40%),radial-gradient(circle at 92% 0%, rgba(31,122,107,.06), transparent 42%);
+    background-attachment:fixed;
+  }
+  .topbar{height:5px;background:linear-gradient(90deg,var(--g-del),var(--g-core) 50%,var(--g-eti));}
+
+  header.head{
+    max-width:920px;margin:0 auto;padding:30px 22px 14px;
+  }
+  .kicker{
+    font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--g-core);font-weight:600;margin-bottom:6px;
+  }
+  h1{
+    font-family:"Fraunces",serif;font-weight:600;font-size:clamp(26px,5vw,38px);
+    line-height:1.08;margin:0 0 8px;letter-spacing:-.01em;color:var(--ink);
+  }
+  .sub{color:var(--ink2);max-width:62ch;font-size:14.5px;}
+  .sub em{font-style:italic;color:var(--muted);}
+
+  .summary{
+    display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 4px;
+  }
+  .chip{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
+    padding:5px 11px;border-radius:999px;border:1px solid var(--line2);
+    background:var(--card);display:inline-flex;align-items:center;gap:7px;color:var(--ink2);
+  }
+  .chip .dot{width:8px;height:8px;border-radius:50%;}
+  .chip.met .dot{background:var(--met);}
+  .chip.notmet .dot{background:var(--notmet);}
+  .chip.inc .dot{background:var(--inc);}
+  .chip b{font-size:13px;}
+
+  .actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+  .btn{
+    font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:13px;cursor:pointer;
+    padding:8px 14px;border-radius:10px;border:1px solid var(--line2);
+    background:var(--card);color:var(--ink2);transition:.15s;
+  }
+  .btn:hover{border-color:var(--ink2);color:var(--ink);}
+  .btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .btn.primary:hover{background:#000;}
+
+  /* sticky nav */
+  nav.jump{
+    position:sticky;top:0;z-index:30;background:var(--paper);
+    border-bottom:1px solid var(--line);backdrop-filter:saturate(1.1);
+  }
+  .jump-inner{
+    max-width:920px;margin:0 auto;padding:9px 16px;
+    display:flex;gap:7px;overflow-x:auto;scrollbar-width:thin;
+  }
+  .jchip{
+    flex:0 0 auto;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:999px;
+    border:1px solid var(--line2);background:var(--card);color:var(--ink2);
+    text-decoration:none;white-space:nowrap;cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+  }
+  .jchip:hover{border-color:var(--ink2);}
+  .jchip .gd{width:7px;height:7px;border-radius:50%;}
+
+  main{max-width:920px;margin:0 auto;padding:6px 16px 70px;}
+
+  .group-title{
+    font-family:"Fraunces",serif;font-style:italic;font-weight:500;
+    font-size:18px;color:var(--ink2);margin:26px 4px 12px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .group-title::before{content:"";width:26px;height:2px;background:var(--gc,var(--ink2));border-radius:2px;}
+  .group-note{font-size:12.5px;color:var(--muted);margin:-6px 4px 14px;}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gc,var(--line2));
+    border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden;
+    scroll-margin-top:62px;
+  }
+  .card-head{
+    display:flex;align-items:flex-start;gap:12px;padding:15px 17px;cursor:pointer;
+    user-select:none;
+  }
+  .card-head:hover{background:rgba(0,0,0,.012);}
+  .ch-main{flex:1;min-width:0;}
+  .ch-title{font-family:"Fraunces",serif;font-weight:600;font-size:18px;line-height:1.15;color:var(--ink);}
+  .ch-note{font-size:12.5px;color:var(--muted);margin-top:3px;}
+  .ch-icd{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--gc,var(--ink2));margin-top:5px;letter-spacing:.01em;line-height:1.4;}
+  .caret{color:var(--muted);font-size:13px;transition:.2s;margin-top:5px;}
+  .card.collapsed .caret{transform:rotate(-90deg);}
+
+  .status{
+    flex:0 0 auto;font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;
+    padding:6px 11px;border-radius:999px;display:inline-flex;align-items:center;gap:7px;
+    border:1px solid;white-space:nowrap;max-width:46vw;
+  }
+  .status .sd{width:8px;height:8px;border-radius:50%;flex:0 0 auto;}
+  .status.met{color:var(--met);background:var(--met-bg);border-color:#bcdcd2;}
+  .status.met .sd{background:var(--met);}
+  .status.notmet{color:var(--notmet);background:var(--notmet-bg);border-color:#e6c7bd;}
+  .status.notmet .sd{background:var(--notmet);}
+  .status.inc{color:var(--inc);background:var(--inc-bg);border-color:#e3d3a4;}
+  .status.inc .sd{background:var(--inc);}
+  .status .lvl{font-weight:600;}
+
+  .card-body{padding:2px 17px 16px;border-top:1px solid var(--line);}
+  .card.collapsed .card-body{display:none;}
+
+  .crit{
+    display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px dashed var(--line);
+  }
+  .crit:last-child{border-bottom:none;}
+  .crit-label{flex:1;font-size:14px;color:var(--ink2);line-height:1.45;}
+  .crit-label .hint{display:block;font-size:12px;color:var(--muted);margin-top:2px;font-style:italic;}
+
+  .toggle{flex:0 0 auto;display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden;background:var(--paper2);}
+  .tg{
+    font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:12.5px;
+    padding:6px 13px;border:none;background:transparent;color:var(--muted);cursor:pointer;transition:.12s;
+  }
+  .tg:first-child{border-right:1px solid var(--line2);}
+  .tg.tg-var.on{background:var(--met);color:#fff;}
+  .tg.tg-yok.on{background:var(--notmet);color:#fff;}
+  .tg:not(.on):hover{color:var(--ink);background:rgba(0,0,0,.03);}
+
+  /* logic group */
+  .grp{margin:6px 0;}
+  .grp-head{
+    display:flex;align-items:center;gap:8px;padding:8px 0 4px;font-size:13.5px;font-weight:600;color:var(--ink2);
+  }
+  .logic{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;letter-spacing:.04em;
+    padding:2px 7px;border-radius:6px;background:var(--g-eti-bg);color:var(--g-eti);border:1px solid #e3d2ac;flex:0 0 auto;
+  }
+  .grp-children{
+    border-left:2px solid var(--line2);margin-left:4px;padding-left:13px;
+  }
+  .grp-children .crit{padding:9px 0;}
+  .grp-children .crit-label{font-size:13.5px;}
+
+  /* level block */
+  .levelbox{
+    margin-top:12px;padding:11px 13px;border:1px dashed var(--line2);border-radius:11px;background:var(--paper2);
+  }
+  .levelbox .lb-title{font-size:12.5px;font-weight:600;color:var(--ink2);margin-bottom:2px;}
+
+  /* specifiers */
+  .specs{margin-top:13px;padding-top:11px;border-top:1px solid var(--line);}
+  .specs-h{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+  .spec-row{display:flex;gap:8px;align-items:center;margin-bottom:7px;flex-wrap:wrap;}
+  .spec-lbl{font-size:12.5px;font-weight:600;color:var(--ink2);min-width:74px;}
+  .spec-opts{display:flex;gap:6px;flex-wrap:wrap;}
+  .sopt{
+    font-size:12px;font-weight:500;padding:4px 10px;border-radius:999px;border:1px solid var(--line2);
+    background:var(--card);color:var(--ink2);cursor:pointer;transition:.12s;
+  }
+  .sopt:hover{border-color:var(--ink2);}
+  .sopt.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .spec-desc{font-size:12.5px;color:var(--ink2);line-height:1.5;margin:4px 0 9px;padding:9px 12px;border-radius:9px;background:var(--paper2);border-left:3px solid var(--g-core);display:none;}
+  .spec-desc.show{display:block;}
+  .spec-desc::before{content:"↳ ";color:var(--g-core);font-weight:700;}
+
+  .card-foot{display:flex;justify-content:flex-end;margin-top:10px;}
+  .mini{font-size:11.5px;font-weight:600;color:var(--muted);background:none;border:none;cursor:pointer;padding:4px 6px;}
+  .mini:hover{color:var(--notmet);}
+
+  footer{max-width:920px;margin:0 auto;padding:0 22px 50px;}
+  .disclaimer{
+    font-size:12px;color:var(--muted);line-height:1.6;border-top:1px solid var(--line);padding-top:16px;
+  }
+  .disclaimer strong{color:var(--ink2);}
+
+  @media (max-width:560px){
+    .card-head{flex-wrap:wrap;}
+    .status{max-width:100%;order:3;width:100%;justify-content:center;margin-top:4px;}
+    .crit{flex-wrap:wrap;}
+    .toggle{margin-top:2px;}
+  }
+
+  @media print{
+    body{background:#fff;}
+    nav.jump,.actions,.btn,.caret,.mini,.topbar{display:none !important;}
+    .card,.summary,.chip,.status,.tg,.sopt{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .card.collapsed .card-body{display:block !important;}
+    .card{box-shadow:none;break-inside:avoid;}
+    header.head{padding-top:6px;}
+  }
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+
+<header class="head">
+  <div class="kicker">DSM-5 · Tanı Ölçütü Listesi</div>
+  <h1>Deliryum ve Nörobilişsel Bozukluklar</h1>
+  <p class="sub">Her ölçüt için <b>Var / Yok</b> seçin; her tanının ölçütlerinin karşılanıp karşılanmadığı anlık olarak gösterilir. <em>Türkçe DSM-5 özetinden uyarlanmış ölçütler.</em></p>
+  <div class="summary" id="summary"></div>
+  <div class="actions">
+    <button class="btn" id="toggleAll">Tümünü daralt</button>
+    <button class="btn" id="resetAll">Tümünü sıfırla</button>
+  </div>
+</header>
+
+<nav class="jump"><div class="jump-inner" id="jumpNav"></div></nav>
+
+<main id="app"></main>
+
+<footer>
+  <p class="disclaimer">
+    <strong>Uyarı:</strong> Bu araç, yüklenen Türkçe DSM-5 özetindeki tanı ölçütlerinden derlenmiş bir klinik karar-destek listesidir; tam klinik değerlendirmenin, öykü-muayene-laboratuvarın ve klinik yargının yerini almaz. Belirleyiciler (alt tip, gidiş, ağırlık, davranış, olası/olabilir) opsiyoneldir ve ölçüt durumunu etkilemez. Kesin tanı ve kodlama için resmî DSM-5 / DSM-5-TR metnine başvurun.
+  </p>
+</footer>
+
+<script>
+const D = [
+  /* ===== DELIRYUM ===== */
+  {
+    id:'del', group:'Deliryum', gc:'--g-del', name:'Deliryum',
+    note:'A–E ölçütlerinin tümü gereklidir.',
+    req:[
+      {t:'leaf', id:'del_A', label:'A. Dikkat (yönlendirme, odaklama, sürdürme, kaydırma) ve çevrenin ayrımında olma (yönelim) bozukluğu vardır.'},
+      {t:'leaf', id:'del_B', label:'B. Kısa sürede (saatler–günler) gelişir; temel dikkat/ayrımında olma düzeyinde değişiklik vardır ve <b>ağırlığı gün içinde dalgalanır.</b>'},
+      {t:'leaf', id:'del_C', label:'C. Bilişte ek bir bozukluk vardır (bellek, yönelim, dil, görsel-uzamsal yeti ya da algı).'},
+      {t:'leaf', id:'del_D', label:'D. A ve C; var olan/gelişmekte olan başka bir nörobilişsel bozuklukla daha iyi açıklanamaz ve koma gibi ileri derecede azalmış uyanıklık bağlamında ortaya çıkmamaktadır.'},
+      {t:'leaf', id:'del_E', label:'E. Öykü/muayene/laboratuvarda; bozukluğun başka bir sağlık durumu, madde entoksikasyonu/yoksunluğu, toksin ya da çoğul etkene bağlı olduğuna ilişkin kanıt vardır.'},
+    ],
+    specs:[
+      {id:'del_sub', lbl:'Alt tip', opts:['Madde entoksikasyonu','Madde yoksunluğu','İlacın yol açtığı','Başka sağlık durumu','Çoğul etken']},
+      {id:'del_course', lbl:'Gidiş', opts:['Akut','Süregiden']},
+      {id:'del_act', lbl:'Ruhsal-motor', opts:['Hiperaktif','Hipoaktif','Karışık']},
+    ]
+  },
+
+  /* ===== ÇEKİRDEK NBB ===== */
+  {
+    id:'maj', group:'Çekirdek NBB', gc:'--g-core', name:'Majör Nörobilişsel Bozukluk (Demans)',
+    note:'A–D ölçütlerinin tümü gereklidir.',
+    req:[
+      {t:'and', label:'A. Bir/birden çok bilişsel alanda (karmaşık dikkat, yerine getirme işlevi, öğrenme-bellek, dil, algısal-motor, toplumsal biliş) önceki düzeye göre BELİRGİN gerileme — her ikisi:', children:[
+        {t:'leaf', id:'maj_A1', label:'A1. Kişi, bilgisi olan biri ya da klinisyen belirgin bilişsel gerilemeden kaygı duymaktadır.'},
+        {t:'leaf', id:'maj_A2', label:'A2. Nöropsikolojik test (yeğlenen) ya da nicel klinik değerlendirme ile belgelenmiş, önemli ölçüde bozulma vardır.'},
+      ]},
+      {t:'leaf', id:'maj_B', label:'B. Bilişsel eksiklikler günlük yaşamda bağımsızlığı GÜÇLEŞTİRİR (en azından fatura ödeme, ilaçları doğru kullanma gibi karmaşık etkinliklerde yardım gerekir).'},
+      {t:'leaf', id:'maj_C', label:'C. Bilişsel eksiklikler yalnızca deliryum bağlamında ortaya çıkmamaktadır.'},
+      {t:'leaf', id:'maj_D', label:'D. Bilişsel eksiklikler başka bir ruhsal bozuklukla (örn. majör depresyon, şizofreni) daha iyi açıklanamaz.'},
+    ],
+    specs:[
+      {id:'maj_sev', lbl:'Ağırlık', opts:['Ağır olmayan (araçsal GYA)','Orta (temel GYA)','Ağır (tam bağımlı)'], desc:{
+        'Ağır olmayan (araçsal GYA)':'Günlük yaşamın karmaşık (araçsal) etkinliklerinde güçlük — para/fatura yönetimi, alışveriş, ilaçların düzenlenmesi, ev işleri. Temel öz bakım korunur; kişi bir miktar uyarlama ile bağımsız yaşayabilir.',
+        'Orta (temel GYA)':'Temel günlük yaşam etkinliklerinde güçlük — beslenme, giyinme, banyo, kişisel bakım. Öz bakım için gözetim/yardım gerekir.',
+        'Ağır (tam bağımlı)':'Tam bağımlıdır. Tüm temel etkinlikler için yardım gerekir; sıklıkla idrar/gaita inkontinansı, kendi başına beslenememe ve yatağa bağımlılık eşlik eder.'
+      }},
+      {id:'maj_beh', lbl:'Davranış', opts:['Davranış bozukluğu ile gitmeyen','Davranış bozukluğu ile giden']},
+    ]
+  },
+  {
+    id:'mild', group:'Çekirdek NBB', gc:'--g-core', name:'Hafif Bilişsel Bozukluk', icd:'ICD-10: F06.7',
+    note:'A–D ölçütlerinin tümü gereklidir.',
+    req:[
+      {t:'and', label:'A. Bir/birden çok bilişsel alanda önceki düzeye göre ÇOK BELİRGİN OLMAYAN gerileme — her ikisi:', children:[
+        {t:'leaf', id:'mild_A1', label:'A1. Kişi, bilgisi olan biri ya da klinisyen hafif bilişsel gerilemeden kaygı duymaktadır.'},
+        {t:'leaf', id:'mild_A2', label:'A2. Nöropsikolojik test ya da nicel klinik değerlendirme ile belgelenmiş, çok önemli ölçüde OLMAYAN bozulma vardır.'},
+      ]},
+      {t:'leaf', id:'mild_B', label:'B. Bilişsel eksiklikler bağımsızlığı ENGELLEMEZ (karmaşık etkinlikler yapılabilir ancak daha çok çaba, ödünleme ya da uyarlama gerekir).'},
+      {t:'leaf', id:'mild_C', label:'C. Bilişsel eksiklikler yalnızca deliryum bağlamında ortaya çıkmamaktadır.'},
+      {t:'leaf', id:'mild_D', label:'D. Bilişsel eksiklikler başka bir ruhsal bozuklukla daha iyi açıklanamaz.'},
+    ],
+    specs:[
+      {id:'mild_beh', lbl:'Davranış', opts:['Davranış bozukluğu ile gitmeyen','Davranış bozukluğu ile giden']},
+    ]
+  },
+
+  /* ===== ETİYOLOJİK ALT TİPLER ===== */
+  {
+    id:'alz', group:'Etiyolojik Alt Tipler', gc:'--g-eti', name:'Alzheimer Hastalığına Bağlı NBB',
+    note:'A–D gereklidir. C dalı → olası / olabilir.', icd:'ICD-10: F02.80/.81 (demans) · hafif F06.7',
+    req:[
+      {t:'leaf', id:'alz_A', label:'A. Majör ya da ağır olmayan NBB için tanı ölçütleri karşılanmaktadır.', hint:'Yukarıdaki çekirdek NBB bölümüne bakınız.'},
+      {t:'leaf', id:'alz_B', label:'B. Bir/birden çok alanda sinsi başlangıç ve yavaş, aşamalı ilerleme vardır (majör NBB’de en az iki alan).'},
+      {t:'or', label:'C. Olası ya da olabilir Alzheimer ölçütleri — en az biri:', children:[
+        {t:'leaf', id:'alz_C1', label:'C1. Aile öyküsü/kalıtımsal ölçümle neden olucu Alzheimer genetik mutasyonu kanıtı. (→ Olası)'},
+        {t:'and', label:'C2. Aşağıdakilerin tümü: (→ Olabilir)', children:[
+          {t:'leaf', id:'alz_C2a', label:'a. Bellek-öğrenme ve en az bir başka alanda açık gerileme kanıtı.'},
+          {t:'leaf', id:'alz_C2b', label:'b. Bilişte duraksamasız, sürekli ilerleyen aşamalı gerileme.'},
+          {t:'leaf', id:'alz_C2c', label:'c. Neden olucu karışık etken (nörodejeneratif/serebrovasküler/başka) kanıtı yoktur.'},
+        ]},
+      ]},
+      {t:'leaf', id:'alz_D', label:'D. Bozukluk; serebrovasküler hastalık, başka nörodejeneratif hastalık, madde ya da başka ruhsal/sinirsel/genel bozuklukla daha iyi açıklanamaz.'},
+    ],
+    level:(S)=>{ if(S('alz_C1')==='var') return 'Olası Alzheimer'; if(['alz_C2a','alz_C2b','alz_C2c'].every(i=>S(i)==='var')) return 'Olabilir Alzheimer'; return null; }
+  },
+  {
+    id:'ftd', group:'Etiyolojik Alt Tipler', gc:'--g-eti', name:'Frontotemporal NBB',
+    note:'A–E gereklidir. Düzey kutusu opsiyoneldir.', icd:'ICD-10: F02.80/.81 (demans) · hafif F06.7',
+    req:[
+      {t:'leaf', id:'ftd_A', label:'A. Majör ya da ağır olmayan NBB için tanı ölçütleri karşılanmaktadır.'},
+      {t:'leaf', id:'ftd_B', label:'B. Sinsi başlangıç ve yavaş ilerleme vardır.'},
+      {t:'or', label:'C. Davranış (1) ya da dil (2) biçimi — en az biri:', children:[
+        {t:'and', label:'C1. Davranış biçimi — her ikisi:', children:[
+          {t:'count', n:3, label:'(i) Aşağıdaki belirtilerden en az 3’ü:', children:[
+            {t:'leaf', id:'ftd_c1a', label:'Davranışsal dezinhibisyon.'},
+            {t:'leaf', id:'ftd_c1b', label:'Apati (duygusuzluk) ya da durağanlık.'},
+            {t:'leaf', id:'ftd_c1c', label:'Empati/sempati kaybı.'},
+            {t:'leaf', id:'ftd_c1d', label:'Perseveratif, basmakalıp ya da kompulsif/törensel davranış.'},
+            {t:'leaf', id:'ftd_c1e', label:'Hiperoralite ve beslenme değişiklikleri.'},
+          ]},
+          {t:'leaf', id:'ftd_c1f', label:'(ii) Toplumsal biliş ve/veya yerine getirme yeterliğinde belirgin gerileme.'},
+        ]},
+        {t:'leaf', id:'ftd_c2', label:'C2. Dil biçimi — söyleme, sözcük bulma, adlandırma, dilbilgisi ya da kavramada belirgin gerileme.'},
+      ]},
+      {t:'leaf', id:'ftd_D', label:'D. Öğrenme, bellek ve algısal-devinsel işlev görece korunmuştur.'},
+      {t:'leaf', id:'ftd_E', label:'E. Serebrovasküler/başka nörodejeneratif/madde/başka ruhsal-sinirsel-genel bozuklukla daha iyi açıklanamaz.'},
+    ],
+    levelBlock:{title:'Düzey belirleyici (opsiyonel) — varsa Olası, yoksa Olabilir:', node:
+      {t:'or', children:[
+        {t:'leaf', id:'ftd_L1', label:'Aile öyküsü/kalıtımsal ölçümle neden olucu FTD genetik mutasyonu kanıtı.'},
+        {t:'leaf', id:'ftd_L2', label:'Nörogörüntülemede oransız frontal ve/veya temporal lob tutulumu.'},
+      ]}
+    },
+    level:(S)=> (S('ftd_L1')==='var'||S('ftd_L2')==='var') ? 'Olası FTD' : 'Olabilir FTD'
+  },
+  {
+    id:'lew', group:'Etiyolojik Alt Tipler', gc:'--g-eti', name:'Lewy Cisimcikli NBB',
+    note:'A,B,D ve C (≥1 ana ya da düşündüren) gereklidir.',
+    req:[
+      {t:'leaf', id:'lew_A', label:'A. Majör ya da ağır olmayan NBB için tanı ölçütleri karşılanmaktadır.'},
+      {t:'leaf', id:'lew_B', label:'B. Sinsi başlangıç ve yavaş ilerleme vardır.'},
+      {t:'or', label:'C. Tanı için en az bir ANA ya da bir DÜŞÜNDÜREN özellik gereklidir:', children:[
+        {t:'count', n:1, label:'Ana özellikler:', children:[
+          {t:'leaf', id:'lew_ana1', label:'Dikkat/uyanıklıkta belirgin değişmelerle giden dalgalanan biliş.'},
+          {t:'leaf', id:'lew_ana2', label:'İyi biçimlenmiş, ayrıntılı, yineleyici görsel varsanılar.'},
+          {t:'leaf', id:'lew_ana3', label:'Bilişsel gerilemeden sonra başlayan kendiliğinden parkinsonizm.'},
+        ]},
+        {t:'count', n:1, label:'Düşündüren özellikler:', children:[
+          {t:'leaf', id:'lew_dus1', label:'REM uykusu davranış bozukluğu ölçütlerini karşılar.'},
+          {t:'leaf', id:'lew_dus2', label:'Nöroleptiklere ileri derecede duyarlılık.'},
+        ]},
+      ]},
+      {t:'leaf', id:'lew_D', label:'D. Serebrovasküler/başka nörodejeneratif/madde/başka ruhsal-sinirsel-genel bozuklukla daha iyi açıklanamaz.'},
+    ],
+    level:(S)=>{ const a=['lew_ana1','lew_ana2','lew_ana3'].filter(i=>S(i)==='var').length; const d=['lew_dus1','lew_dus2'].filter(i=>S(i)==='var').length; if(a>=2||(a>=1&&d>=1)) return 'Olası Lewy'; if(a>=1||d>=1) return 'Olabilir Lewy'; return null; }
+  },
+  {
+    id:'vas', group:'Etiyolojik Alt Tipler', gc:'--g-eti', name:'Vasküler (Damarsal) NBB',
+    note:'A–D gereklidir. Düzey kutusu opsiyoneldir.', icd:'ICD-10: F01.50/.51 (demans) · hafif F06.7',
+    req:[
+      {t:'leaf', id:'vas_A', label:'A. Majör ya da ağır olmayan NBB için tanı ölçütleri karşılanmaktadır.'},
+      {t:'or', label:'B. Klinik özellikler vasküler etkenle uyumludur — en az biri:', children:[
+        {t:'leaf', id:'vas_B1', label:'B1. Bilişsel eksikliklerin başlangıcı bir/birden çok serebrovasküler olayla zamansal olarak ilişkilidir.'},
+        {t:'leaf', id:'vas_B2', label:'B2. Bilişsel gerileme daha çok karmaşık dikkat (işlem hızı dâhil) ve frontal-yerine getirme alanlarındadır.'},
+      ]},
+      {t:'leaf', id:'vas_C', label:'C. Öykü/muayene/nörogörüntülemede eksiklikleri açıklamaya yeterli serebrovasküler hastalık kanıtı vardır.'},
+      {t:'leaf', id:'vas_D', label:'D. Belirtiler başka bir beyin ya da genel hastalıkla daha iyi açıklanamaz.'},
+    ],
+    levelBlock:{title:'Düzey belirleyici (opsiyonel) — varsa Olası, yoksa Olabilir:', node:
+      {t:'or', children:[
+        {t:'leaf', id:'vas_L1', label:'Nörogörüntüleme ile desteklenen belirgin parankimal yıkım.'},
+        {t:'leaf', id:'vas_L2', label:'Belgelenmiş serebrovasküler olay(lar) ile zamansal ilişki.'},
+        {t:'leaf', id:'vas_L3', label:'Beyin-damar hastalığının klinik + genetik kanıtı (örn. CADASIL).'},
+      ]}
+    },
+    level:(S)=> (['vas_L1','vas_L2','vas_L3'].some(i=>S(i)==='var')) ? 'Olası vasküler NBB' : 'Olabilir vasküler NBB'
+  },
+  {
+    id:'tbi', group:'Etiyolojik Alt Tipler', gc:'--g-eti', name:'Travmatik Beyin Yaralanmasına Bağlı NBB',
+    note:'A–C gereklidir.',
+    req:[
+      {t:'leaf', id:'tbi_A', label:'A. Majör ya da ağır olmayan NBB için tanı ölçütleri karşılanmaktadır.'},
+      {t:'count', n:1, label:'B. Çarpmayla beyin yaralanması kanıtı — en az biri:', children:[
+        {t:'leaf', id:'tbi_B1', label:'Bilinç yitimi.'},
+        {t:'leaf', id:'tbi_B2', label:'Çarpma sonrası amnezi.'},
+        {t:'leaf', id:'tbi_B3', label:'Yönelim bozukluğu ve konfüzyon.'},
+        {t:'leaf', id:'tbi_B4', label:'Nörolojik bulgular (görüntülemede yaralanma, yeni nöbet, görme alanı defekti, anozmi, hemiparezi vb.).'},
+      ]},
+      {t:'leaf', id:'tbi_C', label:'C. NBB, yaralanmadan/bilinç kazanımından kısa süre sonra başlar ve akut yaralanma evresi sonrası da sürer.'},
+    ]
+  },
+  {
+    id:'sub', group:'Etiyolojik Alt Tipler', gc:'--g-eti', name:'Madde/İlacın Yol Açtığı NBB',
+    note:'A–E gereklidir.',
+    req:[
+      {t:'leaf', id:'sub_A', label:'A. Majör ya da ağır olmayan NBB için tanı ölçütleri karşılanmaktadır.'},
+      {t:'leaf', id:'sub_B', label:'B. NBB yalnızca deliryum sırasında ortaya çıkmamaktadır ve entoksikasyon/akut yoksunluğun olağan süresi dışında da sürer.'},
+      {t:'leaf', id:'sub_C', label:'C. İlgili madde/ilaç, kullanım süresi ve ölçüsüyle NBB yapabilir niteliktedir.'},
+      {t:'leaf', id:'sub_D', label:'D. Eksikliklerin zamansal gidişi, madde/ilaç kullanımı ve yoksunluğunun zamanlamasıyla uyumludur.'},
+      {t:'leaf', id:'sub_E', label:'E. NBB başka bir sağlık durumuna bağlanamaz ve başka bir ruhsal bozuklukla daha iyi açıklanamaz.'},
+    ]
+  },
+  {
+    id:'hiv', group:'Etiyolojik Alt Tipler', gc:'--g-eti', name:'HIV Enfeksiyonuna Bağlı NBB',
+    note:'A–D gereklidir.',
+    req:[
+      {t:'leaf', id:'hiv_A', label:'A. Majör ya da ağır olmayan NBB için tanı ölçütleri karşılanmaktadır.'},
+      {t:'leaf', id:'hiv_B', label:'B. HIV enfeksiyonu belgelenmiştir.'},
+      {t:'leaf', id:'hiv_C', label:'C. NBB; PML ya da kriptokok menenjiti gibi ikincil beyin hastalıkları dâhil HIV-dışı durumlarla daha iyi açıklanamaz.'},
+      {t:'leaf', id:'hiv_D', label:'D. NBB başka bir sağlık durumuna bağlanamaz ve ruhsal bozuklukla daha iyi açıklanamaz.'},
+    ]
+  },
+  {
+    id:'pri', group:'Etiyolojik Alt Tipler', gc:'--g-eti', name:'Prion Hastalığına Bağlı NBB',
+    note:'A–D gereklidir.',
+    req:[
+      {t:'leaf', id:'pri_A', label:'A. Majör ya da ağır olmayan NBB için tanı ölçütleri karşılanmaktadır.'},
+      {t:'leaf', id:'pri_B', label:'B. Sinsi başlangıç; hızlı ilerleme sıktır.'},
+      {t:'leaf', id:'pri_C', label:'C. Miyoklonus/ataksi gibi motor özellikler ya da prion hastalığı biyobelirteç kanıtı vardır.'},
+      {t:'leaf', id:'pri_D', label:'D. NBB başka bir sağlık durumuna bağlanamaz ve başka bir ruhsal hastalıkla daha iyi açıklanamaz.'},
+    ]
+  },
+  {
+    id:'par', group:'Etiyolojik Alt Tipler', gc:'--g-eti', name:'Parkinson Hastalığına Bağlı NBB',
+    note:'A–D gereklidir. Düzey kutusu opsiyoneldir.',
+    req:[
+      {t:'leaf', id:'par_A', label:'A. Majör ya da ağır olmayan NBB için tanı ölçütleri karşılanmaktadır.'},
+      {t:'leaf', id:'par_B', label:'B. Yerleşik Parkinson hastalığı bağlamında ortaya çıkar.'},
+      {t:'leaf', id:'par_C', label:'C. Sinsi başlangıç, yavaş ilerleme gösterir.'},
+      {t:'leaf', id:'par_D', label:'D. NBB başka bir sağlık durumuna bağlanamaz ve başka bir ruhsal bozuklukla daha iyi açıklanamaz.'},
+    ],
+    levelBlock:{title:'Düzey belirleyici (opsiyonel) — her ikisi varsa Olasılıkla, biri varsa Olabilir:', node:
+      {t:'group', children:[
+        {t:'leaf', id:'par_L1', label:'Neden olucu karışık etken yoktur.'},
+        {t:'leaf', id:'par_L2', label:'Parkinson hastalığı NBB öncesinde bulunmaktadır.'},
+      ]}
+    },
+    level:(S)=>{ const a=S('par_L1')==='var', b=S('par_L2')==='var'; if(a&&b) return 'Olasılıkla PH'; if(a||b) return 'Olabilir PH'; return null; }
+  },
+  {
+    id:'hun', group:'Etiyolojik Alt Tipler', gc:'--g-eti', name:'Huntington Hastalığına Bağlı NBB',
+    note:'A–D gereklidir.',
+    req:[
+      {t:'leaf', id:'hun_A', label:'A. Majör ya da ağır olmayan NBB için tanı ölçütleri karşılanmaktadır.'},
+      {t:'leaf', id:'hun_B', label:'B. Sinsi başlangıç, yavaş ilerleme.'},
+      {t:'leaf', id:'hun_C', label:'C. Klinik olarak yerleşik Huntington hastalığı/aile öyküsü ya da kalıtımsal ölçümle ortaya çıkma olasılığı vardır.'},
+      {t:'leaf', id:'hun_D', label:'D. NBB başka bir sağlık durumuna bağlanamaz ve başka bir ruhsal hastalıkla daha iyi açıklanamaz.'},
+    ]
+  },
+  {
+    id:'oth', group:'Etiyolojik Alt Tipler', gc:'--g-eti', name:'Başka Bir Sağlık Durumuna Bağlı NBB',
+    note:'A–C gereklidir.',
+    req:[
+      {t:'leaf', id:'oth_A', label:'A. Majör ya da ağır olmayan NBB için tanı ölçütleri karşılanmaktadır.'},
+      {t:'leaf', id:'oth_B', label:'B. Öykü/muayene/laboratuvarda NBB’nin başka bir sağlık durumunun patofizyolojik sonucu olduğuna ilişkin kanıt vardır.'},
+      {t:'leaf', id:'oth_C', label:'C. Eksiklikler başka bir ruhsal hastalık ya da başka özgül bir NBB (örn. Alzheimer, HIV) ile daha iyi açıklanamaz.'},
+    ]
+  },
+  {
+    id:'mul', group:'Etiyolojik Alt Tipler', gc:'--g-eti', name:'Çoğul Etkene Bağlı NBB',
+    note:'A–C gereklidir.',
+    req:[
+      {t:'leaf', id:'mul_A', label:'A. Majör ya da ağır olmayan NBB için tanı ölçütleri karşılanmaktadır.'},
+      {t:'leaf', id:'mul_B', label:'B. Öykü/muayene/laboratuvarda NBB’nin (maddeler dışında) birden çok sürecin patofizyolojik sonucu olduğuna ilişkin kanıt vardır.'},
+      {t:'leaf', id:'mul_C', label:'C. Eksiklikler başka bir ruhsal hastalıkla daha iyi açıklanamaz ve yalnızca deliryum sırasında ortaya çıkmamaktadır.'},
+    ]
+  },
+];
+
+const state = {};
+const S = (id)=> state[id];
+const SPEC_DESC = {};
+D.forEach(d=>(d.specs||[]).forEach(sp=>{ if(sp.desc) SPEC_DESC[sp.id]=sp.desc; }));
+
+/* ---- three-valued evaluator ---- */
+function evalNode(n){
+  if(n.t==='leaf'){ const v=state[n.id]; return v==='var'?'T':v==='yok'?'F':'U'; }
+  const r=n.children.map(evalNode);
+  if(n.t==='and'||n.t==='group'){ if(r.includes('F'))return'F'; return r.every(x=>x==='T')?'T':'U'; }
+  if(n.t==='or'){ if(r.includes('T'))return'T'; return r.every(x=>x==='F')?'F':'U'; }
+  if(n.t==='count'){ const tc=r.filter(x=>x==='T').length, fc=r.filter(x=>x==='F').length, tot=r.length;
+    if(tc>=n.n)return'T'; if(tot-fc<n.n)return'F'; return'U'; }
+  return 'U';
+}
+function collectLeaves(n,acc){ if(n.t==='leaf'){acc.push(n.id);return;} (n.children||[]).forEach(c=>collectLeaves(c,acc)); }
+
+/* ---- rendering ---- */
+function toggleHTML(id){
+  return `<div class="toggle" role="group">
+    <button class="tg tg-var" data-id="${id}" data-v="var" aria-pressed="false">Var</button>
+    <button class="tg tg-yok" data-id="${id}" data-v="yok" aria-pressed="false">Yok</button>
+  </div>`;
+}
+function logicTag(n){
+  if(n.t==='and')return '<span class="logic">VE</span>';
+  if(n.t==='or')return '<span class="logic">VEYA</span>';
+  if(n.t==='count')return `<span class="logic">≥${n.n}</span>`;
+  return '';
+}
+function renderNode(n){
+  if(n.t==='leaf'){
+    return `<div class="crit"><div class="crit-label">${n.label}${n.hint?`<span class="hint">${n.hint}</span>`:''}</div>${toggleHTML(n.id)}</div>`;
+  }
+  const head = n.label ? `<div class="grp-head">${logicTag(n)}<span>${n.label}</span></div>` : '';
+  const kids = n.children.map(renderNode).join('');
+  return `<div class="grp">${head}<div class="grp-children">${kids}</div></div>`;
+}
+function renderSpecs(specs){
+  const rows = specs.map(sp=>{
+    const opts = sp.opts.map(o=>`<button class="sopt" data-spec="${sp.id}" data-val="${o}">${o}</button>`).join('');
+    const desc = sp.desc ? `<div class="spec-desc" id="desc-${sp.id}"></div>` : '';
+    return `<div class="spec-row"><span class="spec-lbl">${sp.lbl}</span><div class="spec-opts">${opts}</div></div>${desc}`;
+  }).join('');
+  return `<div class="specs"><div class="specs-h">Belirleyiciler (opsiyonel)</div>${rows}</div>`;
+}
+function renderLevelBlock(lb){
+  return `<div class="levelbox"><div class="lb-title">${lb.title}</div>${renderNode(Object.assign({label:''},lb.node))}</div>`;
+}
+
+function renderCard(d){
+  const crit = d.req.map(renderNode).join('');
+  const lvl = d.levelBlock ? renderLevelBlock(d.levelBlock) : '';
+  const specs = d.specs ? renderSpecs(d.specs) : '';
+  return `<section class="card" id="card-${d.id}" style="--gc:var(${d.gc})">
+    <div class="card-head" data-card="${d.id}">
+      <span class="caret">▾</span>
+      <div class="ch-main">
+        <div class="ch-title">${d.name}</div>
+        <div class="ch-note">${d.note}</div>
+        ${d.icd?`<div class="ch-icd">${d.icd}</div>`:''}
+      </div>
+      <div class="status inc" id="st-${d.id}"><span class="sd"></span><span class="st-txt">—</span></div>
+    </div>
+    <div class="card-body">
+      ${crit}${lvl}${specs}
+      <div class="card-foot"><button class="mini" data-resetcard="${d.id}">Bu bölümü sıfırla</button></div>
+    </div>
+  </section>`;
+}
+
+function build(){
+  const app=document.getElementById('app');
+  let html='', lastGroup=null;
+  const groupColors={'Deliryum':'--g-del','Çekirdek NBB':'--g-core','Etiyolojik Alt Tipler':'--g-eti'};
+  const groupNotes={'Etiyolojik Alt Tipler':'Her alt tipin A ölçütü, yukarıdaki Majör/Ağır olmayan NBB ölçütlerinin karşılanmasını gerektirir.'};
+  D.forEach(d=>{
+    if(d.group!==lastGroup){
+      html+=`<div class="group-title" style="--gc:var(${groupColors[d.group]})">${d.group}</div>`;
+      if(groupNotes[d.group]) html+=`<div class="group-note">${groupNotes[d.group]}</div>`;
+      lastGroup=d.group;
+    }
+    html+=renderCard(d);
+  });
+  app.innerHTML=html;
+
+  // jump nav
+  const nav=document.getElementById('jumpNav');
+  nav.innerHTML=D.map(d=>`<span class="jchip" data-jump="${d.id}"><span class="gd" style="background:var(${d.gc})"></span>${d.name.replace(' Nörobilişsel Bozukluk','').replace(' Hastalığına Bağlı NBB',' (etiyoloji)')}</span>`).join('');
+
+  attach();
+  recompute();
+}
+
+/* ---- interactions ---- */
+function attach(){
+  document.querySelectorAll('.tg').forEach(b=>b.addEventListener('click',()=>{
+    const id=b.dataset.id, v=b.dataset.v;
+    state[id] = (state[id]===v) ? undefined : v;
+    syncToggle(id); recompute();
+  }));
+  document.querySelectorAll('.sopt').forEach(b=>b.addEventListener('click',()=>{
+    const sp=b.dataset.spec, val=b.dataset.val;
+    state[sp] = (state[sp]===val)? undefined : val;
+    document.querySelectorAll(`.sopt[data-spec="${sp}"]`).forEach(x=>x.classList.toggle('on', state[sp]===x.dataset.val));
+    if(SPEC_DESC[sp]){ const el=document.getElementById('desc-'+sp); if(el){ el.textContent = state[sp]?SPEC_DESC[sp][state[sp]]:''; el.classList.toggle('show', !!state[sp]); } }
+  }));
+  document.querySelectorAll('.card-head').forEach(h=>h.addEventListener('click',e=>{
+    if(e.target.closest('.tg'))return;
+    document.getElementById('card-'+h.dataset.card).classList.toggle('collapsed');
+  }));
+  document.querySelectorAll('[data-resetcard]').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const d=D.find(x=>x.id===b.dataset.resetcard);
+    const ids=[]; d.req.forEach(n=>collectLeaves(n,ids));
+    if(d.levelBlock)collectLeaves(d.levelBlock.node,ids);
+    ids.forEach(i=>{state[i]=undefined; syncToggle(i);});
+    (d.specs||[]).forEach(sp=>{state[sp.id]=undefined; document.querySelectorAll(`.sopt[data-spec="${sp.id}"]`).forEach(x=>x.classList.remove('on')); const el=document.getElementById('desc-'+sp.id); if(el){el.textContent='';el.classList.remove('show');}});
+    recompute();
+  }));
+  document.querySelectorAll('[data-jump]').forEach(c=>c.addEventListener('click',()=>{
+    const card=document.getElementById('card-'+c.dataset.jump);
+    card.classList.remove('collapsed');
+    card.scrollIntoView({behavior:'smooth',block:'start'});
+  }));
+
+  document.getElementById('resetAll').addEventListener('click',()=>{
+    Object.keys(state).forEach(k=>state[k]=undefined);
+    document.querySelectorAll('.tg').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-pressed','false');});
+    document.querySelectorAll('.sopt').forEach(b=>b.classList.remove('on'));
+    document.querySelectorAll('.spec-desc').forEach(e=>{e.textContent='';e.classList.remove('show');});
+    recompute();
+  });
+  let collapsed=false;
+  document.getElementById('toggleAll').addEventListener('click',function(){
+    collapsed=!collapsed;
+    document.querySelectorAll('.card').forEach(c=>c.classList.toggle('collapsed',collapsed));
+    this.textContent=collapsed?'Tümünü genişlet':'Tümünü daralt';
+  });
+}
+function syncToggle(id){
+  document.querySelectorAll(`.tg[data-id="${id}"]`).forEach(b=>{
+    const on=state[id]===b.dataset.v;
+    b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false');
+  });
+}
+
+/* ---- compute statuses ---- */
+function recompute(){
+  let met=0,notmet=0,inc=0;
+  D.forEach(d=>{
+    const res=evalNode({t:'and',children:d.req});
+    const el=document.getElementById('st-'+d.id);
+    const txt=el.querySelector('.st-txt');
+    el.classList.remove('met','notmet','inc');
+    if(res==='T'){
+      el.classList.add('met');
+      let lab='Ölçütler karşılanıyor';
+      if(d.level){ const lv=d.level(S); if(lv) lab+=' · '+lv; }
+      txt.textContent=lab; met++;
+    } else if(res==='F'){
+      el.classList.add('notmet'); txt.textContent='Ölçütler karşılanmıyor'; notmet++;
+    } else {
+      el.classList.add('inc');
+      const ids=[]; d.req.forEach(n=>collectLeaves(n,ids));
+      const sel=ids.filter(i=>state[i]!==undefined).length;
+      txt.textContent= sel? `Değerlendirme tamamlanmadı · ${sel} ölçüt` : 'Değerlendirilmedi';
+      inc++;
+    }
+  });
+  document.getElementById('summary').innerHTML=
+    `<span class="chip met"><span class="dot"></span>Karşılanan <b>${met}</b></span>`+
+    `<span class="chip notmet"><span class="dot"></span>Karşılanmayan <b>${notmet}</b></span>`+
+    `<span class="chip inc"><span class="dot"></span>Bekleyen <b>${inc}</b></span>`;
+}
+
+build();
+</script>
+</body>
+</html>
