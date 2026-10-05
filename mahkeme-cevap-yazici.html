@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mahkeme Cevap Yazıcı</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;color:#1a1a1a;background:#f5f5f3}
+.app{max-width:460px;margin:0 auto;padding:12px}
+@media (min-width:768px){
+  .app{max-width:720px;padding:20px}
+}
+@media (min-width:1100px){
+  .app{max-width:820px;padding:28px}
+}
+.card{background:#fff;border:0.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:1rem 1.25rem;margin-bottom:12px}
+.page-title{font-size:18px;font-weight:500;margin-bottom:4px}
+.page-sub{font-size:13px;color:#666;margin-bottom:16px}
+.section-label{font-size:12px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.btn-secondary{display:block;width:100%;padding:10px;background:#fff;color:#1a1a1a;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;font-size:14px;cursor:pointer;margin-top:8px;text-align:center;font-family:inherit}
+.btn-back{background:none;border:none;cursor:pointer;font-size:13px;color:#888;padding:0;margin-bottom:14px;display:flex;align-items:center;gap:4px}
+.rdm-group{margin-bottom:14px}
+.rdm-group:last-child{margin-bottom:0}
+.rdm-title{font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:6px}
+.rdm-title.rdm-missing{color:#A32D2D}
+.rdm-opts{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.rdm-opt{padding:6px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:14px;background:#fff;font-size:12px;color:#1a1a1a;cursor:pointer;transition:all 0.15s;font-family:inherit}
+.rdm-opt:hover{background:#f0f0ee}
+.rdm-opt.selected{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.rdm-opt.missing-opt{border-color:#A32D2D;color:#A32D2D;background:#FEF8F8}
+.rdm-other-input{padding:6px 10px;border:0.5px dashed rgba(0,0,0,0.3);border-radius:14px;background:#fafaf8;font-size:12px;font-family:inherit;width:200px;max-width:100%;outline:none}
+.rdm-other-input:focus{border-color:#1a1a1a;border-style:solid;background:#fff}
+.field-input{width:100%;padding:9px 10px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:#fff}
+.field-input:focus{border-color:#1a1a1a}
+.field-hint{font-size:11px;color:#888;margin-top:4px;line-height:1.5}
+.input-invalid{border-color:#A32D2D !important;box-shadow:0 0 0 2px rgba(163,45,45,0.15)}
+.note-box{background:#fafaf8;border:0.5px solid rgba(0,0,0,0.12);border-radius:8px;padding:12px;font-size:14px;line-height:1.7;white-space:pre-wrap;min-height:60px}
+.copy-incomplete{background:#A32D2D !important;color:#fff !important;border-color:#A32D2D !important;font-weight:500}
+.copy-incomplete:hover{background:#8F2525 !important}
+.copy-ok{background:#1a1a1a;color:#fff;border-color:#1a1a1a;font-weight:500}
+.copy-ok:hover{background:#333}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <button class="btn-back" onclick="window.location.href='index.html'"><i class="ti ti-arrow-left"></i> Ana ekran</button>
+
+  <div style="padding:0 0 16px">
+    <p class="page-title">Mahkeme cevap yazıcı</p>
+    <p class="page-sub">Mahkeme / karakol yazısına cevap → kopyalanabilir metin</p>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Yazıyı gönderen merci</p>
+
+    <div class="rdm-group">
+      <p class="rdm-title" id="t-kurum-ad">1. Merci adı</p>
+      <input type="text" id="kurum-ad" class="field-input" placeholder="Örn: Ankara 5. Asliye Ceza" oninput="update()">
+      <p class="field-hint">Örnek: "Ankara 5. Asliye Ceza" + "mahkemesinin" → Ankara 5. Asliye Ceza mahkemesinin</p>
+    </div>
+
+    <div class="rdm-group">
+      <p class="rdm-title" id="t-kurum-tur">2. Merci türü</p>
+      <div class="rdm-opts" id="kurum-opts"></div>
+    </div>
+
+    <div class="rdm-group">
+      <p class="rdm-title" id="t-esas">3. Sayı (esas / dosya no)</p>
+      <input type="text" id="esas" class="field-input" placeholder="Örn: 2026/123 Esas veya 2026/123 E." oninput="update()">
+      <p class="field-hint">Metne "… sayılı" olarak eklenir.</p>
+    </div>
+
+    <div class="rdm-group">
+      <p class="rdm-title" id="t-tarih">4. Yazı tarihi</p>
+      <input type="date" id="tarih" class="field-input" onchange="update()" oninput="update()">
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Cevap metni</p>
+    <div id="out" class="note-box"></div>
+    <button class="btn-secondary" id="copy-btn" onclick="copyOut()"><i class="ti ti-copy"></i> Kopyala</button>
+    <p id="copy-msg" style="display:none;margin-top:8px;font-size:12px;color:#A32D2D"></p>
+  </div>
+</div>
+
+<script>
+var KURUM_TURLERI=['mahkemesinin','karakolunun'];
+var kurumTur='';
+var kurumOtherSelected=false;
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function buildKurumOpts(){
+  var box=document.getElementById('kurum-opts');
+  var h='';
+  KURUM_TURLERI.forEach(function(t){
+    h+='<button type="button" class="rdm-opt'+(kurumTur===t&&!kurumOtherSelected?' selected':'')+'" data-t="'+esc(t)+'" onclick="pickKurum(this.dataset.t)">'+esc(t)+'</button>';
+  });
+  h+='<button type="button" class="rdm-opt'+(kurumOtherSelected?' selected':'')+'" onclick="pickOther()">diğer</button>';
+  h+='<input type="text" id="kurum-other" class="rdm-other-input" placeholder="Örn: Cumhuriyet Başsavcılığının" style="display:'+(kurumOtherSelected?'inline-block':'none')+'" oninput="kurumTur=this.value;update()" value="'+(kurumOtherSelected?esc(kurumTur):'')+'">';
+  box.innerHTML=h;
+}
+
+function pickKurum(t){
+  kurumOtherSelected=false;
+  kurumTur=(kurumTur===t)?'':t;
+  buildKurumOpts();
+  update();
+}
+
+function pickOther(){
+  kurumOtherSelected=!kurumOtherSelected;
+  kurumTur='';
+  buildKurumOpts();
+  if(kurumOtherSelected){var i=document.getElementById('kurum-other');if(i)i.focus();}
+  update();
+}
+
+function fmtTarih(v){
+  if(!v) return '';
+  var p=v.split('-');
+  return p.length===3?(p[2]+'.'+p[1]+'.'+p[0]):v;
+}
+
+function parts(){
+  return {
+    ad:document.getElementById('kurum-ad').value.trim(),
+    tur:kurumTur.trim(),
+    esas:document.getElementById('esas').value.trim(),
+    tarih:fmtTarih(document.getElementById('tarih').value)
+  };
+}
+
+function build(){
+  var p=parts();
+  var kurum=[p.ad||'……',p.tur||'……'].join(' ');
+  return kurum+' '+(p.esas||'……')+' sayılı '+(p.tarih||'……')+" tarihli yazısı ile gönderilen kişinin muayenesi yapılmış olup; gerekli incelemelerin tamamlanarak istenen raporun düzenlenebilmesi için bir mesai günü saat 09.00'da polikliniğimizde bulundurulması gereğini saygılarımla arz ederim.";
+}
+
+function missingList(){
+  var p=parts(),m=[];
+  if(!p.ad) m.push(['t-kurum-ad','kurum-ad']);
+  if(!p.tur) m.push(['t-kurum-tur',null]);
+  if(!p.esas) m.push(['t-esas','esas']);
+  if(!p.tarih) m.push(['t-tarih','tarih']);
+  return m;
+}
+
+function update(){
+  document.getElementById('out').textContent=build();
+  var m=missingList();
+  var btn=document.getElementById('copy-btn');
+  if(m.length){
+    btn.className='btn-secondary copy-incomplete';
+    btn.innerHTML='<i class="ti ti-copy"></i> Eksik alanlarla kopyala';
+  } else {
+    btn.className='btn-secondary copy-ok';
+    btn.innerHTML='<i class="ti ti-copy"></i> Kopyala';
+    document.getElementById('copy-msg').style.display='none';
+  }
+  ['t-kurum-ad','t-kurum-tur','t-esas','t-tarih'].forEach(function(id){document.getElementById(id).classList.remove('rdm-missing')});
+}
+
+function copyOut(){
+  var m=missingList();
+  var msg=document.getElementById('copy-msg');
+  if(m.length){
+    m.forEach(function(x){
+      document.getElementById(x[0]).classList.add('rdm-missing');
+      if(x[1]){var el=document.getElementById(x[1]);el.classList.add('input-invalid');setTimeout(function(){el.classList.remove('input-invalid')},2500);}
+    });
+    msg.textContent='Eksik alan var; metinde "……" olarak kaldı.';
+    msg.style.display='block';
+  }
+  var txt=document.getElementById('out').textContent;
+  var btn=document.getElementById('copy-btn');
+  function ok(){
+    btn.innerHTML='<i class="ti ti-check"></i> Kopyalandı';
+    setTimeout(update,1500);
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(ok).catch(function(){fallbackCopy(txt,ok)});
+  } else {
+    fallbackCopy(txt,ok);
+  }
+}
+
+function fallbackCopy(txt,done){
+  var ta=document.createElement('textarea');
+  ta.value=txt;
+  ta.style.position='fixed';ta.style.left='-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try{document.execCommand('copy');done();}catch(e){}
+  document.body.removeChild(ta);
+}
+
+buildKurumOpts();
+update();
+</script>
+</body>
+</html>
