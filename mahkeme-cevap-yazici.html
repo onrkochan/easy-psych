@@ -54,6 +54,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
   </div>
 
   <div class="card">
+    <p class="section-label">Cevap türü</p>
+    <div class="rdm-opts" id="tur-opts"></div>
+  </div>
+
+  <div class="card">
     <p class="section-label">Yazıyı gönderen merci</p>
 
     <div class="rdm-group">
@@ -89,6 +94,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 
 <script>
 var KURUM_TURLERI=['mahkemesinin','karakolunun'];
+var CEVAP_TURLERI=[['muayene','Muayene yapıldı, polikliniğe çağrı'],['sevk','Dal sağlık kuruluna sevk']];
+var cevapTur='muayene';
 var kurumTur='';
 var kurumOtherSelected=false;
 
@@ -103,6 +110,20 @@ function buildKurumOpts(){
   h+='<button type="button" class="rdm-opt'+(kurumOtherSelected?' selected':'')+'" onclick="pickOther()">diğer</button>';
   h+='<input type="text" id="kurum-other" class="rdm-other-input" placeholder="Örn: Cumhuriyet Başsavcılığının" style="display:'+(kurumOtherSelected?'inline-block':'none')+'" oninput="kurumTur=this.value;update()" value="'+(kurumOtherSelected?esc(kurumTur):'')+'">';
   box.innerHTML=h;
+}
+
+function buildTurOpts(){
+  var h='';
+  CEVAP_TURLERI.forEach(function(t){
+    h+='<button type="button" class="rdm-opt'+(cevapTur===t[0]?' selected':'')+'" onclick="pickTur(\''+t[0]+'\')">'+esc(t[1])+'</button>';
+  });
+  document.getElementById('tur-opts').innerHTML=h;
+}
+
+function pickTur(t){
+  cevapTur=t;
+  buildTurOpts();
+  update();
 }
 
 function pickKurum(t){
@@ -138,7 +159,9 @@ function parts(){
 function build(){
   var p=parts();
   var kurum=[p.ad||'……',p.tur||'……'].join(' ');
-  return kurum+' '+(p.esas||'……')+' sayılı '+(p.tarih||'……')+" tarihli yazısı ile gönderilen kişinin muayenesi yapılmış olup; gerekli incelemelerin tamamlanarak istenen raporun düzenlenebilmesi için bir mesai günü saat 09.00'da polikliniğimizde bulundurulması gereğini saygılarımla arz ederim.";
+  var bas=kurum+' '+(p.esas||'……')+' sayılı '+(p.tarih||'……')+' tarihli yazısı ile gönderilen kişinin muayenesi yapılmış olup; ';
+  if(cevapTur==='sevk') return bas+'gerekli incelemeleri tamamlanan kişi istenen raporun düzenlenmesi için dal sağlık kuruluna sevk edilmiştir.';
+  return bas+"gerekli incelemelerin tamamlanarak istenen raporun düzenlenebilmesi için bir mesai günü saat 09.00'da polikliniğimizde bulundurulması gereğini saygılarımla arz ederim.";
 }
 
 function missingList(){
@@ -199,6 +222,7 @@ function fallbackCopy(txt,done){
   document.body.removeChild(ta);
 }
 
+buildTurOpts();
 buildKurumOpts();
 update();
 </script>
