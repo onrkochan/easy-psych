@@ -64,7 +64,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
     <div class="rdm-group">
       <p class="rdm-title" id="t-kurum-ad">1. Merci adı</p>
       <input type="text" id="kurum-ad" class="field-input" placeholder="Örn: Ankara 5. Asliye Ceza" oninput="update()">
-      <p class="field-hint">Örnek: "Ankara 5. Asliye Ceza" + "mahkemesinin" → Ankara 5. Asliye Ceza mahkemesinin</p>
+      <p class="field-hint">Örnek: "Ankara 5. Asliye Ceza" + "Mahkemesi'nin" → Ankara 5. Asliye Ceza Mahkemesi'nin</p>
     </div>
 
     <div class="rdm-group">
@@ -93,7 +93,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 </div>
 
 <script>
-var KURUM_TURLERI=['mahkemesinin','karakolunun'];
+var KURUM_TURLERI=["Mahkemesi'nin","Cumhuriyet Savcılığı'nın","Karakolu'nun"];
 var CEVAP_TURLERI=[['muayene','Muayene yapıldı, polikliniğe çağrı'],['sevk','Dal sağlık kuruluna sevk']];
 var cevapTur='muayene';
 var kurumTur='';
@@ -108,7 +108,7 @@ function buildKurumOpts(){
     h+='<button type="button" class="rdm-opt'+(kurumTur===t&&!kurumOtherSelected?' selected':'')+'" data-t="'+esc(t)+'" onclick="pickKurum(this.dataset.t)">'+esc(t)+'</button>';
   });
   h+='<button type="button" class="rdm-opt'+(kurumOtherSelected?' selected':'')+'" onclick="pickOther()">diğer</button>';
-  h+='<input type="text" id="kurum-other" class="rdm-other-input" placeholder="Örn: Cumhuriyet Başsavcılığının" style="display:'+(kurumOtherSelected?'inline-block':'none')+'" oninput="kurumTur=this.value;update()" value="'+(kurumOtherSelected?esc(kurumTur):'')+'">';
+  h+='<input type="text" id="kurum-other" class="rdm-other-input" placeholder="Örn: Jandarma Komutanlığı’nın" style="display:'+(kurumOtherSelected?'inline-block':'none')+'" oninput="kurumTur=this.value;update()" value="'+(kurumOtherSelected?esc(kurumTur):'')+'">';
   box.innerHTML=h;
 }
 
