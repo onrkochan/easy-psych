@@ -39,6 +39,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 .note-box{background:#fafaf8;border:0.5px solid rgba(0,0,0,0.12);border-radius:8px;padding:12px;font-size:14px;line-height:1.7;white-space:pre-wrap;min-height:60px}
 .copy-incomplete{background:#A32D2D !important;color:#fff !important;border-color:#A32D2D !important;font-weight:500}
 .copy-incomplete:hover{background:#8F2525 !important}
+.tur-row{display:flex;align-items:center;gap:10px}
+.tur-arrow{color:#A32D2D;font-size:28px;line-height:1;font-weight:700;animation:nudge 1s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
 .copy-ok{background:#1a1a1a;color:#fff;border-color:#1a1a1a;font-weight:500}
 .copy-ok:hover{background:#333}
 </style>
@@ -54,8 +57,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
   </div>
 
   <div class="card">
-    <p class="section-label">Cevap türü</p>
-    <div class="rdm-opts" id="tur-opts"></div>
+    <p class="section-label" id="t-tur">Cevap türü</p>
+    <div class="tur-row"><span class="tur-arrow" id="tur-arrow" aria-hidden="true">&#10142;</span><div class="rdm-opts" id="tur-opts"></div></div>
   </div>
 
   <div class="card">
@@ -94,8 +97,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-siz
 
 <script>
 var KURUM_TURLERI=["Mahkemesi'nin","Cumhuriyet Savcılığı'nın","Karakolu'nun"];
-var CEVAP_TURLERI=[['muayene','Muayene yapıldı, polikliniğe çağrı'],['sevk','Dal sağlık kuruluna sevk']];
-var cevapTur='muayene';
+var CEVAP_TURLERI=[['muayene','Muayene yapıldı gerekli incelemeler için polikliniğe çağır'],['sevk','Dal sağlık kuruluna sevk']];
+var cevapTur='';
 var kurumTur='';
 var kurumOtherSelected=false;
 
@@ -118,6 +121,7 @@ function buildTurOpts(){
     h+='<button type="button" class="rdm-opt'+(cevapTur===t[0]?' selected':'')+'" onclick="pickTur(\''+t[0]+'\')">'+esc(t[1])+'</button>';
   });
   document.getElementById('tur-opts').innerHTML=h;
+  document.getElementById('tur-arrow').style.display=cevapTur?'none':'inline-block';
 }
 
 function pickTur(t){
@@ -157,6 +161,7 @@ function parts(){
 }
 
 function build(){
+  if(!cevapTur) return 'Önce yukarıdan cevap türünü seçin.';
   var p=parts();
   var kurum=[p.ad||'……',p.tur||'……'].join(' ');
   var bas=kurum+' '+(p.esas||'……')+' sayılı '+(p.tarih||'……')+' tarihli yazısı ile gönderilen kişinin muayenesi yapılmış olup; ';
@@ -166,6 +171,7 @@ function build(){
 
 function missingList(){
   var p=parts(),m=[];
+  if(!cevapTur) m.push(['t-tur',null]);
   if(!p.ad) m.push(['t-kurum-ad','kurum-ad']);
   if(!p.tur) m.push(['t-kurum-tur',null]);
   if(!p.esas) m.push(['t-esas','esas']);
@@ -185,7 +191,7 @@ function update(){
     btn.innerHTML='<i class="ti ti-copy"></i> Kopyala';
     document.getElementById('copy-msg').style.display='none';
   }
-  ['t-kurum-ad','t-kurum-tur','t-esas','t-tarih'].forEach(function(id){document.getElementById(id).classList.remove('rdm-missing')});
+  ["t-tur","t-kurum-ad","t-kurum-tur","t-esas","t-tarih"].forEach(function(id){document.getElementById(id).classList.remove('rdm-missing')});
 }
 
 function copyOut(){
